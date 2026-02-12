@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AIA 實報實銷對比 | 高端 vs 傳統</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#f4f7f9">
+</head>
+<body>
+  <div class="main-container">
+    <h1 class="main-title">自願醫保高端醫療（左邊）及傳統醫療（右邊）的實報實銷對比</h1>
+    <div id="tooltip" class="tooltip-box"></div>
+    <div class="table-wrapper">
+      <table class="comparison-table">
+          <colgroup>
+              <col class="col-num"><col class="col-item">
+              <col class="col-scope"><col class="col-days"><col class="col-actual"><col class="col-expend"><col class="col-reimburse"><col class="col-shortfall">
+              <col class="col-scope"><col class="col-days"><col class="col-actual"><col class="col-expend"><col class="col-reimburse"><col class="col-shortfall">
+          </colgroup>
+          <thead>
+              <tr>
+                  <th rowspan="2">#</th><th rowspan="2">保障項目</th>
+                  <th colspan="6" class="header-plan header-wise">自願醫保睿選計劃（網絡服務/半私家房）<span class="info-icon" data-tooltip-id="wise-plan-remark">!</span></th>
+                  <th colspan="6" class="header-plan header-flexi">自願醫保靈活計劃（網絡服務/普通房）</th>
+              </tr>
+              <tr>
+                  <th>保障範圍</th><th>日數</th><th>實際治療費用</th><th>你的支出</th><th>預期可報銷</th><th>差額</th>
+                  <th>保障範圍</th><th>日數</th><th>實際治療費用</th><th>你的支出</th><th>預期可報銷</th><th>差額</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr><td colspan="14" class="section-header">第一部分：主要保障</td></tr>
+              <tr>
+                  <td>1</td><td>病房及膳食</td>
+                  <td>全數賠償</td><td><input type="number" id="wise-item1-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item1-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item1-expend">0.00</span></td><td><span id="wise-item1-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item1-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每日上限 $1,100</td><td><input type="number" id="flexi-item1-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="flexi-item1-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item1-expend">0.00</span></td><td><span id="flexi-item1-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item1-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>2</td><td>外科醫生費</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item2-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item2-expend">0.00</span></td><td><span id="wise-item2-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item2-shortfall" class="shortfall-span">0.00</span></td>
+                  <td><select id="flexi-item2-type" onchange="calculateAll()"><option value="minor">小型手術 $5,000</option><option value="intermediate">中型手術 $14,375</option><option value="major" selected>大型手術 $25,000</option><option value="complex">複雜手術 $43,750</option></select></td>
+                  <td></td><td><input type="number" id="flexi-item2-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item2-expend">0.00</span></td><td><span id="flexi-item2-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item2-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>3</td><td>麻醉科醫生費</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item3-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item3-expend">0.00</span></td><td><span id="wise-item3-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item3-shortfall" class="shortfall-span">0.00</span></td>
+                  <td><select id="flexi-item3-type" onchange="updateFlexiAutoCalc('item3')"><option value="none" selected>沒有</option><option value="yes">有</option></select> <span id="flexi-item3-scope" class="limit-span"></span></td>
+                  <td></td><td><input type="number" id="flexi-item3-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item3-expend">0.00</span></td><td><span id="flexi-item3-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item3-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>4</td><td>手術室費</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item4-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item4-expend">0.00</span></td><td><span id="wise-item4-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item4-shortfall" class="shortfall-span">0.00</span></td>
+                  <td><select id="flexi-item4-type" onchange="updateFlexiAutoCalc('item4')"><option value="none" selected>沒有</option><option value="yes">有</option></select> <span id="flexi-item4-scope" class="limit-span"></span></td>
+                  <td></td><td><input type="number" id="flexi-item4-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item4-expend">0.00</span></td><td><span id="flexi-item4-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item4-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>5</td><td>主診醫生巡房費</td>
+                  <td>全數賠償</td><td><input type="number" id="wise-item5-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item5-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item5-expend">0.00</span></td><td><span id="wise-item5-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item5-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每日上限 $1,100</td><td><input type="number" id="flexi-item5-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="flexi-item5-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item5-expend">0.00</span></td><td><span id="flexi-item5-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item5-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>6</td><td>專科醫生費</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item6-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item6-expend">0.00</span></td><td><span id="wise-item6-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item6-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每次診症上限 $5,250</td><td></td><td><input type="number" id="flexi-item6-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item6-expend">0.00</span></td><td><span id="flexi-item6-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item6-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>7</td><td>住院雜項開支</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item7-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item7-expend">0.00</span></td><td><span id="wise-item7-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item7-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每次住院上限 $15,000</td><td></td><td><input type="number" id="flexi-item7-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item7-expend">0.00</span></td><td><span id="flexi-item7-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item7-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>8</td><td>入院前/出院後跟進門診</td>
+                  <td>全數賠償 <span class="info-icon" data-tooltip-id="wise-item8-remark">&</span></td><td><input type="number" id="wise-item8-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item8-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item8-expend">0.00</span></td><td><span id="wise-item8-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item8-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每次上限 $848 <span class="info-icon" data-tooltip-id="flexi-item8-remark">&</span></td><td><input type="number" id="flexi-item8-days" max="3" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="flexi-item8-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item8-expend">0.00</span></td><td><span id="flexi-item8-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item8-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr id="new-item-8a">
+                  <td>8a</td><td>出院後護理</td>
+                  <td>全數賠償 <span class="info-icon" data-tooltip-id="wise-item8a-remark">@</span></td><td><input type="number" id="wise-item8a-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item8a-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item8a-expend">0.00</span></td><td><span id="wise-item8a-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item8a-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每次上限 $640 <span class="info-icon" data-tooltip-id="flexi-item8a-remark">@</span></td><td><input type="number" id="flexi-item8a-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="flexi-item8a-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item8a-expend">0.00</span></td><td><span id="flexi-item8a-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item8a-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+               <tr>
+                  <td>9</td><td>訂明診斷成像檢測</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item9-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item9-expend">0.00</span></td><td><span id="wise-item9-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item9-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每年上限 $22,000<br>(須分擔30%費用)<span class="info-icon" data-tooltip-id="flexi-item9-remark">?</span></td>
+                  <td></td><td><input type="number" id="flexi-item9-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item9-expend">0.00</span></td><td><span id="flexi-item9-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item9-shortfall" class="shortfall-span">0.00</span></td>
+               </tr>
+              <tr>
+                  <td>10</td><td>訂明非手術癌症治療</td>
+                  <td>全數賠償</td><td></td><td><input type="number" id="wise-item10-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item10-expend">0.00</span></td><td><span id="wise-item10-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item10-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每年上限 $96,000</td><td></td><td><input type="number" id="flexi-item10-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item10-expend">0.00</span></td><td><span id="flexi-item10-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item10-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>11*</td><td>中醫門診護理</td>
+                  <td>每次 $1,000 (最多20次)</td><td><input type="number" id="wise-item11-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item11-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item11-expend">0.00</span></td><td><span id="wise-item11-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item11-shortfall" class="shortfall-span">0.00</span></td>
+                  <td colspan="6" class="not-included">不包括在此計劃內</td>
+              </tr>
+              <tr>
+                  <td>12</td><td>次級病房現金惠益</td>
+                  <td>每日津貼額</td><td><input type="number" id="wise-item12-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item12-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item12-expend">0.00</span></td><td><span id="wise-item12-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item12-shortfall" class="shortfall-span">0.00</span></td>
+                  <td colspan="6" class="not-included">不包括在此計劃內</td>
+              </tr>
+              <tr><td colspan="14" class="section-header">第二部分：其他保障</td></tr>
+               <tr>
+                  <td>13</td><td>出院後家中看護惠益</td>
+                  <td>全數賠償 (包196日)</td><td><input type="number" id="wise-item13-days" min="0" oninput="syncAndCalculate(event)"></td><td><input type="number" id="wise-item13-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item13-expend">0.00</span></td><td><span id="wise-item13-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item13-shortfall" class="shortfall-span">0.00</span></td>
+                  <td colspan="6" class="not-included">不包括在此計劃內</td>
+              </tr>
+              <tr>
+                  <td>14</td><td>精神科治療</td>
+                  <td>每年保單 $40,000</td><td></td><td><input type="number" id="wise-item14-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item14-expend">0.00</span></td><td><span id="wise-item14-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item14-shortfall" class="shortfall-span">0.00</span></td>
+                  <td>每年上限 $33,000</td><td></td><td><input type="number" id="flexi-item14-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="flexi-item14-expend">0.00</span></td><td><span id="flexi-item14-reimburse" class="reimbursement-span">0.00</span></td><td><span id="flexi-item14-shortfall" class="shortfall-span">0.00</span></td>
+              </tr>
+              <tr>
+                  <td>15</td><td>中風輔助惠益</td>
+                  <td>每次事故 $100,000</td><td></td><td><input type="number" id="wise-item15-actual" min="0" oninput="syncAndCalculate(event)"></td><td><span id="wise-item15-expend">0.00</span></td><td><span id="wise-item15-reimburse" class="reimbursement-span">0.00</span></td><td><span id="wise-item15-shortfall" class="shortfall-span">0.00</span></td>
+                  <td colspan="6" class="not-included">不包括在此計劃內</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+    
+    <div class="summary-container">
+        <div class="summary-column">
+            <h2 class="header-wise">睿選計劃 總結</h2>
+            <div class="summary-item"><label>實際治療總支出</label><span id="wise-total-expenditure" class="value">HK$ 0.00</span></div>
+            <div class="summary-item"><label>預期可索償金額</label><span id="wise-claimable-total" class="value">HK$ 0.00</span></div>
+            <div class="summary-item"><label>墊底費</label><select id="wise-deductible" onchange="calculateAll()"><option value="8800">$8,800</option><option value="18000">$18,000</option><option value="30000">$30,000</option><option value="55000">$55,000</option></select></div>
+            <div class="summary-item final-out-of-pocket"><label>最終自付金額</label><span id="wise-final-oop" class="value">HK$ 0.00</span></div>
+            <div class="summary-item extra-cash-row"><label>病房住院現金（額外現金賠償）</label><span id="wise-ward-cash" class="value">HK$ 0.00</span></div>
+        </div>
+        <div class="summary-column">
+            <h2 class="header-flexi">靈活計劃 總結</h2>
+            <div class="summary-item"><label>實際治療總支出</label><span id="flexi-total-expenditure" class="value">HK$ 0.00</span></div>
+            <div class="summary-item"><label>預期可索償金額</label><span id="flexi-claimable-total" class="value">HK$ 0.00</span></div>
+            <div class="summary-item"><label>額外醫療賠償 SMM (85%)</label><span id="flexi-smm" class="value">HK$ 0.00</span></div>
+            <div class="summary-item final-out-of-pocket"><label>最終自付金額</label><span id="flexi-final-oop" class="value">HK$ 0.00</span></div>
+        </div>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>

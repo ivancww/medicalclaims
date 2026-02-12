@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Noto Sans HK', sans-serif;
+  background-color: #f4f7f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.main-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+h1, h2, h3 { font-weight: 700; }
+h1.main-title {
+  color: #1a3a6e;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* 提示框 */
+.tooltip-box {
+    display: none;
+    position: absolute;
+    background: #fffbe6;
+    border: 1px solid #ffe58f;
+    border-radius: 8px;
+    padding: 15px;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    font-size: 13px;
+    line-height: 1.6;
+    color: #8a6d3b;
+}
+.tooltip-box h3 { margin-top: 0; }
+.tooltip-box ul { padding-left: 20px; margin: 10px 0 0 0; }
+.tooltip-box p { margin: 0; }
+
+/* 表格樣式 */
+.table-wrapper {
+    overflow-x: auto; /* 手機上可橫向捲動 */
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+    min-width: 1000px; /* 確保在手機上不會太擠 */
+}
+
+.comparison-table th, .comparison-table td {
+  padding: 10px 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  position: relative;
+}
+.comparison-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.comparison-table .header-plan { font-size: 16px; padding: 12px; }
+.header-wise { background-color: #e7f3ff; color: #004085; }
+.header-flexi { background-color: #e2f0d9; color: #385723; }
+
+.section-header {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+}
+
+.info-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 14px;
+    user-select: none;
+}
+.info-icon:hover { background: #0056b3; }
+
+/* 欄位寬度 */
+.comparison-table col.col-num { width: 3%; }
+.comparison-table col.col-item { width: 14%; }
+.comparison-table col.col-scope { width: 11%; }
+.comparison-table col.col-days { width: 4%; }
+.comparison-table col.col-actual { width: 7%; }
+.comparison-table col.col-expend { width: 7%; }
+.comparison-table col.col-reimburse { width: 7%; }
+.comparison-table col.col-shortfall { width: 7%; }
+
+.comparison-table td:nth-child(n+4), .comparison-table th:nth-child(n+3) { text-align: center; }
+.comparison-table th:nth-child(1), .comparison-table th:nth-child(2),
+.comparison-table td:nth-child(1), .comparison-table td:nth-child(2) { text-align: left; }
+
+.comparison-table th:nth-child(8), .comparison-table td:nth-child(8) { border-right: 3px solid #005a87; }
+
+.not-included { background-color: #f8f8f8; color: #999; text-align: center !important; font-style: italic; }
+
+input[type="number"], select {
+  width: 95%; box-sizing: border-box; padding: 8px 5px;
+  border: 1px solid #ccc; border-radius: 4px;
+  font-size: 13px; text-align: right;
+}
+input.readonly {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+select {
+    text-align: center;
+    -webkit-appearance: menulist-button;
+    -moz-appearance: menulist-button;
+    appearance: menulist-button;
+}
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+td span { font-weight: 700; display: inline-block; width: 100%; text-align: right; }
+.reimbursement-span { color: #007bff; }
+.shortfall-span { color: #d9534f; }
+.limit-span { color: #888; font-style: italic; font-size: 12px; display: block; margin-top: 2px;}
+
+.note { font-size: 12px; color: #666; margin-top: 15px; }
+
+/* 總結區塊樣式 */
+.summary-container { display: flex; justify-content: space-between; margin-top: 30px; gap: 30px; }
+.summary-column { flex: 1; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; }
+.summary-column h2 { margin-top: 0; text-align: center; }
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.summary-item:last-child { border-bottom: none; }
+
+.summary-item label { font-weight: 500; }
+.summary-item .value { font-weight: 700; font-size: 18px; }
+
+.final-out-of-pocket {
+    background-color: #fff0f0;
+    margin: 10px -20px 10px -20px;
+    padding: 20px;
+    border-top: 2px solid #ffdddd;
+    border-bottom: 2px solid #ffdddd;
+}
+.final-out-of-pocket .value { color: #d9534f; }
+
+.extra-cash-row {
+    background-color: #e7f3ff;
+    margin: 0 -20px -20px -20px;
+    padding: 15px 20px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top: 1px solid #cce5ff;
+}
+.extra-cash-row .value { color: #0056b3; }
+
+/* 手機版響應式設計 */
+@media screen and (max-width: 768px) {
+    body { padding: 10px; }
+    .main-container { padding: 15px; }
+    .summary-container { flex-direction: column; }
+    .summary-item label { font-size: 14px; }
+    .summary-item .value { font-size: 16px; }
+    h1.main-title { font-size: 20px; }
+}
