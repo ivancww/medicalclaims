@@ -46,7 +46,6 @@ function syncAndCalculate(event) {
     const value = target.value;
     const parts = id.split('-');
     
-    // 簡單的同步邏輯：無論哪邊輸入，都同步到另一邊
     if (parts.length >= 3) {
         const currentPlan = parts[0];
         const key = parts[1];
@@ -60,13 +59,11 @@ function syncAndCalculate(event) {
             otherElement.value = value;
         }
         
-        // 限制靈活計劃 Item 8 日數
         if (key === 'item8' && fieldType === 'days') {
              const flexi8Days = document.getElementById('flexi-item8-days');
              if(flexi8Days && parseFloat(flexi8Days.value) > 3) flexi8Days.value = 3;
         }
         
-        // 如果是 Item 2 費用變動，嘗試更新 Flexi 的自動計算項目
         if (key === 'item2' && fieldType === 'actual') {
             updateFlexiAutoCalc('item3', false);
             updateFlexiAutoCalc('item4', false);
@@ -110,9 +107,12 @@ function calculateAll() {
     document.getElementById('wise-ward-cash').textContent = `HK$ ${(wiseResults.wardCash || 0).toFixed(2)}`;
     document.getElementById('wise-final-oop').textContent = `HK$ ${wiseOOP.toFixed(2)}`;
 
-    // 渲染靈活總結
-    const smmAmount = flexiResults.smmShortfall * 0.85;
-    const flexiOOP = Math.max(0, flexiResults.totalExpenditure - (flexiResults.claimableTotal + smmAmount));
+    // 渲染靈活總結 (已加入 12 萬 SMM 上限)
+    const rawSmm = flexiResults.smmShortfall * 0.85;
+    const smmAmount = Math.min(rawSmm, 120000); // 核心修改點：加入上限
+    
+    const flexiFinalClaim = flexiResults.claimableTotal + smmAmount;
+    const flexiOOP = Math.max(0, flexiResults.totalExpenditure - flexiFinalClaim);
     
     document.getElementById('flexi-total-expenditure').textContent = `HK$ ${flexiResults.totalExpenditure.toFixed(2)}`;
     document.getElementById('flexi-claimable-total').textContent = `HK$ ${flexiResults.claimableTotal.toFixed(2)}`;
@@ -132,56 +132,42 @@ function calculatePlan(planPrefix, rules) {
         const reimburseSpan = document.getElementById(`${planPrefix}-${key}-reimburse`);
         const shortfallSpan = document.getElementById(`${planPrefix}-${key}-shortfall`);
 
-        // 安全檢查：如果找不到輸入框，跳過
         if (!actualInput) continue;
         
-        // 1. 獲取數值 (防止 NaN)
         const daysRaw = (rule.hasDays && daysInput) ? parseFloat(daysInput.value) : 1;
         const days = isNaN(daysRaw) ? 1 : daysRaw;
-        
         const actualCostRaw = parseFloat(actualInput.value);
         const actualCost = isNaN(actualCostRaw) ? 0 : actualCostRaw;
         
-        // 2. 計算支出
         const expenditure = actualCost * days;
 
-        // 3. 顯示支出 (病房現金除外)
         if (expendSpan) {
             if (rule.type !== 'cash_benefit') {
                  expendSpan.textContent = expenditure.toFixed(2);
-                 // 睿選的出院後護理 (#8a) 默認計入總支出，除非您想排除
-                 // 這裡統一邏輯：只要不是現金津貼，都算支出
                  totalExpenditure += expenditure;
             } else {
                  expendSpan.textContent = "N/A";
             }
         }
         
-        // 4. 計算賠償 (Reimbursement)
         let reimbursement = 0;
         let currentLimit = rule.limit;
         
-        // 處理靈活計劃的動態上限 (手術等級)
         if (rule.type === 'dynamic_cap' && planPrefix === 'flexi') {
-            let selectedType = 'major'; // 預設
-            
+            let selectedType = 'major';
             if (key === 'item2') {
                 const typeSelector = document.getElementById('flexi-item2-type');
                 if (typeSelector) selectedType = typeSelector.value;
+                currentLimit = surgeryLimits[key][selectedType];
             } else {
-                // Item 3 & 4 依賴 Item 2 的等級
                 const surgeonSelector = document.getElementById('flexi-item2-type');
                 if (surgeonSelector) selectedType = surgeonSelector.value;
-                
-                // 同時檢查自己的 Yes/No 開關
                 const yesNoSelector = document.getElementById(`flexi-${key}-type`);
                 if (yesNoSelector && yesNoSelector.value === 'none') {
                     currentLimit = 0;
                 } else {
                     currentLimit = surgeryLimits[key][selectedType];
                 }
-                
-                // 更新上限顯示文字
                 const scopeSpan = document.getElementById(`flexi-${key}-scope`);
                 if (scopeSpan) {
                     if (currentLimit > 0) {
@@ -192,62 +178,43 @@ function calculatePlan(planPrefix, rules) {
                     }
                 }
             }
-            
-            // 如果還沒設定上限 (Item 2)，從表查找
-            if (key === 'item2') {
-                currentLimit = surgeryLimits[key][selectedType];
-            }
         }
 
-        // 根據類型計算賠償
         if (rule.type === 'full' || rule.type === 'cash_benefit') {
             reimbursement = expenditure;
         } else if (rule.type === 'cap' || rule.type === 'dynamic_cap') {
-            // 防止 currentLimit 為 undefined
             const safeLimit = (currentLimit === undefined) ? 0 : currentLimit;
             reimbursement = Math.min(expenditure, safeLimit);
         } else if (rule.type === 'per_visit_cap') {
-            // 睿選中醫改為全數賠償 (跟隨指示)，若要改回限額請取消註解下面這行
-            // reimbursement = Math.min(expenditure, rule.limit * days);
             reimbursement = expenditure; 
         } else if (rule.type === 'daily_cap') {
             reimbursement = Math.min(expenditure, rule.limit * days);
         } else if (rule.type === 'tiered_daily_cap') {
-            // 前X天全賠(上限內)，超過打折
-            // 計算前 Tier 支出
             const daysInTier1 = Math.min(days, rule.tier_days);
             const daysInTier2 = Math.max(0, days - rule.tier_days);
-            
-            // 假設費用是平均分攤到每天
             const costPerDay = actualCost; 
-            
             const reimTier1 = Math.min(costPerDay, rule.limit) * daysInTier1;
             const reimTier2 = (Math.min(costPerDay, rule.limit) * rule.tier_rate) * daysInTier2;
-            
             reimbursement = reimTier1 + reimTier2;
-
         } else if (rule.type === 'coinsurance') {
             const annualLimit = rule.annual_limit || Infinity;
             const coinsuranceAmt = expenditure * rule.rate;
             reimbursement = Math.min(coinsuranceAmt, annualLimit);
         }
         
-        // 5. 更新顯示
         if (reimburseSpan) reimburseSpan.textContent = reimbursement.toFixed(2);
 
-        // 6. 計算差額 (Shortfall)
         let shortfall = expenditure - reimbursement;
         if (shortfallSpan) {
             if(rule.type === 'cash_benefit'){
                 shortfallSpan.textContent = "N/A";
-            } else if (shortfall > 0.005) { // 浮點數容差
+            } else if (shortfall > 0.005) {
                 shortfallSpan.textContent = `-${shortfall.toFixed(2)}`;
             } else {
                 shortfallSpan.textContent = '0.00';
             }
         }
 
-        // 7. 累計總額
         if (rule.smm && shortfall > 0) {
             smmShortfall += shortfall;
         }
@@ -262,7 +229,7 @@ function calculatePlan(planPrefix, rules) {
     return { claimableTotal, totalExpenditure, smmShortfall, wardCash };
 }
 
-// 提示框事件監聽
+// 提示框與事件監聽
 const tooltipData = {
   'wise-plan-remark': '<h3>享用半私家房服務必須要符合以下條件</h3><ul><li>4間指定醫院 - 仁安，聖保祿，浸會及法國醫院</li><li>醫生須要可以係呢4間處理</li><li>手術前須要安排預先批核</li></ul>',
   'wise-item8-remark': '<p><b>睿選計劃備註：</b>用網絡服務包含出院後跟進門診，最少90天，最長365天。</p>',
@@ -287,7 +254,6 @@ document.querySelectorAll('.info-icon').forEach(icon => {
         tooltip.innerHTML = content;
         const rect = icon.getBoundingClientRect();
         
-        // 手機版優化
         if (window.innerWidth < 768) {
             tooltip.style.left = '10px';
             tooltip.style.width = 'calc(100% - 40px)';
@@ -306,5 +272,4 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// 頁面載入時先計算一次，確保所有數值歸零
 window.onload = calculateAll;
