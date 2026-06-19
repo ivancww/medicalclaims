@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v2.3.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v2.4.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta name="Expires" content="0">
-  
   <meta name="theme-color" content="#1a3a6e">
   
   <style>
@@ -30,7 +29,12 @@
     
     select, input[type="number"] { width: 100%; padding: 12px; font-size: 16px; border-radius: 8px; border: 1px solid #b3d4fc; background: #fff; font-family: inherit; font-weight: 700; color: #1a3a6e; margin-bottom: 10px; box-sizing: border-box;}
     
-    /* 睿選條件明細 */
+    /* 條件切換按鈕 Toggle */
+    .toggle-container { background: #e0e0e0; border-radius: 30px; cursor: pointer; padding: 4px; transition: 0.3s; margin-top: 10px; }
+    .toggle-switch { background: #fff; border-radius: 26px; padding: 10px; text-align: center; font-weight: 700; font-size: 15px; transition: 0.3s; color: #555; }
+    .toggle-switch.active { background: #28a745; color: #fff; box-shadow: 0 2px 10px rgba(40,167,69,0.3); }
+    .toggle-switch.inactive { background: #ffc107; color: #333; }
+    
     .condition-list { font-size: 13px; color: #444; padding-left: 20px; margin-top: 10px; line-height: 1.6; }
     .condition-list li { margin-bottom: 5px; }
     .condition-highlight { color: #1a3a6e; font-weight: 700; }
@@ -66,6 +70,20 @@
     .wise-oop .oop-value { color: #2e7d32; }
     .flexi-oop .oop-value { color: #c62828; font-size: 30px; }
 
+    /* 底部清單 Check List */
+    .checklist-section { margin-top: 30px; border-top: 2px dashed #ccc; padding-top: 20px; }
+    .checklist-title { text-align: center; margin-bottom: 20px; font-size: 20px; color: #1a3a6e; font-weight: 700;}
+    .checklist-grid { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+    .checklist-row { display: flex; border-bottom: 1px solid #eee; }
+    .checklist-row:last-child { border-bottom: none; }
+    .header-row { background: #f8f9fa; font-weight: 700; text-align: center; }
+    .col-item { flex: 2; padding: 15px; background: #fafafa; font-weight: 500; display: flex; align-items: center; border-right: 1px solid #eee; }
+    .col-wise, .col-flexi { flex: 1.5; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+    .col-wise { background: #fafffb; border-right: 1px solid #eee; color: #2e7d32; }
+    .col-flexi { background: #fffcfc; color: #777; }
+    .sub-text { font-size: 12px; color: #888; margin-top: 4px; font-weight: normal; }
+    .danger-text { color: #d9534f; font-size: 16px;}
+
     /* 保費計算器 */
     .premium-section { margin-top: 35px; border-top: 3px solid #1a3a6e; padding-top: 25px; background: #fafbfc; border-radius: 0 0 12px 12px; }
     .premium-title { text-align: center; font-size: 22px; color: #1a3a6e; margin-bottom: 20px; }
@@ -87,10 +105,9 @@
 <body>
   <div class="main-container">
     <div class="header-section">
-      <h1 class="main-title">醫療保障實況對比 v2.3.0</h1>
+      <h1 class="main-title">醫療保障實況對比 v2.4.0</h1>
     </div>
 
-    <!-- 頂部設定區 -->
     <div class="settings-panel">
       <div class="plan-setting wise-setting">
         <h3>🛡️ 睿選計劃 (高端醫療)</h3>
@@ -106,14 +123,17 @@
           <option value="18000" selected>HK$ 18,000</option>
         </select>
         
-        <div style="margin-top: 15px; background: #fff; padding: 10px; border-radius: 8px; border: 1px dashed #b3d4fc;">
-          <strong>✅ 已符合半私家房三大條件：</strong>
-          <ul class="condition-list">
-            <li>🏥 於4間指定私家醫院住院<br><span class="condition-highlight">(香港浸信會、聖保祿、聖德肋撒、仁安)</span></li>
-            <li>👨‍⚕️ 須經「睿選網絡醫生」轉介及掛單</li>
-            <li>📝 接受治療前完成「醫療費用預先批核」</li>
-          </ul>
+        <div class="toggle-container" onclick="toggleConditions()">
+          <div id="condition-toggle" class="toggle-switch active">
+            <span class="toggle-text">✅ 已符合三大條件 (享半私家房)</span>
+          </div>
         </div>
+        
+        <ul class="condition-list">
+          <li>🏥 於4間指定私家醫院住院<br><span class="condition-highlight">(香港浸信會、聖保祿、聖德肋撒、仁安)</span></li>
+          <li>👨‍⚕️ 須經「睿選網絡醫生」轉介及掛單</li>
+          <li>📝 接受治療前完成「醫療費用預先批核」</li>
+        </ul>
       </div>
       
       <div class="plan-setting flexi-setting">
@@ -126,30 +146,59 @@
       </div>
     </div>
 
-    <!-- 類別導航 Tabs -->
     <div class="category-tabs">
       <div class="tab active" onclick="switchCategory('day', this)">☀️ 日間手術中心</div>
       <div class="tab" onclick="switchCategory('inpatient', this)">🏥 須住院手術</div>
       <div class="tab tab-cancer" onclick="switchCategory('cancer', this)">🎗️ 獨立專區：癌症治療</div>
     </div>
 
-    <!-- 專屬手術下拉選單 -->
     <div class="surgery-selector">
       <select id="surgery-select" onchange="renderScenario()">
-        <!-- 選項由 JS 動態生成 -->
-      </select>
+        </select>
     </div>
 
-    <!-- 癌症專屬警告 -->
     <div id="cancer-warning" style="display: none; background: #fff3cd; color: #856404; padding: 15px; border-left: 5px solid #ffeeba; border-radius: 4px; margin-bottom: 20px; font-size: 15px;">
       🚨 <b>【重要備註】</b>以上僅為單次「切除腫瘤」的外科手術預算。<br>
       <b>傳統醫療絕對未包：標靶藥、化療、免疫療法等極昂貴的長遠抗癌開支！</b>
     </div>
 
-    <!-- 單一情境展示區 -->
     <div id="scenario-container"></div>
 
-    <!-- 保費對比計算器 -->
+    <div class="checklist-section">
+      <h2 class="checklist-title">📋 康復及附加保障對比</h2>
+      <div class="checklist-grid">
+        <div class="checklist-row header-row">
+          <div class="col-item">保障項目</div>
+          <div class="col-wise">睿選計劃 (高端)</div>
+          <div class="col-flexi">靈活計劃 (傳統)</div>
+        </div>
+        
+        <div class="checklist-row">
+          <div class="col-item">🩺 手術 / 出院後覆診</div>
+          <div class="col-wise" id="chk-followup">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90 - 365 日)</span></div>
+          <div class="col-flexi">⚠️ <b>每次上限 $848</b><br><span class="sub-text">(只限出院後 3 日內)</span></div>
+        </div>
+        
+        <div class="checklist-row">
+          <div class="col-item">🌿 手術 / 出院後中醫門診</div>
+          <div class="col-wise" id="chk-tcm">✅ <b>每次 $1,000</b><br><span class="sub-text">(每年高達 20 次)</span></div>
+          <div class="col-flexi">❌ <b>不適用</b><br><span class="sub-text">(需全數自費)</span></div>
+        </div>
+        
+        <div class="checklist-row">
+          <div class="col-item">💰 次級病房每日現金賠償</div>
+          <div class="col-wise" id="chk-cash">🎁 <b>每日 $2,400 津貼</b><br><span class="sub-text">(如自願降級住普通房)</span></div>
+          <div class="col-flexi">❌ <b>不適用</b></div>
+        </div>
+        
+        <div class="checklist-row">
+          <div class="col-item">🎗️ 訂明非手術癌症治療<br><span class="sub-text">(化療/標靶/免疫治療等)</span></div>
+          <div class="col-wise">🛡️ <b>全數賠償</b><br><span class="sub-text">(免找數專心治病)</span></div>
+          <div class="col-flexi">⚠️ <b class="danger-text">每年上限 $96,000</b></div>
+        </div>
+      </div>
+    </div>
+
     <div class="premium-section">
       <h2 class="premium-title">💰 專屬保費預算及稅務優惠</h2>
       <div class="calc-grid">
@@ -201,6 +250,42 @@
   </div>
 
   <script>
+    // 條件切換邏輯
+    let isConditionMet = true; 
+    function toggleConditions() {
+        isConditionMet = !isConditionMet;
+        const toggleEl = document.getElementById('condition-toggle');
+        const toggleText = toggleEl.querySelector('.toggle-text');
+        
+        if (isConditionMet) {
+            toggleEl.className = 'toggle-switch active';
+            toggleText.textContent = '✅ 已符合三大條件 (享半私家房)';
+            updateChecklist(true);
+        } else {
+            toggleEl.className = 'toggle-switch inactive';
+            toggleText.textContent = '⚠️ 未能符合 (跌落普通房)';
+            updateChecklist(false);
+        }
+    }
+
+    function updateChecklist(isMet) {
+        const chkFollowup = document.getElementById('chk-followup');
+        const chkTcm = document.getElementById('chk-tcm');
+        const chkCash = document.getElementById('chk-cash');
+
+        if (isMet) {
+            chkFollowup.innerHTML = `✅ <b>全數賠償</b><br><span class="sub-text">(長達 90 - 365 日)</span>`;
+            chkTcm.innerHTML = `✅ <b>每次 $1,000</b><br><span class="sub-text">(每年高達 20 次)</span>`;
+            chkCash.innerHTML = `🎁 <b>每日 $2,400 津貼</b><br><span class="sub-text">(如自願降級住普通房)</span>`;
+            chkCash.style.color = "#2e7d32";
+        } else {
+            chkFollowup.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受限於普通房級別日數)</span>`;
+            chkTcm.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受限於普通房級別次數)</span>`;
+            chkCash.innerHTML = `❌ <b>不適用</b><br><span class="sub-text">(已屬基本房型，無降級獎勵)</span>`;
+            chkCash.style.color = "#888";
+        }
+    }
+
     // 手術資料庫
     const surgeryData = {
         day: [
@@ -266,7 +351,7 @@
         `;
     }
 
-    // JSON 保費資料庫 (節錄自上傳的 Excel)
+    // 保費資料庫
     const premiumDB = {
       "18000": {"0":3560,"5":3264,"10":2768,"19":2880,"20":2880,"25":3896,"30":5112,"35":5528,"40":6064,"45":7840,"50":10016,"55":14168,"60":19288,"65":28000,"70":37264,"75":48976,"80":58024},
       "8800": {"0":4528,"5":4168,"10":3560,"19":3688,"20":3688,"25":4976,"30":6512,"35":7064,"40":7728,"45":9984,"50":12736,"55":17968,"60":24456,"65":35504,"70":47232,"75":62048,"80":72688},
@@ -274,7 +359,6 @@
       "flexi_m": {"0":5855,"5":3474,"10":3294,"19":3973,"20":3973,"25":4396,"30":4880,"35":5406,"40":6549,"45":8313,"50":10557,"55":13304,"60":17478,"65":23658,"70":30820,"75":41363,"80":52084}
     };
 
-    // 獲取就近保費 (插值/找最近的年齡記錄)
     function getRate(db, age) {
         let keys = Object.keys(db).map(Number).sort((a,b)=>a-b);
         let bestKey = keys[0];
@@ -294,11 +378,9 @@
         let wisePrem = getRate(premiumDB[deduc], age);
         let flexiPrem = getRate(premiumDB["flexi_" + gender.toLowerCase()], age);
 
-        // 9折
         if(isVitality) { wisePrem *= 0.9; flexiPrem *= 0.9; }
 
         let wiseTax = 0; let flexiTax = 0;
-        // 扣稅 (上限 8000)
         if(isTax) {
             wiseTax = Math.min(wisePrem, 8000) * taxRate;
             flexiTax = Math.min(flexiPrem, 8000) * taxRate;
@@ -317,6 +399,7 @@
     window.onload = function() {
         switchCategory('day', document.querySelector('.tab.active'));
         calculatePremium();
+        updateChecklist(true);
     };
   </script>
 </body>
