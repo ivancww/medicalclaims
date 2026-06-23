@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v3.0.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v3.1.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -28,9 +28,9 @@
     @media (max-width: 900px) { .settings-panel { flex-direction: column; } }
     .plan-setting { flex: 1; padding: 20px; border-radius: 10px; display: flex; flex-direction: column;}
     
-    .elite-setting { background-color: #fffaf0; border: 1px solid #fdebd0; } /* 尊顯：尊貴金色系 */
-    .wise-setting { background-color: #f0f7ff; border: 1px solid #cce5ff; }  /* 睿選：安心藍色系 */
-    .flexi-setting { background-color: #fff5f5; border: 1px solid #ffdce0; justify-content: center; text-align: center; } /* 靈活：警告紅色系 */
+    .elite-setting { background-color: #fffaf0; border: 1px solid #fdebd0; } 
+    .wise-setting { background-color: #f0f7ff; border: 1px solid #cce5ff; }  
+    .flexi-setting { background-color: #fff5f5; border: 1px solid #ffdce0; justify-content: center; text-align: center; } 
     
     .plan-setting h3 { margin-top: 0; margin-bottom: 15px; font-size: 18px; text-align: center; }
     .elite-setting h3 { color: #b9770e; }
@@ -46,14 +46,8 @@
     .toggle-switch.inactive { background: #ffc107; color: #333; }
     
     .condition-list { font-size: 13px; color: #444; padding-left: 20px; margin-top: 10px; line-height: 1.5; }
-    .condition-list li { margin-bottom: 4px; }
+    .condition-list li { margin-bottom: 6px; }
     .condition-highlight { color: #1a3a6e; font-weight: 700; }
-
-    /* 隱藏式提示 Tooltip */
-    .tooltip-container { position: relative; display: inline-block; cursor: help; margin-left: 5px; }
-    .tooltip-icon { background: #888; color: white; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
-    .tooltip-text { visibility: hidden; width: 200px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 12px; font-weight: normal; }
-    .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
 
     /* 類別導航 Tabs */
     .category-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -67,8 +61,13 @@
     /* 情境卡片區 */
     .scenario-card { border: 1px solid #eee; border-radius: 10px; padding: 20px; margin-bottom: 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     .scenario-title { font-size: 20px; font-weight: 700; margin: 0 0 5px 0; color: #333; text-align: center;}
-    .scenario-cost { font-size: 15px; color: #777; margin-bottom: 20px; text-align: center;}
+    .scenario-cost { font-size: 15px; color: #777; margin-bottom: 15px; text-align: center;}
     
+    /* 合理及慣常 收縮按鈕 */
+    .rc-toggle-btn { text-align: center; font-size: 14px; color: #1a3a6e; cursor: pointer; text-decoration: underline; margin-bottom: 15px; font-weight: 500; display: inline-block; width: 100%;}
+    .rc-info-box { display: none; background: #fdf5f5; border-left: 4px solid #d9534f; padding: 12px 15px; border-radius: 6px; font-size: 13px; color: #555; margin-bottom: 15px; line-height: 1.5; text-align: left; }
+    .rc-info-box b { color: #d9534f; }
+
     .oop-comparison { display: flex; gap: 15px; }
     @media (max-width: 768px) { .oop-comparison { flex-direction: column; } }
     .oop-box { flex: 1; padding: 15px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
@@ -124,12 +123,14 @@
 <body>
   <div class="main-container">
     <div class="header-section">
-      <h1 class="main-title">醫療保障實況對比 v3.0.0</h1>
+      <h1 class="main-title">醫療保障實況對比 v3.1.0</h1>
       <div id="sync-status">🔄 正在連接 Google Sheets...</div>
     </div>
 
+    <!-- 頂部設定區 (三欄) -->
     <div class="settings-panel">
       
+      <!-- 尊顯計劃 -->
       <div class="plan-setting elite-setting">
         <h3>👑 高端尊顯計劃</h3>
         <label>自付額選項：</label>
@@ -144,15 +145,10 @@
         </div>
       </div>
 
+      <!-- 睿選計劃 -->
       <div class="plan-setting wise-setting">
         <h3>🛡️ 高端睿選計劃</h3>
-        <label>
-          自付額選項 
-          <span class="tooltip-container">
-            <span class="tooltip-icon">i</span>
-            <span class="tooltip-text">受「合理及慣常」手術收費條款限制，詳情請參閱保單契約。</span>
-          </span>：
-        </label>
+        <label>自付額選項：</label>
         <select id="wise-deductible" onchange="renderScenario(); calculatePremium();">
           <option value="0">HK$ 0</option>
           <option value="8800">HK$ 8,800</option>
@@ -165,12 +161,16 @@
             <span class="toggle-text">✅ 符合條件 (享半私家)</span>
           </div>
         </div>
+        
+        <!-- 已按要求詳列 3 大條件 -->
         <ul class="condition-list">
           <li>🏥 於4間指定醫院住院<br><span class="condition-highlight">(浸會、聖保祿、法國、仁安)</span></li>
-          <li>👨‍⚕️ 網絡醫生及預先批核</li>
+          <li>👨‍⚕️ 須經「睿選網絡醫生」轉介及掛單</li>
+          <li>📝 接受治療前完成「醫療費用預先批核」</li>
         </ul>
       </div>
       
+      <!-- 靈活計劃 -->
       <div class="plan-setting flexi-setting">
         <h3>⚠️ 靈活計劃</h3>
         <p style="color: #d9534f; font-weight: 500; line-height: 1.5; font-size: 15px; margin: 0;">
@@ -182,24 +182,30 @@
       </div>
     </div>
 
+    <!-- 類別導航 Tabs -->
     <div class="category-tabs">
       <div class="tab active" onclick="switchCategory('day', this)">☀️ 日間手術中心</div>
       <div class="tab" onclick="switchCategory('inpatient', this)">🏥 須住院手術</div>
       <div class="tab tab-cancer" onclick="switchCategory('cancer', this)">🎗️ 獨立專區：癌症治療</div>
     </div>
 
+    <!-- 專屬手術下拉選單 -->
     <div class="surgery-selector">
       <select id="surgery-select" onchange="renderScenario()">
-        </select>
+        <!-- 選項由 JS 動態生成 -->
+      </select>
     </div>
 
+    <!-- 癌症專屬警告 -->
     <div id="cancer-warning" style="display: none; background: #fff3cd; color: #856404; padding: 15px; border-left: 5px solid #ffeeba; border-radius: 4px; margin-bottom: 20px; font-size: 15px;">
       🚨 <b>【重要備註】</b>以上僅為單次「切除腫瘤」的外科手術預算。<br>
       <b>傳統醫療絕對未包：標靶藥、化療、免疫療法等極昂貴的長遠抗癌開支！</b>
     </div>
 
+    <!-- 單一情境展示區 -->
     <div id="scenario-container"></div>
 
+    <!-- 出院及附加保障 Check List -->
     <div class="checklist-section">
       <h2 class="checklist-title">📋 康復及附加保障對比</h2>
       <div class="checklist-grid">
@@ -240,6 +246,7 @@
       </div>
     </div>
 
+    <!-- 保費對比計算器 -->
     <div class="premium-section">
       <h2 class="premium-title">💰 專屬保費預算及稅務優惠</h2>
       <div class="calc-grid">
@@ -296,7 +303,6 @@
   </div>
 
   <script>
-    // 雲端 CSV 連結設定 (已加入 尊顯 及 睿選 新連結)
     const sheetsUrls = {
         "flexi_m": "https://docs.google.com/spreadsheets/d/1tCBEMv00y13vzN2QY_yivoGruTKmYhnF6NqIc-uovmE/export?format=csv",
         "flexi_f": "https://docs.google.com/spreadsheets/d/1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw/export?format=csv",
@@ -382,7 +388,6 @@
         calculatePremium();
     }
 
-    // 睿選條件切換邏輯
     let isConditionMet = true; 
     function toggleConditions() {
         isConditionMet = !isConditionMet;
@@ -415,6 +420,16 @@
             chkTcm.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受普通房次數限制)</span>`;
             chkCash.innerHTML = `❌ <b>不適用</b><br><span class="sub-text">(無降級獎勵)</span>`;
             chkCash.style.color = "#888";
+        }
+    }
+
+    // 展開/收起「合理及慣常」條款
+    function toggleRCInfo() {
+        const rcBox = document.getElementById('rc-info-box');
+        if (rcBox.style.display === 'none' || rcBox.style.display === '') {
+            rcBox.style.display = 'block';
+        } else {
+            rcBox.style.display = 'none';
         }
     }
 
@@ -473,6 +488,17 @@
             <div class="scenario-card">
                 <h4 class="scenario-title">${item.name}</h4>
                 <div class="scenario-cost">🏥 預算參考：${item.cost}</div>
+                
+                <div class="rc-toggle-btn" onclick="toggleRCInfo()">
+                    ℹ️ 點擊了解「合理及慣常」條款風險
+                </div>
+                <div id="rc-info-box" class="rc-info-box">
+                    <b>客人請留意：</b><br>
+                    尊顯及睿選等高端計劃，賠償額會受「合理及慣常」手術收費條款限制。<br>
+                    若主診醫生的收費<b>大幅高於市場普遍水平</b>（例如同行中位數），保險公司只會賠償至合理水平，超出的差額需由客人自行承擔。<br>
+                    👉 <i>建議方案：手術前務必向保險公司提交「醫療費用預先批核」，以提前鎖定最終預算，免失預算。</i>
+                </div>
+
                 <div class="oop-comparison">
                     <div class="oop-box elite-oop">
                         <span class="oop-label">尊顯 自付上限</span>
