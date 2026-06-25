@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v3.1.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v3.2.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -123,14 +123,12 @@
 <body>
   <div class="main-container">
     <div class="header-section">
-      <h1 class="main-title">醫療保障實況對比 v3.1.0</h1>
+      <h1 class="main-title">醫療保障實況對比 v3.2.0</h1>
       <div id="sync-status">🔄 正在連接 Google Sheets...</div>
     </div>
 
-    <!-- 頂部設定區 (三欄) -->
     <div class="settings-panel">
       
-      <!-- 尊顯計劃 -->
       <div class="plan-setting elite-setting">
         <h3>👑 高端尊顯計劃</h3>
         <label>自付額選項：</label>
@@ -145,7 +143,6 @@
         </div>
       </div>
 
-      <!-- 睿選計劃 -->
       <div class="plan-setting wise-setting">
         <h3>🛡️ 高端睿選計劃</h3>
         <label>自付額選項：</label>
@@ -162,7 +159,6 @@
           </div>
         </div>
         
-        <!-- 已按要求詳列 3 大條件 -->
         <ul class="condition-list">
           <li>🏥 於4間指定醫院住院<br><span class="condition-highlight">(浸會、聖保祿、法國、仁安)</span></li>
           <li>👨‍⚕️ 須經「睿選網絡醫生」轉介及掛單</li>
@@ -170,7 +166,6 @@
         </ul>
       </div>
       
-      <!-- 靈活計劃 -->
       <div class="plan-setting flexi-setting">
         <h3>⚠️ 靈活計劃</h3>
         <p style="color: #d9534f; font-weight: 500; line-height: 1.5; font-size: 15px; margin: 0;">
@@ -182,30 +177,24 @@
       </div>
     </div>
 
-    <!-- 類別導航 Tabs -->
     <div class="category-tabs">
       <div class="tab active" onclick="switchCategory('day', this)">☀️ 日間手術中心</div>
       <div class="tab" onclick="switchCategory('inpatient', this)">🏥 須住院手術</div>
       <div class="tab tab-cancer" onclick="switchCategory('cancer', this)">🎗️ 獨立專區：癌症治療</div>
     </div>
 
-    <!-- 專屬手術下拉選單 -->
     <div class="surgery-selector">
       <select id="surgery-select" onchange="renderScenario()">
-        <!-- 選項由 JS 動態生成 -->
-      </select>
+        </select>
     </div>
 
-    <!-- 癌症專屬警告 -->
     <div id="cancer-warning" style="display: none; background: #fff3cd; color: #856404; padding: 15px; border-left: 5px solid #ffeeba; border-radius: 4px; margin-bottom: 20px; font-size: 15px;">
       🚨 <b>【重要備註】</b>以上僅為單次「切除腫瘤」的外科手術預算。<br>
       <b>傳統醫療絕對未包：標靶藥、化療、免疫療法等極昂貴的長遠抗癌開支！</b>
     </div>
 
-    <!-- 單一情境展示區 -->
     <div id="scenario-container"></div>
 
-    <!-- 出院及附加保障 Check List -->
     <div class="checklist-section">
       <h2 class="checklist-title">📋 康復及附加保障對比</h2>
       <div class="checklist-grid">
@@ -246,7 +235,6 @@
       </div>
     </div>
 
-    <!-- 保費對比計算器 -->
     <div class="premium-section">
       <h2 class="premium-title">💰 專屬保費預算及稅務優惠</h2>
       <div class="calc-grid">
@@ -303,16 +291,20 @@
   </div>
 
   <script>
-    const sheetsUrls = {
-        "flexi_m": "https://docs.google.com/spreadsheets/d/1tCBEMv00y13vzN2QY_yivoGruTKmYhnF6NqIc-uovmE/export?format=csv",
-        "flexi_f": "https://docs.google.com/spreadsheets/d/1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw/export?format=csv",
-        "wise_0": "https://docs.google.com/spreadsheets/d/1i9pDkhXjKSfu2zjImoz9a5U0JUuxqoGz4_3j9El4SyY/export?format=csv",
-        "wise_8800": "https://docs.google.com/spreadsheets/d/1enfXeDK5v8OuuIGUT9Y6qC0O_1YCmLx2AU63LpxfAzE/export?format=csv",
-        "wise_18000": "https://docs.google.com/spreadsheets/d/1eAVVki3uhUodYgE5m3qSF2tEU8cQRw6JGjE_B63o2Tg/export?format=csv",
-        "wise_30000": "https://docs.google.com/spreadsheets/d/1Haos2s3w24EpBWjRUeKA-gMfZ_ovzh9HsFrKmJQZT5M/export?format=csv",
-        "elite_0": "https://docs.google.com/spreadsheets/d/1wnoW04BAGmujkGibxRI6a_YPQB-7ydNt0d8YBEz-77w/export?format=csv",
-        "elite_16000": "https://docs.google.com/spreadsheets/d/1NTsZs8xgEGYzqJb0KubgyvTYNfCWMJBuUZP-9fc8WZ0/export?format=csv",
-        "elite_25000": "https://docs.google.com/spreadsheets/d/1u33a1dpKqicADenJX3pyByI08LLM0qOQGPZzDxHc2MY/export?format=csv"
+    // 總群組：單一 Google Sheet ID
+    const spreadsheetId = "1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw";
+
+    // 精準對應你指定的 9 個分頁名稱
+    const tabNames = {
+        "flexi_f": "女靈活計劃",
+        "flexi_m": "男靈活計劃",
+        "wise_0": "睿選0自付額",
+        "wise_8800": "睿選8800自付額",
+        "wise_18000": "睿選18000自付額",
+        "wise_30000": "睿選30000自付額",
+        "elite_0": "尊顯0自付額",
+        "elite_16000": "尊顯16000自付額",
+        "elite_25000": "尊顯25000自付額"
     };
 
     let premiumDB = {};
@@ -359,28 +351,34 @@
         return db;
     }
 
+    // 基於 Google Visualization API 直拉單一試算表的不同分頁
     async function syncPremiumData() {
         const statusEl = document.getElementById('sync-status');
         try {
-            const keys = Object.keys(sheetsUrls);
-            const fetchPromises = keys.map(k => fetchCSV(sheetsUrls[k]));
+            const keys = Object.keys(tabNames);
+            const fetchPromises = keys.map(k => {
+                // 利用 gviz/tq 加上 sheet 參數抓取特定分頁
+                const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabNames[k])}`;
+                return fetchCSV(url);
+            });
+            
             const results = await Promise.all(fetchPromises);
             
             keys.forEach((key, index) => {
                 premiumDB[key] = results[index];
             });
             
-            localStorage.setItem('avaPremiumDB_v3', JSON.stringify(premiumDB));
-            statusEl.innerHTML = '✅ 保費數據已同步 (實時)';
+            localStorage.setItem('avaPremiumDB_v3_2', JSON.stringify(premiumDB));
+            statusEl.innerHTML = '✅ 雲端多分頁保費數據已同步 (實時)';
             statusEl.className = 'status-ok';
         } catch (e) {
-            const cached = localStorage.getItem('avaPremiumDB_v3');
+            const cached = localStorage.getItem('avaPremiumDB_v3_2');
             if (cached) {
                 premiumDB = JSON.parse(cached);
-                statusEl.innerHTML = '⚠️ 離線模式 (載入已儲存保費)';
+                statusEl.innerHTML = '⚠️ 離線模式 (載入已儲存分頁保費)';
                 statusEl.className = 'status-offline';
             } else {
-                statusEl.innerHTML = '❌ 無法載入保費，請連接網絡';
+                statusEl.innerHTML = '❌ 無法載入保費，請連接網絡並確保共享權限已開';
                 statusEl.style.background = '#f8d7da';
                 statusEl.style.color = '#721c24';
             }
@@ -418,19 +416,14 @@
         } else {
             chkFollowup.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受普通房日數限制)</span>`;
             chkTcm.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受普通房次數限制)</span>`;
-            chkCash.innerHTML = `❌ <b>不適用</b><br><span class="sub-text">(無降級獎勵)</span>`;
+            chkCash.innerHTML = `❌ <b>不適用</b><br><span class="sub-text">(無降級獎級)</span>`;
             chkCash.style.color = "#888";
         }
     }
 
-    // 展開/收起「合理及慣常」條款
     function toggleRCInfo() {
         const rcBox = document.getElementById('rc-info-box');
-        if (rcBox.style.display === 'none' || rcBox.style.display === '') {
-            rcBox.style.display = 'block';
-        } else {
-            rcBox.style.display = 'none';
-        }
+        rcBox.style.display = (rcBox.style.display === 'none' || rcBox.style.display === '') ? 'block' : 'none';
     }
 
     const surgeryData = {
@@ -443,7 +436,7 @@
         inpatient: [
             { name: '通波仔手術 (微創)', cost: 'HK$ 100,000 - $300,000', tradOOP: 'HK$ 30,000 - $80,000+' },
             { name: '十字韌帶手術 (微創)', cost: 'HK$ 100,000 - $150,000', tradOOP: 'HK$ 20,000 - $35,000+' },
-            { name: '半月板手術 (微創)', cost: 'HK$ 50,000 - $80,000', tradOOP: 'HK$ 10,000 - $18,000+' }
+            { name: '半月板手術 (微創)', cost: 'HK$ 5,000 - $8,000', tradOOP: 'HK$ 10,000 - $18,000+' }
         ],
         cancer: [
             { name: '乳癌手術 (乳房切除)', cost: 'HK$ 150,000 - $250,000', tradOOP: 'HK$ 50,000 - $80,000+' },
@@ -565,7 +558,7 @@
     window.onload = function() {
         switchCategory('day', document.querySelector('.tab.active'));
         updateChecklist(true);
-        syncPremiumData();
+        syncPremiumData(); // 啟動實時多分頁同步
     };
   </script>
 </body>
