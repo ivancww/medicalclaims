@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v3.5.1 | AVA專屬</title>
+  <title>醫療保障實況對比 v3.5.2 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -68,8 +68,6 @@
     .tab.active { background: #1a3a6e; color: #fff; }
     .tab.tab-cancer { color: #d9534f; }
     .tab.tab-cancer.active { background: #d9534f; color: #fff; }
-    .tab.tab-public { background: #e0e0e0; color: #333; }
-    .tab.tab-public.active { background: #444; color: #fff; }
     .tab.tab-claims { background: #fff2cc; color: #b78103; border-color: #ffe599; }
     .tab.tab-claims.active { background: #f1c232; color: #fff; }
 
@@ -169,7 +167,7 @@
 
   <div id="app-launcher-lock" class="app-lock-overlay">
       <div class="lock-box">
-          <h3 class="lock-title">🛡️ AVA Team 專屬系統驗證</h3>
+          <h3 class="lock-title">🛡️ AVA Team 專專屬系統驗證</h3>
           <input type="password" id="launcher-password" placeholder="請輸入啟動密碼" style="text-align: center; font-size: 18px; padding: 12px;">
           <button class="lock-btn" onclick="unlockApp()">解除鎖定</button>
           <div id="lock-error-msg" style="color:red; font-size:13px; margin-top:10px; font-weight:bold; display:none;">❌ 密碼錯誤，拒絕進入！</div>
@@ -178,7 +176,7 @@
 
   <div class="main-container">
     <div class="header-section">
-      <h1 class="main-title">醫療保障實況對比 v3.5.1</h1>
+      <h1 class="main-title">醫療保障實況對比 v3.5.2</h1>
       <div id="sync-status">🔄 正在連接 Google Sheets...</div>
     </div>
 
@@ -240,7 +238,6 @@
       <div class="tab" onclick="switchCategory('inpatient', this)">🏥 住院手術</div>
       <div class="tab" onclick="switchCategory('child_inpatient', this)">👶 小朋友住院</div>
       <div class="tab tab-cancer" onclick="switchCategory('cancer', this)">🎗️ 癌症專區</div>
-      <div class="tab tab-public" onclick="switchCategory('public', this)">🏥 公營實況</div>
       <div class="tab tab-claims" onclick="switchCategory('claims', this)">📊 真實索償例子</div>
     </div>
 
@@ -255,40 +252,6 @@
     </div>
 
     <div id="scenario-container"></div>
-
-    <div id="public-hospital-container" style="display: none;">
-        <div class="scenario-card" style="border: 2px solid #555;">
-            <h2 style="color: #333; text-align: center; margin-top:0;">🏥 醫管局公營醫療：實況與盲點</h2>
-            <div style="text-align: center; margin-bottom: 25px; margin-top: 20px;">
-                <button onclick="toggleHAInfo()" style="background: #1a3a6e; color: white; border: none; padding: 12px 20px; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer;">
-                    👁️ 顯示 / 隱藏「合資格人士」基本收費
-                </button>
-            </div>
-            <div id="ha-info-box" style="display: none; background: #f0f7ff; border-left: 5px solid #1a3a6e; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-                <h4 style="margin-top: 0; color: #1a3a6e; font-size: 18px;">2026年 醫管局基本收費 (符合資格人士)：</h4>
-                <div style="font-size: 15px; line-height: 1.8; color: #333;">
-                    • <b>急症室：</b> 每次 $400｜• <b>急症病床 (住院)：</b> 每日 $300<br>
-                    • <b>全年收費上限：</b> 每年累計達 <b>$10,000</b> 後豁免基本費用 (不含自費項目)。
-                </div>
-            </div>
-            <div class="oop-comparison">
-                <div class="oop-box flexi-oop" style="border-color: #aaa; background: #fafafa;">
-                    <span class="oop-label" style="font-size: 17px; font-weight: 900; color: #333;">⏳ 時間成本 (輪候盲點)</span>
-                    <div style="text-align: left; font-size: 14px; margin-top: 10px; line-height: 1.7; color: #444;">
-                        • 白內障手術：長達 1.5 至 4 年以上<br>• 骨科 (關節/韌帶)：長達 2 至 6 年<br>
-                        • 專科新症排期：普遍需時 1 至 2 年
-                    </div>
-                </div>
-                <div class="oop-box flexi-oop" style="border-color: #d9534f; background: #fff5f5;">
-                    <span class="oop-label" style="font-size: 17px; font-weight: 900; color: #c62828;">💸 隱藏金錢 (自費盲點)</span>
-                    <div style="text-align: left; font-size: 14px; margin-top: 10px; line-height: 1.7; color: #444;">
-                        • 通波仔支架 (SFI)：每個 $40,000 - $80,000<br>• 癌症標靶藥物：每月 $30,000 - $80,000<br>
-                        • 微創自費耗材：數萬至十數萬元
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="claims-gallery-container" style="display: none;">
         <div class="scenario-card" style="border: 2px solid #f1c232; background: #fffdf5; text-align: center;">
@@ -312,7 +275,7 @@
     <div id="main-checklist-section" class="checklist-section">
       <h2 class="checklist-title">📋 康復及附加保障對比</h2>
       <div class="checklist-grid">
-        <div class="checklist-row header-row"><div class="col-item">保障項目</div><div class="col-elite">尊顯計劃 (left)</div><div class="col-wise">睿選計劃 (mid)</div><div class="col-flexi">靈活計劃 (right)</div></div>
+        <div class="checklist-row header-row"><div class="col-item">保障項目</div><div class="col-elite">尊顯計劃 (左)</div><div class="col-wise">睿選計劃 (中)</div><div class="col-flexi">靈活計劃 (右)</div></div>
         <div class="checklist-row"><div class="col-item">🩺 手術 / 出院後覆診</div><div class="col-elite">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span></div><div class="col-wise" id="chk-followup">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span></div><div class="col-flexi">⚠️ <b>上限 $848</b><br><span class="sub-text">(只限 3 日內)</span></div></div>
         <div class="checklist-row"><div class="col-item">🌿 手術 / 出院後中醫</div><div class="col-elite">✅ <b>每次 $650</b><br><span class="sub-text">(全年高達 15 次)</span></div><div class="col-wise" id="chk-tcm">✅ <b>每次 $1,000</b><br><span class="sub-text">(全年高達 20 次)</span></div><div class="col-flexi">❌ <b>不適用</b><br><span class="sub-text">(全數自費)</span></div></div>
         <div class="checklist-row"><div class="col-item">💰 次級病房每日現金</div><div class="col-elite">🎁 <b>每日 $1,200</b><br><span class="sub-text">(自願降級普通房)</span></div><div class="col-wise" id="chk-cash">🎁 <b>每日 $2,400</b><br><span class="sub-text">(自願降級普通房)</span></div><div class="col-flexi">❌ <b>不適用</b></div></div>
@@ -375,7 +338,7 @@
                     </div>
                 </div>
 
-                <label style="font-weight: bold; font-size:14px; margin-top:5px; display:block;">5. 客人最終自付金額 (忠實还原真實情況)：</label>
+                <label style="font-weight: bold; font-size:14px; margin-top:5px; display:block;">5. 客人最終自付金額 (忠實還原真實情況)：</label>
                 <input type="text" id="upload-oop-input" placeholder="例如: 0 / 18,000 / 18,000 (自付額)">
 
                 <label style="font-weight: bold; font-size:14px; margin-top:5px; display:block;">6. 案例病症名稱：</label>
@@ -394,9 +357,6 @@
   </div>
 
   <script>
-    // ==========================================
-    // 🔗 你的真實 FIREBASE CONFIG
-    // ==========================================
     const firebaseConfig = {
       apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
       authDomain: "medical-and-ci.firebaseapp.com",
@@ -407,12 +367,10 @@
       measurementId: "G-VC775G3QRW"
     };
 
-    // 初始化
     if (firebase.apps.length === 0) {
         firebase.initializeApp(firebaseConfig);
     }
 
-    // 🔐 App 啟動安全認證
     function unlockApp() {
         const inputPass = document.getElementById('launcher-password').value;
         if (inputPass === "AVA team") {
@@ -522,11 +480,6 @@
         rcBox.style.display = (rcBox.style.display === 'none' || rcBox.style.display === '') ? 'block' : 'none';
     }
 
-    function toggleHAInfo() {
-        const haBox = document.getElementById('ha-info-box');
-        haBox.style.display = (haBox.style.display === 'none' || haBox.style.display === '') ? 'block' : 'none';
-    }
-
     const surgeryData = {
         day: [
             { name: '腸胃鏡 (連瘜肉切除)', cost: 'HK$ 20,000 - $30,000', tradOOP: 'HK$ 500 - $2,500' },
@@ -559,17 +512,9 @@
         document.getElementById('main-checklist-section').style.display = 'block';
         document.getElementById('main-premium-section').style.display = 'block';
         document.getElementById('cancer-warning').style.display = 'none';
-        document.getElementById('public-hospital-container').style.display = 'none';
         document.getElementById('claims-gallery-container').style.display = 'none';
         
-        if (category === 'public') {
-            document.getElementById('main-settings-panel').style.display = 'none';
-            document.getElementById('main-surgery-selector').style.display = 'none';
-            document.getElementById('scenario-container').style.display = 'none';
-            document.getElementById('main-checklist-section').style.display = 'none';
-            document.getElementById('main-premium-section').style.display = 'none';
-            document.getElementById('public-hospital-container').style.display = 'block';
-        } else if (category === 'claims') {
+        if (category === 'claims') {
             document.getElementById('main-settings-panel').style.display = 'none';
             document.getElementById('main-surgery-selector').style.display = 'none';
             document.getElementById('scenario-container').style.display = 'none';
@@ -656,7 +601,7 @@
     }
 
     // ===================================================
-    // ⚙️ FIREBASE 醫療索償一體化中央後台邏輯 (手動還原版)
+    // ⚙️ FIREBASE 醫療索償一體化中央後台邏輯 
     // ===================================================
     function openAdminPanel() {
         document.getElementById('admin-modal').style.display = 'flex';
@@ -665,7 +610,6 @@
 
     function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
 
-    // 智能檔名結構升級： claim_[高端high/傳統trad]_[總費用]_[可索金額]_[手動自付oop]_[時間戳]_[病症名].ext
     async function uploadClaimWithMetadata() {
         const fileInput = document.getElementById('upload-file-input');
         const typeInput = document.getElementById('upload-type-input').value;
@@ -687,19 +631,16 @@
             const timestamp = Date.now();
             const extension = file.name.split('.').pop();
             
-            // 安全過濾字符，防止傳輸損壞
             const safeTotal = totalInput.replace(/_/g, '-');
             const safeClaim = claimInput.replace(/_/g, '-');
             const safeOop = oopInput.replace(/_/g, '-');
             const safeDesc = descInput.replace(/_/g, '-');
             
-            // 組裝全新檔名 (加入手動自付欄位，剔除自動計算)
             const fileName = `claim_${typeInput}_${safeTotal}_${safeClaim}_${safeOop}_${timestamp}_${safeDesc}.${extension}`;
             
             await storageRef.child('medical_claims/' + fileName).put(file);
             alert("🚀 醫療真實索償案例已安全儲存！");
             
-            // 重置表单
             fileInput.value = ''; 
             document.getElementById('upload-total-input').value = '';
             document.getElementById('upload-claim-input').value = ''; 
@@ -716,7 +657,6 @@
         }
     }
 
-    // 渲染後台管理畫廊
     async function renderAdminDashboard() {
         const grid = document.getElementById('admin-images-grid');
         grid.innerHTML = "正在提取中央檔案...";
@@ -733,7 +673,7 @@
                 if (parts.length < 7) continue;
 
                 const type = parts[1]; 
-                const oop = parts[4]; // 直接獲取手動自付文字
+                const oop = parts[4]; 
                 const descWithExt = parts.slice(6).join('_');
                 const desc = descWithExt.substring(0, descWithExt.lastIndexOf('.'));
                 
@@ -753,7 +693,6 @@
         }
     }
 
-    // 刪除
     async function deleteClaim(name) {
         if (!confirm("確定要永久刪除此索償案例嗎？")) return;
         try {
@@ -765,7 +704,6 @@
         }
     }
 
-    // 前端讀取並解讀
     async function loadClaimsFromFirebase() {
         const grid = document.getElementById('claims-gallery-grid');
         const loader = document.getElementById('claims-loading');
@@ -776,7 +714,6 @@
             const storageRef = firebase.storage().ref('medical_claims');
             const result = await storageRef.listAll();
             loader.style.display = "none";
-
             allClaimsCached = []; 
 
             for (let itemRef of result.items) {
@@ -784,18 +721,16 @@
                 const parts = name.split('_');
                 if (parts.length < 7) continue;
 
-                const type = parts[1]; // high / trad
-                const total = parts[2]; // 保持文字
-                const claim = parts[3]; // 保持文字
-                const oop = parts[4];   // 100% 忠實讀取手動填寫的自付情況
-                
+                const type = parts[1]; 
+                const total = parts[2]; 
+                const claim = parts[3]; 
+                const oop = parts[4];   
                 const descWithExt = parts.slice(6).join('_');
                 const desc = descWithExt.substring(0, descWithExt.lastIndexOf('.'));
                 const url = await itemRef.getDownloadURL();
 
                 allClaimsCached.push({ name, type, total, claim, oop, desc, url });
             }
-
             renderFilteredClaims();
         } catch (e) {
             loader.innerHTML = "❌ 連接 Firebase 失敗，請確認 Storage 權限。";
@@ -827,7 +762,6 @@
             const card = document.createElement('div');
             card.className = 'claim-card';
             
-            // 根據真實輸入進行顏色美化 (如果是 0 就顯示綠色，否則顯示紅色警告字體)
             const isZero = (c.oop === '0' || c.oop === 'HK$0' || c.oop === 'HK$ 0');
             const oopDisplay = isZero 
                 ? `<b style="color:#28a745; font-size:15px;">HK$ ${c.oop} (全數全賠 ✅)</b>`
