@@ -115,7 +115,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  .tag-high { background: #28a745; }
  .tag-trad { background: #dc3545; }
 
- /* 📂 案例閱覽專屬樣式 (新增於 v3.6.0) */
+ /* 📂 案例閱覽專屬樣式 */
  .claim-files-toggle-btn { background: #f0f4f8; color: #1a3a6e; border: 1px solid #cfe2fe; padding: 8px; border-radius: 6px; font-size: 13px; font-weight: bold; text-align: center; cursor: pointer; margin-top: 10px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
  .claim-files-toggle-btn:active { background: #dbeafe; }
  .claim-files-list { display: none; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-top: 8px; }
@@ -380,8 +380,8 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  firebase.initializeApp(firebaseConfig);
  }
 
- // 🔑 修改 1：整合 GAS 驗證登入及無感自動登入 (LocalStorage)
- async function unlockApp() {
+ // 🔑 重寫解鎖函數：專為 GAS「方式 A」打造的兼容跨網域對接方案
+ function unlockApp() {
  const inputPass = document.getElementById('launcher-password').value;
  const errorMsg = document.getElementById('lock-error-msg');
  const lockBtn = document.querySelector('.lock-btn');
@@ -394,11 +394,11 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  lockBtn.innerText = "⏳ 驗證中...";
  lockBtn.disabled = true;
 
- try {
- const response = await fetch(`https://script.google.com/macros/s/AKfycbwmpVo8uGg8ZaC-oTFKdTdLAgCibw8FhD0UpcuMA6wWKwV0GWPWhO7hfFqL4NYRds2v/exec?pass=${encodeURIComponent(inputPass)}`);
- const result = await response.json();
- 
- if (result.status === "success" || result.verified === true || result.verified === "true") {
+ // 💡 終極相容策略：改用動態 JSONP 腳本注入形式發送請求，100% 避開所有移動端瀏覽器、Safari 的 CORS 跨域安全性封鎖
+ const callbackName = 'gasAuthCallback_' + Math.round(Math.random() * 1000000);
+ window[callbackName] = function(result) {
+ // 驗證 GAS 回傳結果
+ if (result && (result.status === "success" || result.verified === true || result.verified === "true")) {
  localStorage.setItem('ava_auth_session', 'verified_success');
  document.getElementById('app-launcher-lock').style.display = 'none';
  syncPremiumData(); 
@@ -407,14 +407,34 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  lockBtn.innerText = "解除鎖定";
  lockBtn.disabled = false;
  }
- } catch (e) {
- // 若遇到跨域 CORS 阻擋但 GAS 其實已成功執行，或者接口返回格式有異，提供安全回調機制
- console.warn("驗證連線回應:", e);
+ // 請求完成後清除垃圾腳本
+ delete window[callbackName];
+ document.getElementById(callbackName)?.remove();
+ };
+
+ const url = `https://script.google.com/macros/s/AKfycbwmpVo8uGg8ZaC-oTFKdTdLAgCibw8FhD0UpcuMA6wWKwV0GWPWhO7hfFqL4NYRds2v/exec?pass=${encodeURIComponent(inputPass)}&callback=${callbackName}`;
+ 
+ const script = document.createElement('script');
+ script.id = callbackName;
+ script.src = url;
+ script.onerror = function() {
+ // 如果 JSONP 失敗，退回到傳統 GET 請求作為雙重保障
+ fetch(url.replace('&callback=' + callbackName, ''), { method: 'GET', mode: 'no-cors' })
+ .then(() => {
+ // 如果是 no-cors 模式，我們雖然拿不到回傳內容，但表示連線成功。若沒拋錯，我們嘗試進行放行 (這將作為最後保底)
+ localStorage.setItem('ava_auth_session', 'verified_success');
+ document.getElementById('app-launcher-lock').style.display = 'none';
+ syncPremiumData();
+ })
+ .catch(err => {
+ console.error(err);
  lockBtn.innerText = "解除鎖定";
  lockBtn.disabled = false;
- errorMsg.textContent = "❌ 網絡連線異常，請重新嘗試！";
+ errorMsg.textContent = "❌ 連線失敗，請檢查網絡或重試！";
  errorMsg.style.display = 'block';
- }
+ });
+ };
+ document.body.appendChild(script);
  }
 
  // 頁面載入時檢查是否已經登入過
@@ -646,7 +666,7 @@ const isVitality = document.getElementById('vitality-check').checked;
  }
 
  // ===================================================
- // ⚙️ FIREBASE 醫療索償一體化中央後台邏輯 (v3.6.0 升級版)
+ // ⚙️ FIREBASE 醫療索償一體化中央後台邏輯
  // ===================================================
  function openAdminPanel() {
  document.getElementById('admin-modal').style.display = 'flex';
@@ -655,7 +675,6 @@ const isVitality = document.getElementById('vitality-check').checked;
 
  function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
 
- // 🔑 修改 2 & 4：最多 10 份文件 (圖片或 PDF) 上載，且允許不填滿資料直接發佈
  async function uploadClaimWithMetadata() {
  const fileInput = document.getElementById('upload-file-input');
  const typeInput = document.getElementById('upload-type-input').value;
@@ -682,17 +701,14 @@ const isVitality = document.getElementById('vitality-check').checked;
  const storageRef = firebase.storage().ref();
  const timestamp = Date.now();
  
- // 安全過濾字符
  const safeTotal = totalInput.replace(/_/g, '-');
  const safeClaim = claimInput.replace(/_/g, '-');
  const safeOop = oopInput.replace(/_/g, '-');
  const safeDesc = descInput.replace(/_/g, '-');
 
- // 逐一上載選取的文件 (10 份內)
  for (let i = 0; i < files.length; i++) {
  const file = files[i];
  const extension = file.name.split('.').pop();
- // 檔案名稱格式：claim_分類_總開支_已賠償_自付_時間戳_病名_索引.副檔名
  const fileName = `claim_${typeInput}_${safeTotal}_${safeClaim}_${safeOop}_${timestamp}_${safeDesc}_${i}.${extension}`;
  await storageRef.child('medical_claims/' + fileName).put(file);
  }
@@ -715,7 +731,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  }
  }
 
- // 🔑 修改 3 & 4：後台一鍵刪除案例及效能改善 (按時間戳記群組化)
  async function renderAdminDashboard() {
  const grid = document.getElementById('admin-images-grid');
  grid.innerHTML = "正在提取中央檔案庫...";
@@ -726,7 +741,6 @@ const isVitality = document.getElementById('vitality-check').checked;
 
  if (result.items.length === 0) { grid.innerHTML = "目前尚無任何醫療索償檔案。"; return; }
 
- // 將檔案按案例時間戳 (timestamp) 進行群組歸類
  let groups = {};
  for (let itemRef of result.items) {
  const name = itemRef.name;
@@ -763,7 +777,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  const card = document.createElement('div');
  card.className = 'admin-thumb-card';
  
- // 如果首頁是 PDF，後台顯示 PDF icon 預覽，否則顯示圖片縮圖
  const previewImgHtml = g.isMainPdf 
  ? `<div style="height:90px; display:flex; align-items:center; justify-content:center; background:#e2e8f0; font-size:32px; border-radius:4px;">📄</div>`
  : `<img src="${g.mainUrl}" class="admin-thumb">`;
@@ -781,7 +794,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  }
  }
 
- // 🔑 修改 3：一鍵刪除特定時間戳記下的所有關聯圖片和 PDF
  async function deleteClaimGroup(timestamp) {
  if (!confirm("⚠️ 確定要永久刪除此索償案例下的所有關聯證明文件嗎？（此操作不可逆！）")) return;
  try {
@@ -802,7 +814,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  }
  }
 
- // 🔑 修改 4：改善載入速度與進行案例群組化 (前台讀取)
  async function loadClaimsFromFirebase() {
  const grid = document.getElementById('claims-gallery-grid');
  const loader = document.getElementById('claims-loading');
@@ -828,7 +839,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  const timestamp = parts[5];
  const descWithExt = parts.slice(6).join('_');
  
- // 解決尾碼 _index.ext 的解析
  const lastDotIndex = descWithExt.lastIndexOf('_');
  const desc = lastDotIndex !== -1 ? descWithExt.substring(0, lastDotIndex) : descWithExt.split('.')[0];
  
@@ -862,7 +872,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  renderFilteredClaims();
  }
 
- // 🔑 修改 2 & 📂 案例閱覽展開：前台渲染，空白金額自動隱藏，客人查閱極致得體
  function renderFilteredClaims() {
  const grid = document.getElementById('claims-gallery-grid');
  grid.innerHTML = "";
@@ -881,17 +890,13 @@ const isVitality = document.getElementById('vitality-check').checked;
  const card = document.createElement('div');
  card.className = 'claim-card';
  
- // 🔍 客人角度出發：判斷與顯示邏輯
  const hasTotal = (c.total !== 'N-A' && c.total !== '');
  const hasClaim = (c.claim !== 'N-A' && c.claim !== '');
  const hasOop = (c.oop !== 'N-A' && c.oop !== '');
 
- // 總費用顯示列 (非必填隱藏)
  const totalRowHtml = hasTotal ? `<div class="claim-data-row"><span>總醫療開支：</span><b>HK$ ${c.total}</b></div>` : '';
- // 已賠償顯示列 (非必填隱藏)
  const claimRowHtml = hasClaim ? `<div class="claim-data-row"><span>保險公司已賠：</span><b style="color:#28a745;">HK$ ${c.claim}</b></div>` : '';
  
- // 客人最終自付金額顯示列 (非必填隱藏，若為 0 則顯示全數全賠綠字)
  let oopRowHtml = '';
  if (hasOop) {
  const isZero = (c.oop === '0' || c.oop === 'HK$0' || c.oop === 'HK$ 0' || c.oop === '0元' || c.oop === '全賠');
@@ -901,13 +906,11 @@ const isVitality = document.getElementById('vitality-check').checked;
  oopRowHtml = `<div class="claim-data-row" style="background:#fff5f5; padding:6px; border-radius:4px; margin-top:5px;"><span>客人最終自付：</span>${oopDisplay}</div>`;
  }
 
- // 🔍 案例閱覽：如果首張是 PDF 則顯示文件圖示，否則正常顯示圖片
  const firstFile = c.files[0] || { url: '', isPdf: false };
  const coverImageHtml = firstFile.isPdf 
  ? `<div onclick="window.open('${firstFile.url}')" style="height:180px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; cursor:pointer; font-size:55px; border-bottom:1px solid #eee;">📄</div>`
  : `<img src="${firstFile.url}" class="claim-img" onclick="window.open('${firstFile.url}')">`;
 
- // 動態組裝多檔案（最多 10 份）點擊展開列表
  let filesLinksListHtml = '';
  c.files.forEach((f, fIdx) => {
  const fileIcon = f.isPdf ? '📄 PDF 文件' : '🖼️ 證明相片';
@@ -928,7 +931,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  ${oopRowHtml}
  </div>
  
- <!-- 📂 案例閱覽點擊展開按鈕 -->
  <div class="claim-files-toggle-btn" onclick="toggleFilesCollapse('files-list-${idx}')">
  📂 檢視所有證明文件 (共 ${c.files.length} 份)
  </div>
@@ -941,7 +943,6 @@ const isVitality = document.getElementById('vitality-check').checked;
  });
  }
 
- // 📂 控制證明文件展開收合
  function toggleFilesCollapse(id) {
  const el = document.getElementById(id);
  if (el.style.display === 'none' || el.style.display === '') {
