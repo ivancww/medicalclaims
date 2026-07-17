@@ -699,7 +699,9 @@ const isVitality = document.getElementById('vitality-check').checked;
 
  try {
  const storageRef = firebase.storage().ref();
- const timestamp = Date.now();
+ 
+ // ⭐ 關鍵修正：將時間戳放到迴圈外面！確保這批上載的所有檔案時間戳 100% 相同！
+ const timestamp = Date.now(); 
  
  const safeTotal = totalInput.replace(/_/g, '-');
  const safeClaim = claimInput.replace(/_/g, '-');
