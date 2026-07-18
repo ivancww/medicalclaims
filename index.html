@@ -714,6 +714,36 @@ const isVitality = document.getElementById('vitality-check').checked;
  const fileName = `claim_${typeInput}_${safeTotal}_${safeClaim}_${safeOop}_${timestamp}_${safeDesc}_${i}.${extension}`;
  await storageRef.child('medical_claims/' + fileName).put(file);
  }
+// --- 在原本 for 迴圈結束後 (約第 716 行) 加入 ---
+
+// 2. 同步資料到 Google Sheet
+const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec";
+
+try {
+  await fetch(scriptUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+      type: typeInput,
+      total: totalInput,
+      claim: claimInput,
+      oop: oopInput,
+      desc: descInput
+    })
+  });
+  console.log("已成功同步至 Google Sheet");
+} catch (sheetErr) {
+  console.error("Google Sheet 同步失敗:", sheetErr);
+}
+
+// 彈出成功提示
+alert("🚀 真實索償案例檔案庫及 Google Sheet 資料已同步發佈！");
+
+// --- 原有的清空欄位邏輯 ---
+fileInput.value = ''; 
+document.getElementById('upload-total-input').value = '';
+// ... (以下保持不變)
+
 
  alert("🚀 真實索償案例檔案庫已安全發佈！");
  
