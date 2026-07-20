@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v3.6.1 | AVA專屬</title>
+ <title>醫療保障實況對比 v3.7.0 | AVA專屬</title>
  
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -184,7 +184,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  <div class="main-container">
  <div class="header-section">
- <h1 class="main-title">醫療保障實況對比 v3.6.0</h1>
+ <h1 class="main-title">醫療保障實況對比 v3.7.0</h1>
  <div id="sync-status">🔄 正在連接 Google Sheets...</div>
  </div>
 
@@ -523,6 +523,7 @@ function toggleConditions() {
  }
  }
 
+ // 🎯 康復保障表動態資料更新
  function updateChecklist(isMet) {
  const chkFollowup = document.getElementById('chk-followup');
  const chkTcm = document.getElementById('chk-tcm');
@@ -533,8 +534,8 @@ function toggleConditions() {
  chkCash.innerHTML = `🎁 <b>每日 $2,400</b><br><span class="sub-text">(自願降級普通房)</span>`;
  chkCash.style.color = "#2e7d32";
  } else {
- chkFollowup.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受普通房日數限制)</span>`;
- chkTcm.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(受普通房次數限制)</span>`;
+ chkFollowup.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(每次 HK$640 及 3 日內)</span>`;
+ chkTcm.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(每次 HK$600 及 每年 20 次)</span>`;
  chkCash.innerHTML = `❌ <b>不適用</b><br><span class="sub-text">(無降級獎勵)</span>`;
  chkCash.style.color = "#888";
  }
@@ -545,22 +546,27 @@ function toggleConditions() {
  rcBox.style.display = (rcBox.style.display === 'none' || rcBox.style.display === '') ? 'block' : 'none';
  }
 
+ // 🎯 手術數據物件（補齊 CT、半月板、肺癌、腸癌）
  const surgeryData = {
  day: [
  { name: '腸胃鏡 (連瘜肉切除)', cost: 'HK$ 20,000 - $30,000', tradOOP: 'HK$ 500 - $2,500' },
  { name: '白內障手術 (單眼)', cost: 'HK$ 20,000 - $25,000', tradOOP: 'HK$ 1,000 - $3,000' },
- { name: 'MRI 磁力共振', cost: 'HK$ 5,000 - $8,000', tradOOP: 'HK$ 1,500 - $2,400 (硬食30%)' }
+ { name: 'MRI 磁力共振', cost: 'HK$ 5,000 - $8,000', tradOOP: 'HK$ 1,500 - $2,400 (硬食30%)' },
+ { name: 'CT 電腦斷層掃描', cost: 'HK$ 4,000 - $7,000', tradOOP: 'HK$ 1,200 - $2,100 (硬食30%)' }
  ],
  inpatient: [
  { name: '通波仔手術 (微創)', cost: 'HK$ 100,000 - $300,000', tradOOP: 'HK$ 30,000 - $80,000+' },
- { name: '十字韌帶手術 (微創)', cost: 'HK$ 100,000 - $150,000', tradOOP: 'HK$ 20,000 - $35,000+' }
+ { name: '十字韌帶手術 (微創)', cost: 'HK$ 100,000 - $150,000', tradOOP: 'HK$ 20,000 - $35,000+' },
+ { name: '半月板修復 / 切除手術 (微創)', cost: 'HK$ 80,000 - $120,000', tradOOP: 'HK$ 15,000 - $30,000+' }
  ],
  child_inpatient: [
  { name: '👶 小朋友發燒住院檢查 (3日2夜)', cost: 'HK$ 20,000 - $30,000', tradOOP: '⚠️ 預計可報 85-90%<br><b class="danger-text">客人需硬食差額約 $2,000 - $4,500</b>' },
  { name: '👶 小朋友肺炎住院檢查 (8日7夜)', cost: 'HK$ 70,000 - $80,000', tradOOP: '⚠️ 預計可報 85-90%<br><b class="danger-text">客人需硬食差額約 $7,000 - $12,000</b>' }
  ],
  cancer: [
- { name: '乳癌手術 (乳房切除)', cost: 'HK$ 150,000 - $250,000', tradOOP: 'HK$ 50,000 - $80,000+' }
+ { name: '乳癌手術 (乳房切除)', cost: 'HK$ 150,000 - $250,000', tradOOP: 'HK$ 50,000 - $80,000+' },
+ { name: '肺癌手術 (肺葉切除)', cost: 'HK$ 200,000 - $350,000', tradOOP: 'HK$ 60,000 - $120,000+' },
+ { name: '腸癌手術 (大腸切除)', cost: 'HK$ 180,000 - $300,000', tradOOP: 'HK$ 50,000 - $100,000+' }
  ]
  };
 
@@ -699,8 +705,6 @@ const isVitality = document.getElementById('vitality-check').checked;
 
  try {
  const storageRef = firebase.storage().ref();
- 
- // ⭐ 關鍵修正：將時間戳放到迴圈外面！確保這批上載的所有檔案時間戳 100% 相同！
  const timestamp = Date.now(); 
  
  const safeTotal = totalInput.replace(/_/g, '-');
@@ -714,12 +718,10 @@ const isVitality = document.getElementById('vitality-check').checked;
  const fileName = `claim_${typeInput}_${safeTotal}_${safeClaim}_${safeOop}_${timestamp}_${safeDesc}_${i}.${extension}`;
  await storageRef.child('medical_claims/' + fileName).put(file);
  }
-// --- 在原本 for 迴圈結束後 (約第 716 行) 加入 ---
 
-// 2. 同步資料到 Google Sheet
-const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec";
+ const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec";
 
-try {
+ try {
   await fetch(scriptUrl, {
     method: 'POST',
     mode: 'no-cors',
@@ -732,20 +734,11 @@ try {
     })
   });
   console.log("已成功同步至 Google Sheet");
-} catch (sheetErr) {
+ } catch (sheetErr) {
   console.error("Google Sheet 同步失敗:", sheetErr);
-}
+ }
 
-// 彈出成功提示
-alert("🚀 真實索償案例檔案庫及 Google Sheet 資料已同步發佈！");
-
-// --- 原有的清空欄位邏輯 ---
-fileInput.value = ''; 
-document.getElementById('upload-total-input').value = '';
-// ... (以下保持不變)
-
-
- alert("🚀 真實索償案例檔案庫已安全發佈！");
+ alert("🚀 真實索償案例檔案庫及 Google Sheet 資料已同步發佈！");
  
  fileInput.value = ''; 
  document.getElementById('upload-total-input').value = '';
@@ -846,54 +839,74 @@ document.getElementById('upload-total-input').value = '';
  }
  }
 
+ // 🎯 索償案例「0秒秒開 + 背景拉取更新」優化
  async function loadClaimsFromFirebase() {
  const grid = document.getElementById('claims-gallery-grid');
  const loader = document.getElementById('claims-loading');
- grid.innerHTML = "";
- loader.style.display = "block";
 
+ // ⚡ 1. 讀取本地快取，實現 0 秒開
+ const cachedData = localStorage.getItem('ava_claims_cache_v3.7');
+ if (cachedData) {
+   try {
+     allClaimsCached = JSON.parse(cachedData);
+     loader.style.display = "none";
+     renderFilteredClaims();
+   } catch(e) { console.error(e); }
+ } else {
+   grid.innerHTML = "";
+   loader.style.display = "block";
+ }
+
+ // 🔄 2. 背景靜默拉取最新數據
  try {
- const storageRef = firebase.storage().ref('medical_claims');
- const result = await storageRef.listAll();
- loader.style.display = "none";
- allClaimsCached = []; 
+   const storageRef = firebase.storage().ref('medical_claims');
+   const result = await storageRef.listAll();
+   
+   // 平行並行獲取 URL（速度極速提升）
+   const groupPromises = result.items.map(async (itemRef) => {
+     const name = itemRef.name;
+     const parts = name.split('_');
+     if (parts.length < 7) return null;
 
- let groups = {};
- for (let itemRef of result.items) {
- const name = itemRef.name;
- const parts = name.split('_');
- if (parts.length < 7) continue;
+     const type = parts[1]; 
+     const total = parts[2]; 
+     const claim = parts[3]; 
+     const oop = parts[4]; 
+     const timestamp = parts[5];
+     const descWithExt = parts.slice(6).join('_');
+     
+     const lastDotIndex = descWithExt.lastIndexOf('_');
+     const desc = lastDotIndex !== -1 ? descWithExt.substring(0, lastDotIndex) : descWithExt.split('.')[0];
+     const isPdf = name.toLowerCase().endsWith('.pdf');
+     
+     const url = await itemRef.getDownloadURL();
+     return { timestamp, type, total, claim, oop, desc, url, isPdf };
+   });
 
- const type = parts[1]; 
- const total = parts[2]; 
- const claim = parts[3]; 
- const oop = parts[4]; 
- const timestamp = parts[5];
- const descWithExt = parts.slice(6).join('_');
- 
- const lastDotIndex = descWithExt.lastIndexOf('_');
- const desc = lastDotIndex !== -1 ? descWithExt.substring(0, lastDotIndex) : descWithExt.split('.')[0];
- 
- const url = await itemRef.getDownloadURL();
- const isPdf = name.toLowerCase().endsWith('.pdf');
+   const rawItems = (await Promise.all(groupPromises)).filter(Boolean);
 
- if (!groups[timestamp]) {
- groups[timestamp] = {
- type, total, claim, oop, desc,
- files: []
- };
- }
- groups[timestamp].files.push({ url, isPdf });
- }
+   let groups = {};
+   rawItems.forEach(item => {
+     if (!groups[item.timestamp]) {
+       groups[item.timestamp] = {
+         type: item.type, total: item.total, claim: item.claim, oop: item.oop, desc: item.desc,
+         files: []
+       };
+     }
+     groups[item.timestamp].files.push({ url: item.url, isPdf: item.isPdf });
+   });
 
- for (let ts in groups) {
- const g = groups[ts];
- allClaimsCached.push(g);
- }
- 
- renderFilteredClaims();
+   allClaimsCached = Object.values(groups);
+   
+   // 保存快取
+   localStorage.setItem('ava_claims_cache_v3.7', JSON.stringify(allClaimsCached));
+   
+   loader.style.display = "none";
+   renderFilteredClaims();
  } catch (e) {
- loader.innerHTML = "❌ 連接 Firebase 失敗，請確認 Storage 規則已發佈。";
+   if (!cachedData) {
+     loader.innerHTML = "❌ 連接 Firebase 失敗，請確認 Storage 規則已發佈。";
+   }
  }
  }
 
