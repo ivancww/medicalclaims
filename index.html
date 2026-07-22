@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v3.7.0 | AVA專屬</title>
+ <title>醫療保障實況對比 v3.9.0 | AVA專屬</title>
  
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -32,12 +32,20 @@
 #sync-status { font-size: 13px; font-weight: 500; padding: 6px 12px; border-radius: 15px; background: #f0f0f0; color: #555; }
  .status-ok { background: #d4edda !important; color: #155724 !important; }
 
+ /* 👑 點擊隱藏/顯示計劃按鈕列 */
+ .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+ .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1px solid #ccc; background: #f8f9fa; color: #555; transition: 0.2s; }
+ .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
+ .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
+ .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
+ .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
+
  /* 保額對比定錨區 */
  .limit-banner { display: flex; gap: 10px; margin-bottom: 20px; }
  @media (max-width: 768px) { .limit-banner { flex-direction: column; } }
  .limit-badge { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
  .limit-badge.elite { background: #fffaf0; border: 1px solid #fdebd0; color: #b9770e; }
- .limit-badge.wise { background: #f0f7ff; border: 1px solid #cceff5; color: #0056b3; }
+ .limit-badge.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: #0056b3; }
  .limit-badge.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: #c62828; }
 
  /* 設定區 */
@@ -84,14 +92,15 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  .oop-comparison { display: flex; gap: 15px; }
  @media (max-width: 768px) { .oop-comparison { flex-direction: column; } }
  .oop-box { flex: 1; padding: 15px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
- .oop-box.elite-oop { background: #fef9e7; border: 1px solid #fdebd0; }
- .oop-box.wise-oop { background: #e8f5e9; border: 1px solid #c8e6c9; }
- .oop-box.flexi-oop { background: #ffebee; border: 1px solid #ffcdd2; }
+ 
+ .oop-box.elite-oop { background: #fffaf0; border: 1px solid #fdebd0; }
+ .oop-box.wise-oop { background: #f0f7ff; border: 1px solid #cce5ff; }
+ .oop-box.flexi-oop { background: #fff5f5; border: 1px solid #ffdce0; }
  
 .oop-label { display: block; font-size: 13px; margin-bottom: 8px; font-weight: 500; color: #555;}
  .oop-value { display: block; font-size: 24px; font-weight: 900; }
  .elite-oop .oop-value { color: #b9770e; }
- .wise-oop .oop-value { color: #2e7d32; }
+ .wise-oop .oop-value { color: #0056b3; }
  .flexi-oop .oop-value { color: #c62828; font-size: 28px; }
 
  /* 索償主題高亮標籤 */
@@ -115,7 +124,6 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  .tag-high { background: #28a745; }
  .tag-trad { background: #dc3545; }
 
- /* 📂 案例閱覽專屬樣式 */
  .claim-files-toggle-btn { background: #f0f4f8; color: #1a3a6e; border: 1px solid #cfe2fe; padding: 8px; border-radius: 6px; font-size: 13px; font-weight: bold; text-align: center; cursor: pointer; margin-top: 10px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
  .claim-files-toggle-btn:active { background: #dbeafe; }
  .claim-files-list { display: none; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-top: 8px; }
@@ -132,9 +140,10 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  .header-row { background: #f8f9fa; font-weight: 700; text-align: center; }
  .col-item { flex: 1.5; padding: 15px; background: #fafafa; font-weight: 500; display: flex; align-items: center; border-right: 1px solid #eee; }
  .col-elite, .col-wise, .col-flexi { flex: 1; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid #eee;}
- .col-elite { background: #fffdf7; color: #b9770e; }
- .col-wise { background: #fafffb; color: #2e7d32; }
- .col-flexi { background: #fffcfc; color: #777; border-right: none;}
+ 
+ .col-elite { background: #fffaf0; color: #b9770e; }
+ .col-wise { background: #f0f7ff; color: #0056b3; }
+ .col-flexi { background: #fff5f5; color: #c62828; border-right: none;}
  .sub-text { font-size: 11px; color: #888; margin-top: 4px; font-weight: normal; }
  .danger-text { color: #d9534f; font-size: 15px;}
 
@@ -147,9 +156,9 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  @media (max-width: 768px) { .calc-results { flex-direction: column; } }
  
 .result-box { flex: 1; padding: 15px; border-radius: 8px; text-align: center; border: 2px solid transparent; display: flex; flex-direction: column; justify-content: center;}
- .result-box.elite { background: #fffaf0; border-color: #fdebd0; }
- .result-box.wise { background: #f0f7ff; border-color: #b3d4fc; }
- .result-box.flexi { background: #fff5f5; border-color: #ffdce0; }
+ .result-box.elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
+ .result-box.wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
+ .result-box.flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
  .result-price { font-size: 24px; font-weight: 900; margin: 10px 0; }
  
 .checkbox-group { margin-top: 15px; font-size: 14px; }
@@ -169,6 +178,9 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  
 .form-group-row { display: flex; gap: 10px; margin-bottom: 5px; }
  .form-group-row > div { flex: 1; }
+
+ /* 🗑️ 手術案例管理清單樣式 */
+ .scenario-manage-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1px solid #e0e0e0; font-size: 12px; }
  </style>
 </head>
 <body>
@@ -184,18 +196,26 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  <div class="main-container">
  <div class="header-section">
- <h1 class="main-title">醫療保障實況對比 v3.7.0</h1>
+ <h1 class="main-title">醫療保障實況對比 v3.9.0</h1>
  <div id="sync-status">🔄 正在連接 Google Sheets...</div>
  </div>
 
+ <!-- 👑 隱藏/顯示計劃切換按鈕 -->
+ <div class="plan-visibility-bar">
+ <span style="font-size: 12px; font-weight: bold; color: #666; align-self: center;">顯示計劃：</span>
+ <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVisibility('elite')">👑 尊顯：顯示</button>
+ <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVisibility('wise')">🛡️ 睿選：顯示</button>
+ <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVisibility('flexi')">⚠️ 靈活：顯示</button>
+ </div>
+
  <div id="main-limit-banner" class="limit-banner">
- <div class="limit-badge elite">👑 尊顯保額：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
- <div class="limit-badge wise">🛡️ 睿選保額：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
- <div class="limit-badge flexi">⚠️ 靈活保額：無特定上限 ｜ 受制於各細項嚴重受限 ❌</div>
+ <div class="limit-badge elite plan-col-elite">👑 尊顯保額：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
+ <div class="limit-badge wise plan-col-wise">🛡️ 睿選保額：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
+ <div class="limit-badge flexi plan-col-flexi">⚠️ 靈活保額：無特定上限 ｜ 受制於各細項嚴重受限 ❌</div>
  </div>
 
  <div id="main-settings-panel" class="settings-panel">
- <div class="plan-setting elite-setting">
+ <div class="plan-setting elite-setting plan-col-elite">
  <h3>👑 高端尊顯計劃</h3>
  <label>自付額選項：</label>
  <select id="elite-deductible" onchange="renderScenario(); calculatePremium();">
@@ -209,7 +229,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  </div>
  </div>
 
- <div class="plan-setting wise-setting">
+ <div class="plan-setting wise-setting plan-col-wise">
  <h3>🛡️ 高端睿選計劃</h3>
  <label>自付額選項：</label>
  <select id="wise-deductible" onchange="renderScenario(); calculatePremium();">
@@ -230,7 +250,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  </ul>
  </div>
  
-<div class="plan-setting flexi-setting">
+<div class="plan-setting flexi-setting plan-col-flexi">
  <h3>⚠️ 靈活計劃</h3>
  <p style="color: #d9534f; font-weight: 500; line-height: 1.5; font-size: 15px; margin: 0;">
  普通房級別<br><br>
@@ -283,11 +303,36 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  <div id="main-checklist-section" class="checklist-section">
  <h2 class="checklist-title">📋 康復及附加保障對比</h2>
  <div class="checklist-grid">
- <div class="checklist-row header-row"><div class="col-item">保障項目</div><div class="col-elite">尊顯計劃 (左)</div><div class="col-wise">睿選計劃 (中)</div><div class="col-flexi">靈活計劃 (右)</div></div>
- <div class="checklist-row"><div class="col-item">🩺 手術 / 出院後覆診</div><div class="col-elite">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span></div><div class="col-wise" id="chk-followup">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span></div><div class="col-flexi">⚠️ <b>上限 $848</b><br><span class="sub-text">(只限 3 日內)</span></div></div>
- <div class="checklist-row"><div class="col-item">🌿 手術 / 出院後中醫</div><div class="col-elite">✅ <b>每次 $650</b><br><span class="sub-text">(全年高達 15 次)</span></div><div class="col-wise" id="chk-tcm">✅ <b>每次 $1,000</b><br><span class="sub-text">(全年高達 20 次)</span></div><div class="col-flexi">❌ <b>不適用</b><br><span class="sub-text">(全數自費)</span></div></div>
- <div class="checklist-row"><div class="col-item">💰 次級病房每日現金</div><div class="col-elite">🎁 <b>每日 $1,200</b><br><span class="sub-text">(自願降級普通房)</span></div><div class="col-wise" id="chk-cash">🎁 <b>每日 $2,400</b><br><span class="sub-text">(自願降級普通房)</span></div><div class="col-flexi">❌ <b>不適用</b></div></div>
- <div class="checklist-row"><div class="col-item">🎗️ 非手術癌症長遠開支</div><div class="col-elite">🛡️ <b>全數賠償</b><br><span class="sub-text">(免找數專心治病)</span></div><div class="col-wise">🛡️ <b>全數賠償</b><br><span class="sub-text">(免找數專心治病)</span></div><div class="col-flexi">⚠️ <b class="danger-text">上限 $96,000</b></div></div>
+ <div class="checklist-row header-row">
+ <div class="col-item">保障項目</div>
+ <div class="col-elite plan-col-elite">尊顯計劃 (左)</div>
+ <div class="col-wise plan-col-wise">睿選計劃 (中)</div>
+ <div class="col-flexi plan-col-flexi">靈活計劃 (右)</div>
+ </div>
+ <div class="checklist-row">
+ <div class="col-item">🩺 手術 / 出院後覆診</div>
+ <div class="col-elite plan-col-elite">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span></div>
+ <div class="col-wise plan-col-wise" id="chk-followup">✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span></div>
+ <div class="col-flexi plan-col-flexi">⚠️ <b>上限 $848</b><br><span class="sub-text">(只限 3 日內)</span></div>
+ </div>
+ <div class="checklist-row">
+ <div class="col-item">🌿 手術 / 出院後中醫</div>
+ <div class="col-elite plan-col-elite">✅ <b>每次 $650</b><br><span class="sub-text">(全年高達 15 次)</span></div>
+ <div class="col-wise plan-col-wise" id="chk-tcm">✅ <b>每次 $1,000</b><br><span class="sub-text">(全年高達 20 次)</span></div>
+ <div class="col-flexi plan-col-flexi">❌ <b>不適用</b><br><span class="sub-text">(全數自費)</span></div>
+ </div>
+ <div class="checklist-row">
+ <div class="col-item">💰 次級病房每日現金</div>
+ <div class="col-elite plan-col-elite">🎁 <b>每日 $1,200</b><br><span class="sub-text">(自願降級普通房)</span></div>
+ <div class="col-wise plan-col-wise" id="chk-cash">🎁 <b>每日 $2,400</b><br><span class="sub-text">(自願降級普通房)</span></div>
+ <div class="col-flexi plan-col-flexi">❌ <b>不適用</b></div>
+ </div>
+ <div class="checklist-row">
+ <div class="col-item">🎗️ 非手術癌症長遠開支</div>
+ <div class="col-elite plan-col-elite">🛡️ <b>全數賠償</b><br><span class="sub-text">(免找數專心治病)</span></div>
+ <div class="col-wise plan-col-wise">🛡️ <b>全數賠償</b><br><span class="sub-text">(免找數專心治病)</span></div>
+ <div class="col-flexi plan-col-flexi">⚠️ <b class="danger-text">上限 $96,000</b></div>
+ </div>
  </div>
  </div>
 
@@ -310,9 +355,9 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  </div>
  </div>
  <div class="calc-results">
- <div class="result-box elite"><h4>尊顯計劃</h4><div id="elite-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="elite-tax-display"></div></div>
- <div class="result-box wise"><h4>睿選計劃</h4><div id="wise-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="wise-tax-display"></div></div>
- <div class="result-box flexi"><h4>靈活計劃</h4><div id="flexi-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="flexi-tax-display"></div></div>
+ <div class="result-box elite plan-col-elite"><h4>尊顯計劃</h4><div id="elite-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="elite-tax-display"></div></div>
+ <div class="result-box wise plan-col-wise"><h4>睿選計劃</h4><div id="wise-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="wise-tax-display"></div></div>
+ <div class="result-box flexi plan-col-flexi"><h4>靈活計劃</h4><div id="flexi-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="flexi-tax-display"></div></div>
  </div>
  </div>
  </div>
@@ -321,7 +366,44 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  <div class="admin-content">
  <h3 style="margin-top:0; color:#1a3a6e; text-align: center;">⚙️ AVA 醫療索償中央後台</h3>
  
-<div style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 12px; color: #856404; margin-bottom: 15px; font-weight: bold; border-left: 4px solid #f1c232;">
+<!-- 手動新增自訂手術/情境選項區塊 -->
+ <div style="background: #f0f7ff; padding: 15px; border: 1px solid #b3d4fc; border-radius: 8px; margin-bottom: 20px;">
+ <h4 style="margin-top:0; color:#0056b3;">➕ 新增自訂手術/情境案例</h4>
+ <label style="font-weight: bold; font-size:13px;">1. 所屬分類：</label>
+ <select id="custom-cat-select" style="margin-bottom:8px;">
+ <option value="day">☀️ 日間手術</option>
+ <option value="inpatient">🏥 住院手術</option>
+ <option value="child_inpatient">👶 小朋友住院</option>
+ <option value="cancer">🎗️ 癌症專區</option>
+ </select>
+ <label style="font-weight: bold; font-size:13px;">2. 手術/情境名稱：</label>
+ <input type="text" id="custom-name-input" placeholder="例如: 微創膽囊切除手術" style="margin-bottom:8px;">
+ <label style="font-weight: bold; font-size:13px;">3. 預算參考：</label>
+ <input type="text" id="custom-cost-input" placeholder="例如: HK$ 80,000 - $120,000" style="margin-bottom:8px;">
+ <label style="font-weight: bold; font-size:13px;">4. 靈活計劃客人自付金額：</label>
+ <input type="text" id="custom-trad-input" placeholder="例如: HK$ 15,000 - $30,000" style="margin-bottom:8px;">
+ <button class="admin-btn" style="background:#0056b3; width:100%; padding:10px; font-size:14px;" onclick="addCustomScenario()">🚀 新增至前台下拉選單</button>
+ </div>
+
+ <!-- 🗑️ 🆕 管理與刪除現有手術/情境案例區塊 -->
+ <div style="background: #fff5f5; padding: 15px; border: 1px solid #ffdce0; border-radius: 8px; margin-bottom: 20px;">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+ <h4 style="margin:0; color:#c62828;">🗑️ 管理 / 刪除手術情境案例</h4>
+ <button class="admin-btn" style="background:#6c757d; font-size:11px;" onclick="resetDefaultScenarios()">🔄 重置恢復預設案例</button>
+ </div>
+ <label style="font-weight: bold; font-size:13px;">選擇分類：</label>
+ <select id="manage-cat-select" onchange="renderScenarioManageList()" style="margin-bottom:10px;">
+ <option value="day">☀️ 日間手術</option>
+ <option value="inpatient">🏥 住院手術</option>
+ <option value="child_inpatient">👶 小朋友住院</option>
+ <option value="cancer">🎗️ 癌症專區</option>
+ </select>
+ <div id="scenario-manage-list" style="max-height:180px; overflow-y:auto; border:1px solid #eee; padding:5px; border-radius:6px; background:#fafafa;">
+ <!-- 動態渲染刪除項目列表 -->
+ </div>
+ </div>
+
+ <div style="background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 12px; color: #856404; margin-bottom: 15px; font-weight: bold; border-left: 4px solid #f1c232;">
  ※ 本版面為團隊內部管理專用。可在下方選取多個文件（最多10份，支援相片及PDF檔案）發佈。<br>
  <span style="color:#d9534f;">⚠️ 🛡️ 重要提示：為保障私隱，上載收據前請務必手動塗黑或遮蓋所有客人的姓名、身分證號碼及電話號碼！</span>
  </div>
@@ -333,7 +415,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 <label style="font-weight: bold; font-size:14px;">2. 索償分類：</label>
  <select id="upload-type-input">
  <option value="high">👑 高端醫療索償 (如全數賠償)</option>
- <option value="trad">⚠️ 傳統醫療索償 (如留尾硬食)</option>
+ <option value="trad">⚠️ 傳統醫療索償 (如留尾自付)</option>
  </select>
 
  <div class="form-group-row">
@@ -380,7 +462,6 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  firebase.initializeApp(firebaseConfig);
  }
 
- // 🔑 重寫解鎖函數：專為 GAS「方式 A」打造的兼容跨網域對接方案
  function unlockApp() {
  const inputPass = document.getElementById('launcher-password').value;
  const errorMsg = document.getElementById('lock-error-msg');
@@ -394,10 +475,8 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  lockBtn.innerText = "⏳ 驗證中...";
  lockBtn.disabled = true;
 
- // 💡 終極相容策略：改用動態 JSONP 腳本注入形式發送請求，100% 避開所有移動端瀏覽器、Safari 的 CORS 跨域安全性封鎖
  const callbackName = 'gasAuthCallback_' + Math.round(Math.random() * 1000000);
  window[callbackName] = function(result) {
- // 驗證 GAS 回傳結果
  if (result && (result.status === "success" || result.verified === true || result.verified === "true")) {
  localStorage.setItem('ava_auth_session', 'verified_success');
  document.getElementById('app-launcher-lock').style.display = 'none';
@@ -407,7 +486,6 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  lockBtn.innerText = "解除鎖定";
  lockBtn.disabled = false;
  }
- // 請求完成後清除垃圾腳本
  delete window[callbackName];
  document.getElementById(callbackName)?.remove();
  };
@@ -418,10 +496,8 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  script.id = callbackName;
  script.src = url;
  script.onerror = function() {
- // 如果 JSONP 失敗，退回到傳統 GET 請求作為雙重保障
  fetch(url.replace('&callback=' + callbackName, ''), { method: 'GET', mode: 'no-cors' })
  .then(() => {
- // 如果是 no-cors 模式，我們雖然拿不到回傳內容，但表示連線成功。若沒拋錯，我們嘗試進行放行 (這將作為最後保底)
  localStorage.setItem('ava_auth_session', 'verified_success');
  document.getElementById('app-launcher-lock').style.display = 'none';
  syncPremiumData();
@@ -437,13 +513,13 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  document.body.appendChild(script);
  }
 
- // 頁面載入時檢查是否已經登入過
  window.addEventListener('DOMContentLoaded', () => {
  const session = localStorage.getItem('ava_auth_session');
  if (session === 'verified_success') {
  document.getElementById('app-launcher-lock').style.display = 'none';
  syncPremiumData();
  }
+ loadActiveScenarios();
  });
 
  const spreadsheetId = "1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw";
@@ -456,6 +532,29 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  let premiumDB = {};
  let allClaimsCached = []; 
 let currentFilterType = 'all';
+
+let planVisibility = { elite: true, wise: true, flexi: true };
+
+function togglePlanVisibility(plan) {
+ planVisibility[plan] = !planVisibility[plan];
+ const btn = document.getElementById('vis-btn-' + plan);
+ 
+ const labelMap = { elite: '👑 尊顯', wise: '🛡️ 睿選', flexi: '⚠️ 靈活' };
+ if (planVisibility[plan]) {
+ btn.className = `vis-btn active-${plan}`;
+ btn.textContent = `${labelMap[plan]}：顯示`;
+ } else {
+ btn.className = `vis-btn off`;
+ btn.textContent = `${labelMap[plan]}：隱藏`;
+ }
+
+ const elements = document.querySelectorAll(`.plan-col-${plan}`);
+ elements.forEach(el => {
+ el.style.display = planVisibility[plan] ? '' : 'none';
+ });
+
+ renderScenario();
+}
 
  function parseCSVLine(text) {
  let ret = []; let inQuote = false; let value = '';
@@ -523,7 +622,6 @@ function toggleConditions() {
  }
  }
 
- // 🎯 康復保障表動態資料更新
  function updateChecklist(isMet) {
  const chkFollowup = document.getElementById('chk-followup');
  const chkTcm = document.getElementById('chk-tcm');
@@ -532,7 +630,7 @@ function toggleConditions() {
  chkFollowup.innerHTML = `✅ <b>全數賠償</b><br><span class="sub-text">(長達 90-365 日)</span>`;
  chkTcm.innerHTML = `✅ <b>每次 $1,000</b><br><span class="sub-text">(全年高達 20 次)</span>`;
  chkCash.innerHTML = `🎁 <b>每日 $2,400</b><br><span class="sub-text">(自願降級普通房)</span>`;
- chkCash.style.color = "#2e7d32";
+ chkCash.style.color = "#0056b3";
  } else {
  chkFollowup.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(每次 HK$640 及 3 日內)</span>`;
  chkTcm.innerHTML = `⚠️ <b>降級受限</b><br><span class="sub-text">(每次 HK$600 及 每年 20 次)</span>`;
@@ -546,8 +644,8 @@ function toggleConditions() {
  rcBox.style.display = (rcBox.style.display === 'none' || rcBox.style.display === '') ? 'block' : 'none';
  }
 
- // 🎯 手術數據物件（補齊 CT、半月板、肺癌、腸癌）
- const surgeryData = {
+ // 預設手術數據模板
+ const defaultSurgeryData = {
  day: [
  { name: '腸胃鏡 (連瘜肉切除)', cost: 'HK$ 20,000 - $30,000', tradOOP: 'HK$ 500 - $2,500' },
  { name: '白內障手術 (單眼)', cost: 'HK$ 20,000 - $25,000', tradOOP: 'HK$ 1,000 - $3,000' },
@@ -560,8 +658,8 @@ function toggleConditions() {
  { name: '半月板修復 / 切除手術 (微創)', cost: 'HK$ 80,000 - $120,000', tradOOP: 'HK$ 15,000 - $30,000+' }
  ],
  child_inpatient: [
- { name: '👶 小朋友發燒住院檢查 (3日2夜)', cost: 'HK$ 20,000 - $30,000', tradOOP: '⚠️ 預計可報 85-90%<br><b class="danger-text">客人需硬食差額約 $2,000 - $4,500</b>' },
- { name: '👶 小朋友肺炎住院檢查 (8日7夜)', cost: 'HK$ 70,000 - $80,000', tradOOP: '⚠️ 預計可報 85-90%<br><b class="danger-text">客人需硬食差額約 $7,000 - $12,000</b>' }
+ { name: '👶 小朋友發燒住院檢查 (3日2夜)', cost: 'HK$ 20,000 - $30,000', tradOOP: 'HK$ 2,000 - $4,500' },
+ { name: '👶 小朋友肺炎住院檢查 (8日7夜)', cost: 'HK$ 70,000 - $80,000', tradOOP: 'HK$ 7,000 - $12,000' }
  ],
  cancer: [
  { name: '乳癌手術 (乳房切除)', cost: 'HK$ 150,000 - $250,000', tradOOP: 'HK$ 50,000 - $80,000+' },
@@ -570,12 +668,102 @@ function toggleConditions() {
  ]
  };
 
+ let surgeryData = {};
+
+ // 載入或更新最新手術案例資料庫
+ function loadActiveScenarios() {
+ const savedScenarios = localStorage.getItem('ava_active_scenarios');
+ if (savedScenarios) {
+ try {
+ surgeryData = JSON.parse(savedScenarios);
+ } catch(e) {
+ surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
+ }
+ } else {
+ surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
+ }
+ }
+
+ function saveActiveScenarios() {
+ localStorage.setItem('ava_active_scenarios', JSON.stringify(surgeryData));
+ }
+
+ // 新增自訂情境
+ function addCustomScenario() {
+ const cat = document.getElementById('custom-cat-select').value;
+ const name = document.getElementById('custom-name-input').value.trim();
+ const cost = document.getElementById('custom-cost-input').value.trim();
+ const tradOOP = document.getElementById('custom-trad-input').value.trim();
+
+ if (!name || !cost || !tradOOP) {
+ alert("❌ 請填寫完整的手術名稱、預算及自付金額！");
+ return;
+ }
+
+ if (!surgeryData[cat]) surgeryData[cat] = [];
+ surgeryData[cat].push({ name, cost, tradOOP });
+ saveActiveScenarios();
+
+ alert(`✅ 已成功新增【${name}】至前台選單！`);
+ document.getElementById('custom-name-input').value = '';
+ document.getElementById('custom-cost-input').value = '';
+ document.getElementById('custom-trad-input').value = '';
+
+ switchCategory(currentCategory, document.querySelector('.tab.active'));
+ renderScenarioManageList();
+ }
+
+ // 🗑️ 刪除特定手術案例選項
+ function deleteScenario(cat, index) {
+ const item = surgeryData[cat][index];
+ if (!confirm(`⚠️ 確定要刪除案例【${item.name}】嗎？`)) return;
+
+ surgeryData[cat].splice(index, 1);
+ saveActiveScenarios();
+ 
+ switchCategory(currentCategory, document.querySelector('.tab.active'));
+ renderScenarioManageList();
+ }
+
+ // 🔄 一鍵重置恢復所有預設案例
+ function resetDefaultScenarios() {
+ if (!confirm("⚠️ 確定要將所有手術情境案例重置回系統初始預設值嗎？")) return;
+ surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
+ saveActiveScenarios();
+ switchCategory(currentCategory, document.querySelector('.tab.active'));
+ renderScenarioManageList();
+ alert("✅ 已成功恢復預設手術案例！");
+ }
+
+ // 渲染後台手術刪除管理列表
+ function renderScenarioManageList() {
+ const cat = document.getElementById('manage-cat-select').value;
+ const container = document.getElementById('scenario-manage-list');
+ container.innerHTML = '';
+
+ const list = surgeryData[cat] || [];
+ if (list.length === 0) {
+ container.innerHTML = '<div style="color:#999; text-align:center; padding:10px;">此分類下目前無任何案例</div>';
+ return;
+ }
+
+ list.forEach((item, idx) => {
+ const div = document.createElement('div');
+ div.className = 'scenario-manage-item';
+ div.innerHTML = `
+ <div><b>${item.name}</b> <span style="color:#777;">(${item.cost})</span></div>
+ <button class="admin-btn danger" style="padding:2px 8px; font-size:11px;" onclick="deleteScenario('${cat}', ${idx})">🗑️ 刪除</button>
+ `;
+ container.appendChild(div);
+ });
+ }
+
  let currentCategory = 'day';
 
  function switchCategory(category, element) {
  currentCategory = category;
  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
- element.classList.add('active');
+ if(element) element.classList.add('active');
  
 document.getElementById('main-settings-panel').style.display = 'flex';
  document.getElementById('main-surgery-selector').style.display = 'block';
@@ -597,18 +785,24 @@ if (category === 'claims') {
  if (category === 'cancer') document.getElementById('cancer-warning').style.display = 'block';
  const select = document.getElementById('surgery-select');
  select.innerHTML = '';
+ if (surgeryData[category]) {
  surgeryData[category].forEach((item, index) => {
  const opt = document.createElement('option'); opt.value = index;
  opt.textContent = `📍 選擇情境：${item.name}`; select.appendChild(opt);
  });
+ }
  renderScenario();
  }
  }
 
  function renderScenario() {
- if (!surgeryData[currentCategory]) return;
+ if (!surgeryData[currentCategory] || surgeryData[currentCategory].length === 0) {
+ document.getElementById('scenario-container').innerHTML = '<div style="text-align:center; color:#999; padding:20px;">此分類下暫無顯示案例</div>';
+ return;
+ }
  const index = document.getElementById('surgery-select').value || 0;
- const item = surgeryData[currentCategory][index];
+ const item = surgeryData[currentCategory][index] || surgeryData[currentCategory][0];
+ if (!item) return;
  
 const eliteVal = parseInt(document.getElementById('elite-deductible').value);
  const wiseVal = parseInt(document.getElementById('wise-deductible').value);
@@ -616,6 +810,11 @@ const eliteVal = parseInt(document.getElementById('elite-deductible').value);
  const wiseText = wiseVal === 0 ? "HK$ 0" : `HK$ ${wiseVal.toLocaleString()}`;
  
 const container = document.getElementById('scenario-container');
+
+ const eliteDisplay = planVisibility.elite ? '' : 'display:none;';
+ const wiseDisplay = planVisibility.wise ? '' : 'display:none;';
+ const flexiDisplay = planVisibility.flexi ? '' : 'display:none;';
+
  container.innerHTML = `
  <div class="scenario-card">
  <h4 class="scenario-title">${item.name}</h4>
@@ -625,9 +824,9 @@ const container = document.getElementById('scenario-container');
  <b>理財顧問提示：</b>高端計劃賠償額受「合理及慣常」限制。若主診醫生收費嚴重偏離市場，超出部分需自理。<i>👉 建議手術前必做「醫療費用預先批核」以鎖定預算。</i>
  </div>
  <div class="oop-comparison">
- <div class="oop-box elite-oop"><span class="oop-label">尊顯 自付上限</span><span class="oop-value">${eliteText}</span></div>
- <div class="oop-box wise-oop"><span class="oop-label">睿選 自付上限</span><span class="oop-value">${wiseText}</span></div>
- <div class="oop-box flexi-oop"><span class="oop-label">靈活 客人硬食</span><span class="oop-value">${item.tradOOP}</span></div>
+ <div class="oop-box elite-oop" style="${eliteDisplay}"><span class="oop-label">尊顯 自付上限</span><span class="oop-value">${eliteText}</span></div>
+ <div class="oop-box wise-oop" style="${wiseDisplay}"><span class="oop-label">睿選 自付上限</span><span class="oop-value">${wiseText}</span></div>
+ <div class="oop-box flexi-oop" style="${flexiDisplay}"><span class="oop-label">靈活 客人自付</span><span class="oop-value">${item.tradOOP}</span></div>
  </div>
  </div>
  `;
@@ -671,11 +870,9 @@ const isVitality = document.getElementById('vitality-check').checked;
  document.getElementById('flexi-tax-display').innerHTML = isTax ? `<span style="color:#28a745">已扣稅 ~$${Math.round(flexiTax)}</span>` : '';
  }
 
- // ===================================================
- // ⚙️ FIREBASE 醫療索償一體化中央後台邏輯
- // ===================================================
  function openAdminPanel() {
  document.getElementById('admin-modal').style.display = 'flex';
+ renderScenarioManageList();
  renderAdminDashboard();
  }
 
@@ -839,13 +1036,11 @@ const isVitality = document.getElementById('vitality-check').checked;
  }
  }
 
- // 🎯 索償案例「0秒秒開 + 背景拉取更新」優化
  async function loadClaimsFromFirebase() {
  const grid = document.getElementById('claims-gallery-grid');
  const loader = document.getElementById('claims-loading');
 
- // ⚡ 1. 讀取本地快取，實現 0 秒開
- const cachedData = localStorage.getItem('ava_claims_cache_v3.7');
+ const cachedData = localStorage.getItem('ava_claims_cache_v3.9');
  if (cachedData) {
    try {
      allClaimsCached = JSON.parse(cachedData);
@@ -857,12 +1052,10 @@ const isVitality = document.getElementById('vitality-check').checked;
    loader.style.display = "block";
  }
 
- // 🔄 2. 背景靜默拉取最新數據
  try {
    const storageRef = firebase.storage().ref('medical_claims');
    const result = await storageRef.listAll();
    
-   // 平行並行獲取 URL（速度極速提升）
    const groupPromises = result.items.map(async (itemRef) => {
      const name = itemRef.name;
      const parts = name.split('_');
@@ -898,8 +1091,7 @@ const isVitality = document.getElementById('vitality-check').checked;
 
    allClaimsCached = Object.values(groups);
    
-   // 保存快取
-   localStorage.setItem('ava_claims_cache_v3.7', JSON.stringify(allClaimsCached));
+   localStorage.setItem('ava_claims_cache_v3.9', JSON.stringify(allClaimsCached));
    
    loader.style.display = "none";
    renderFilteredClaims();
