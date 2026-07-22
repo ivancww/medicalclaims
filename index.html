@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v3.9.0 | AVA專屬</title>
+ <title>醫療保障實況對比 v4.0.0 | AVA專屬</title>
  
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -34,7 +34,7 @@
 
  /* 👑 點擊隱藏/顯示計劃按鈕列 */
  .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
- .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1px solid #ccc; background: #f8f9fa; color: #555; transition: 0.2s; }
+ .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed #ccc; background: #f8f9fa; color: #555; transition: 0.2s; }
  .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
  .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
  .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
@@ -59,8 +59,35 @@
  .elite-setting h3 { color: #b9770e; }
  .wise-setting h3 { color: #0056b3; }
  .flexi-setting h3 { color: #c62828; }
- 
-select, input[type="number"], input[type="text"], input[type="password"] { width: 100%; padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid #ccc; background: #fff; font-family: inherit; font-weight: 700; color: #333; margin-bottom: 10px; box-sizing: border-box;}
+
+ /* 🎯 加上微點虛線效果 (Dotted / Dashed) 的輸入框與下拉選單 */
+ select, input[type="number"], input[type="text"], input[type="password"] { 
+    width: 100%; 
+    padding: 10px; 
+    font-size: 15px; 
+    border-radius: 8px; 
+    border: 2px dashed #a0aec0; /* 👈 微點/虛線外框 */
+    background: #fff; 
+    font-family: inherit; 
+    font-weight: 700; 
+    color: #333; 
+    margin-bottom: 10px; 
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+ }
+ select:focus, input[type="number"]:focus, input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #1a3a6e;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 58, 110, 0.15);
+ }
+
+ .input-dashed-box {
+    border: 2px dashed #b3d4fc !important;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+ }
  
 /* Toggle */
  .toggle-container { background: #e0e0e0; border-radius: 30px; cursor: pointer; padding: 4px; transition: 0.3s; margin-top: 10px; }
@@ -72,8 +99,8 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  /* Tabs */
  .category-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
- .tab { flex: 1; text-align: center; padding: 12px; background: #f4f4f4; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; border: 2px solid transparent; min-width: 120px; }
- .tab.active { background: #1a3a6e; color: #fff; }
+ .tab { flex: 1; text-align: center; padding: 12px; background: #f4f4f4; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent; min-width: 120px; }
+ .tab.active { background: #1a3a6e; color: #fff; border-color: #1a3a6e; }
  .tab.tab-cancer { color: #d9534f; }
  .tab.tab-cancer.active { background: #d9534f; color: #fff; }
  .tab.tab-claims { background: #fff2cc; color: #b78103; border-color: #ffe599; }
@@ -109,7 +136,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  /* 篩選按鈕列 */
  .filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
- .filter-btn { background: #fff; border: 1px solid #ccc; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; color: #555;}
+ .filter-btn { background: #fff; border: 1.5px dashed #ccc; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; color: #555;}
  .filter-btn.active { background: #1a3a6e; color: white; border-color: #1a3a6e; }
 
  /* 索償圖片展示卡片 */
@@ -124,10 +151,10 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  .tag-high { background: #28a745; }
  .tag-trad { background: #dc3545; }
 
- .claim-files-toggle-btn { background: #f0f4f8; color: #1a3a6e; border: 1px solid #cfe2fe; padding: 8px; border-radius: 6px; font-size: 13px; font-weight: bold; text-align: center; cursor: pointer; margin-top: 10px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+ .claim-files-toggle-btn { background: #f0f4f8; color: #1a3a6e; border: 1.5px dashed #cfe2fe; padding: 8px; border-radius: 6px; font-size: 13px; font-weight: bold; text-align: center; cursor: pointer; margin-top: 10px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
  .claim-files-toggle-btn:active { background: #dbeafe; }
- .claim-files-list { display: none; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-top: 8px; }
- .claim-file-link { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #edf2f7; color: #1a3a6e; text-decoration: none; font-size: 12px; font-weight: bold; }
+ .claim-files-list { display: none; background: #fafafa; border: 1px dashed #e2e8f0; border-radius: 6px; padding: 10px; margin-top: 8px; }
+ .claim-file-link { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #edf2f7; color: #1a3a6e; text-decoration: none; font-size: 12px; font-weight: bold; }
  .claim-file-link:last-child { border-bottom: none; }
  .claim-file-link:hover { color: #3b82f6; }
 
@@ -179,8 +206,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 .form-group-row { display: flex; gap: 10px; margin-bottom: 5px; }
  .form-group-row > div { flex: 1; }
 
- /* 🗑️ 手術案例管理清單樣式 */
- .scenario-manage-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1px solid #e0e0e0; font-size: 12px; }
+ .scenario-manage-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1.5px dashed #ccc; font-size: 12px; }
  </style>
 </head>
 <body>
@@ -196,7 +222,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  <div class="main-container">
  <div class="header-section">
- <h1 class="main-title">醫療保障實況對比 v3.9.0</h1>
+ <h1 class="main-title">醫療保障實況對比 v4.0.0</h1>
  <div id="sync-status">🔄 正在連接 Google Sheets...</div>
  </div>
 
@@ -367,7 +393,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  <h3 style="margin-top:0; color:#1a3a6e; text-align: center;">⚙️ AVA 醫療索償中央後台</h3>
  
 <!-- 手動新增自訂手術/情境選項區塊 -->
- <div style="background: #f0f7ff; padding: 15px; border: 1px solid #b3d4fc; border-radius: 8px; margin-bottom: 20px;">
+ <div class="input-dashed-box">
  <h4 style="margin-top:0; color:#0056b3;">➕ 新增自訂手術/情境案例</h4>
  <label style="font-weight: bold; font-size:13px;">1. 所屬分類：</label>
  <select id="custom-cat-select" style="margin-bottom:8px;">
@@ -378,15 +404,18 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  </select>
  <label style="font-weight: bold; font-size:13px;">2. 手術/情境名稱：</label>
  <input type="text" id="custom-name-input" placeholder="例如: 微創膽囊切除手術" style="margin-bottom:8px;">
- <label style="font-weight: bold; font-size:13px;">3. 預算參考：</label>
- <input type="text" id="custom-cost-input" placeholder="例如: HK$ 80,000 - $120,000" style="margin-bottom:8px;">
- <label style="font-weight: bold; font-size:13px;">4. 靈活計劃客人自付金額：</label>
- <input type="text" id="custom-trad-input" placeholder="例如: HK$ 15,000 - $30,000" style="margin-bottom:8px;">
+ 
+ <label style="font-weight: bold; font-size:13px;">3. 預算參考 (直接輸入數字，自動千位符+HK$)：</label>
+ <input type="text" id="custom-cost-input" placeholder="例如輸入: 80000 - 120000" oninput="autoFormatCurrencyRange(this)" style="margin-bottom:8px;">
+ 
+ <label style="font-weight: bold; font-size:13px;">4. 靈活計劃客人自付金額 (直接輸入數字，自動千位符+HK$)：</label>
+ <input type="text" id="custom-trad-input" placeholder="例如輸入: 15000 - 30000" oninput="autoFormatCurrencyRange(this)" style="margin-bottom:8px;">
+ 
  <button class="admin-btn" style="background:#0056b3; width:100%; padding:10px; font-size:14px;" onclick="addCustomScenario()">🚀 新增至前台下拉選單</button>
  </div>
 
- <!-- 🗑️ 🆕 管理與刪除現有手術/情境案例區塊 -->
- <div style="background: #fff5f5; padding: 15px; border: 1px solid #ffdce0; border-radius: 8px; margin-bottom: 20px;">
+ <!-- 🗑️ 管理與刪除現有手術/情境案例區塊 -->
+ <div style="background: #fff5f5; padding: 15px; border: 2px dashed #ffdce0; border-radius: 8px; margin-bottom: 20px;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
  <h4 style="margin:0; color:#c62828;">🗑️ 管理 / 刪除手術情境案例</h4>
  <button class="admin-btn" style="background:#6c757d; font-size:11px;" onclick="resetDefaultScenarios()">🔄 重置恢復預設案例</button>
@@ -398,8 +427,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  <option value="child_inpatient">👶 小朋友住院</option>
  <option value="cancer">🎗️ 癌症專區</option>
  </select>
- <div id="scenario-manage-list" style="max-height:180px; overflow-y:auto; border:1px solid #eee; padding:5px; border-radius:6px; background:#fafafa;">
- <!-- 動態渲染刪除項目列表 -->
+ <div id="scenario-manage-list" style="max-height:180px; overflow-y:auto; border:2px dashed #eee; padding:5px; border-radius:6px; background:#fafafa;">
  </div>
  </div>
 
@@ -408,7 +436,7 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
  <span style="color:#d9534f;">⚠️ 🛡️ 重要提示：為保障私隱，上載收據前請務必手動塗黑或遮蓋所有客人的姓名、身分證號碼及電話號碼！</span>
  </div>
 
- <div style="background: #fafafa; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px;">
+ <div style="background: #fafafa; padding: 15px; border: 2px dashed #e0e0e0; border-radius: 8px;">
  <label style="font-weight: bold; font-size:14px;">1. 選取索償證明（多選，最多10份，支援圖片及PDF）：</label>
  <input type="file" id="upload-file-input" accept="image/*, application/pdf" multiple style="margin-top:5px; margin-bottom:12px;">
  
@@ -420,17 +448,17 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  <div class="form-group-row">
  <div>
- <label style="font-weight: bold; font-size:13px;">3. 總費用 (非必填)：</label>
- <input type="text" id="upload-total-input" placeholder="例如: 250,000 (留空則前台自動隱藏)">
+ <label style="font-weight: bold; font-size:13px;">3. 總費用 (數字自動千位點)：</label>
+ <input type="text" id="upload-total-input" placeholder="例如: 250,000" oninput="autoFormatSingleCurrency(this)">
  </div>
  <div>
- <label style="font-weight: bold; font-size:13px;">4. 已獲賠償 (非必填)：</label>
- <input type="text" id="upload-claim-input" placeholder="例如: 232,000 (留空則前台自動隱藏)">
+ <label style="font-weight: bold; font-size:13px;">4. 已獲賠償 (數字自動千位點)：</label>
+ <input type="text" id="upload-claim-input" placeholder="例如: 232,000" oninput="autoFormatSingleCurrency(this)">
  </div>
  </div>
 
- <label style="font-weight: bold; font-size:14px; margin-top:5px; display:block;">5. 客人最終自付金額 (非必填)：</label>
- <input type="text" id="upload-oop-input" placeholder="例如: 0 / 18,000 / 自付額 (留空則自動隱藏)">
+ <label style="font-weight: bold; font-size:14px; margin-top:5px; display:block;">5. 客人最終自付金額：</label>
+ <input type="text" id="upload-oop-input" placeholder="例如: 0 / 18,000" oninput="autoFormatSingleCurrency(this)">
 
  <label style="font-weight: bold; font-size:14px; margin-top:5px; display:block;">6. 案例病症名稱 (必填)：</label>
  <input type="text" id="upload-desc-input" placeholder="例如: 腸胃鏡連瘜肉切除 / 肺炎住院8日">
@@ -460,6 +488,44 @@ select, input[type="number"], input[type="text"], input[type="password"] { width
 
  if (firebase.apps.length === 0) {
  firebase.initializeApp(firebaseConfig);
+ }
+
+ // 💡 邊打字邊格式化港幣與千位點 (支援範圍 如: 80000 - 120000 -> HK$ 80,000 - $120,000)
+ function autoFormatCurrencyRange(input) {
+    let raw = input.value;
+    if (!raw.trim()) return;
+
+    // 清除原本的 HK$ 與多餘字元，保留數字與 hyphen(-) 或波浪號(~)
+    let hasPlus = raw.includes('+');
+    let parts = raw.split(/[-~–—]/);
+
+    let formattedParts = parts.map(part => {
+        let numStr = part.replace(/[^0-9]/g, '');
+        if (!numStr) return '';
+        let num = parseInt(numStr, 10);
+        return isNaN(num) ? '' : num.toLocaleString();
+    }).filter(Boolean);
+
+    if (formattedParts.length === 0) {
+        input.value = '';
+        return;
+    }
+
+    if (formattedParts.length === 1) {
+        input.value = `HK$ ${formattedParts[0]}${hasPlus ? '+' : ''}`;
+    } else {
+        input.value = `HK$ ${formattedParts[0]} - $${formattedParts[1]}${hasPlus ? '+' : ''}`;
+    }
+ }
+
+ // 單一金額動態千位點格式化 (上載索償用)
+ function autoFormatSingleCurrency(input) {
+    let raw = input.value.replace(/[^0-9]/g, '');
+    if (!raw) return;
+    let num = parseInt(raw, 10);
+    if (!isNaN(num)) {
+        input.value = num.toLocaleString();
+    }
  }
 
  function unlockApp() {
@@ -670,9 +736,8 @@ function toggleConditions() {
 
  let surgeryData = {};
 
- // 載入或更新最新手術案例資料庫
  function loadActiveScenarios() {
- const savedScenarios = localStorage.getItem('ava_active_scenarios');
+ const savedScenarios = localStorage.getItem('ava_active_scenarios_v4');
  if (savedScenarios) {
  try {
  surgeryData = JSON.parse(savedScenarios);
@@ -685,10 +750,9 @@ function toggleConditions() {
  }
 
  function saveActiveScenarios() {
- localStorage.setItem('ava_active_scenarios', JSON.stringify(surgeryData));
+ localStorage.setItem('ava_active_scenarios_v4', JSON.stringify(surgeryData));
  }
 
- // 新增自訂情境
  function addCustomScenario() {
  const cat = document.getElementById('custom-cat-select').value;
  const name = document.getElementById('custom-name-input').value.trim();
@@ -713,7 +777,6 @@ function toggleConditions() {
  renderScenarioManageList();
  }
 
- // 🗑️ 刪除特定手術案例選項
  function deleteScenario(cat, index) {
  const item = surgeryData[cat][index];
  if (!confirm(`⚠️ 確定要刪除案例【${item.name}】嗎？`)) return;
@@ -725,7 +788,6 @@ function toggleConditions() {
  renderScenarioManageList();
  }
 
- // 🔄 一鍵重置恢復所有預設案例
  function resetDefaultScenarios() {
  if (!confirm("⚠️ 確定要將所有手術情境案例重置回系統初始預設值嗎？")) return;
  surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
@@ -735,7 +797,6 @@ function toggleConditions() {
  alert("✅ 已成功恢復預設手術案例！");
  }
 
- // 渲染後台手術刪除管理列表
  function renderScenarioManageList() {
  const cat = document.getElementById('manage-cat-select').value;
  const container = document.getElementById('scenario-manage-list');
@@ -1040,7 +1101,7 @@ const isVitality = document.getElementById('vitality-check').checked;
  const grid = document.getElementById('claims-gallery-grid');
  const loader = document.getElementById('claims-loading');
 
- const cachedData = localStorage.getItem('ava_claims_cache_v3.9');
+ const cachedData = localStorage.getItem('ava_claims_cache_v4.0');
  if (cachedData) {
    try {
      allClaimsCached = JSON.parse(cachedData);
@@ -1091,7 +1152,7 @@ const isVitality = document.getElementById('vitality-check').checked;
 
    allClaimsCached = Object.values(groups);
    
-   localStorage.setItem('ava_claims_cache_v3.9', JSON.stringify(allClaimsCached));
+   localStorage.setItem('ava_claims_cache_v4.0', JSON.stringify(allClaimsCached));
    
    loader.style.display = "none";
    renderFilteredClaims();
