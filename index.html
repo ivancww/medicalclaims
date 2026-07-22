@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v4.0.0 | AVA專屬</title>
+ <title>醫療保障實況對比 v4.2.0 | AVA專屬</title>
  
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -60,13 +60,13 @@
  .wise-setting h3 { color: #0056b3; }
  .flexi-setting h3 { color: #c62828; }
 
- /* 🎯 加上微點虛線效果 (Dotted / Dashed) 的輸入框與下拉選單 */
+ /* 微點虛線邊框樣式 */
  select, input[type="number"], input[type="text"], input[type="password"] { 
     width: 100%; 
     padding: 10px; 
     font-size: 15px; 
     border-radius: 8px; 
-    border: 2px dashed #a0aec0; /* 👈 微點/虛線外框 */
+    border: 2px dashed #a0aec0; 
     background: #fff; 
     font-family: inherit; 
     font-weight: 700; 
@@ -207,6 +207,7 @@
  .form-group-row > div { flex: 1; }
 
  .scenario-manage-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1.5px dashed #ccc; font-size: 12px; }
+ .scenario-manage-item.custom-tag { border-left: 4px solid #0056b3; }
  </style>
 </head>
 <body>
@@ -222,8 +223,8 @@
 
  <div class="main-container">
  <div class="header-section">
- <h1 class="main-title">醫療保障實況對比 v4.0.0</h1>
- <div id="sync-status">🔄 正在連接 Google Sheets...</div>
+ <h1 class="main-title">醫療保障實況對比 v4.2.0</h1>
+ <div id="sync-status">🔄 正在連接雲端數據庫...</div>
  </div>
 
  <!-- 👑 隱藏/顯示計劃切換按鈕 -->
@@ -392,9 +393,9 @@
  <div class="admin-content">
  <h3 style="margin-top:0; color:#1a3a6e; text-align: center;">⚙️ AVA 醫療索償中央後台</h3>
  
-<!-- 手動新增自訂手術/情境選項區塊 -->
+<!-- 🆕 手動新增自訂手術/情境選項區塊 -->
  <div class="input-dashed-box">
- <h4 style="margin-top:0; color:#0056b3;">➕ 新增自訂手術/情境案例</h4>
+ <h4 style="margin-top:0; color:#0056b3;">➕ 新增自訂雲端手術案例</h4>
  <label style="font-weight: bold; font-size:13px;">1. 所屬分類：</label>
  <select id="custom-cat-select" style="margin-bottom:8px;">
  <option value="day">☀️ 日間手術</option>
@@ -402,23 +403,29 @@
  <option value="child_inpatient">👶 小朋友住院</option>
  <option value="cancer">🎗️ 癌症專區</option>
  </select>
- <label style="font-weight: bold; font-size:13px;">2. 手術/情境名稱：</label>
+
+ <label style="font-weight: bold; font-size:13px; color:#d9534f;">2. 案例性質定位：</label>
+ <select id="custom-plan-type" onchange="handlePlanTypeChange(this)" style="margin-bottom:8px; background:#fff2f2; border-color:#f5c6cb;">
+ <option value="high">👑 高端醫療案例 (靈活預設為「不適用」)</option>
+ <option value="trad" selected>⚠️ 靈活/傳統醫療案例 (需填寫靈活自付金額)</option>
+ </select>
+
+ <label style="font-weight: bold; font-size:13px;">3. 手術/情境名稱：</label>
  <input type="text" id="custom-name-input" placeholder="例如: 微創膽囊切除手術" style="margin-bottom:8px;">
  
- <label style="font-weight: bold; font-size:13px;">3. 預算參考 (直接輸入數字，自動千位符+HK$)：</label>
+ <label style="font-weight: bold; font-size:13px;">4. 預算參考 (直接輸入數字，自動千位符+HK$)：</label>
  <input type="text" id="custom-cost-input" placeholder="例如輸入: 80000 - 120000" oninput="autoFormatCurrencyRange(this)" style="margin-bottom:8px;">
  
- <label style="font-weight: bold; font-size:13px;">4. 靈活計劃客人自付金額 (直接輸入數字，自動千位符+HK$)：</label>
+ <label style="font-weight: bold; font-size:13px;">5. 靈活計劃客人自付金額：</label>
  <input type="text" id="custom-trad-input" placeholder="例如輸入: 15000 - 30000" oninput="autoFormatCurrencyRange(this)" style="margin-bottom:8px;">
  
- <button class="admin-btn" style="background:#0056b3; width:100%; padding:10px; font-size:14px;" onclick="addCustomScenario()">🚀 新增至前台下拉選單</button>
+ <button id="add-scenario-btn" class="admin-btn" style="background:#0056b3; width:100%; padding:10px; font-size:14px;" onclick="addCustomScenario()">🚀 新增並同步至全隊雲端</button>
  </div>
 
  <!-- 🗑️ 管理與刪除現有手術/情境案例區塊 -->
  <div style="background: #fff5f5; padding: 15px; border: 2px dashed #ffdce0; border-radius: 8px; margin-bottom: 20px;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
- <h4 style="margin:0; color:#c62828;">🗑️ 管理 / 刪除手術情境案例</h4>
- <button class="admin-btn" style="background:#6c757d; font-size:11px;" onclick="resetDefaultScenarios()">🔄 重置恢復預設案例</button>
+ <h4 style="margin:0; color:#c62828;">🗑️ 管理雲端手術案例</h4>
  </div>
  <label style="font-weight: bold; font-size:13px;">選擇分類：</label>
  <select id="manage-cat-select" onchange="renderScenarioManageList()" style="margin-bottom:10px;">
@@ -490,12 +497,26 @@
  firebase.initializeApp(firebaseConfig);
  }
 
- // 💡 邊打字邊格式化港幣與千位點 (支援範圍 如: 80000 - 120000 -> HK$ 80,000 - $120,000)
+ // 💡 GAS Web App URL (你必須使用你更新了的 doPost 的 URL)
+ const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec";
+
+ function handlePlanTypeChange(selectEl) {
+    const tradInput = document.getElementById('custom-trad-input');
+    if (selectEl.value === 'high') {
+        tradInput.value = '不適用';
+        tradInput.disabled = true;
+        tradInput.style.background = '#e9ecef';
+    } else {
+        tradInput.value = '';
+        tradInput.disabled = false;
+        tradInput.style.background = '#fff';
+    }
+ }
+
  function autoFormatCurrencyRange(input) {
     let raw = input.value;
-    if (!raw.trim()) return;
+    if (!raw.trim() || raw === '不適用') return;
 
-    // 清除原本的 HK$ 與多餘字元，保留數字與 hyphen(-) 或波浪號(~)
     let hasPlus = raw.includes('+');
     let parts = raw.split(/[-~–—]/);
 
@@ -518,7 +539,6 @@
     }
  }
 
- // 單一金額動態千位點格式化 (上載索償用)
  function autoFormatSingleCurrency(input) {
     let raw = input.value.replace(/[^0-9]/g, '');
     if (!raw) return;
@@ -556,13 +576,13 @@
  document.getElementById(callbackName)?.remove();
  };
 
- const url = `https://script.google.com/macros/s/AKfycbwmpVo8uGg8ZaC-oTFKdTdLAgCibw8FhD0UpcuMA6wWKwV0GWPWhO7hfFqL4NYRds2v/exec?pass=${encodeURIComponent(inputPass)}&callback=${callbackName}`;
+ const authUrl = `https://script.google.com/macros/s/AKfycbwmpVo8uGg8ZaC-oTFKdTdLAgCibw8FhD0UpcuMA6wWKwV0GWPWhO7hfFqL4NYRds2v/exec?pass=${encodeURIComponent(inputPass)}&callback=${callbackName}`;
  
  const script = document.createElement('script');
  script.id = callbackName;
- script.src = url;
+ script.src = authUrl;
  script.onerror = function() {
- fetch(url.replace('&callback=' + callbackName, ''), { method: 'GET', mode: 'no-cors' })
+ fetch(authUrl.replace('&callback=' + callbackName, ''), { method: 'GET', mode: 'no-cors' })
  .then(() => {
  localStorage.setItem('ava_auth_session', 'verified_success');
  document.getElementById('app-launcher-lock').style.display = 'none';
@@ -585,7 +605,7 @@
  document.getElementById('app-launcher-lock').style.display = 'none';
  syncPremiumData();
  }
- loadActiveScenarios();
+ // 不再從 localStorage 讀取，稍後會跟隨 syncPremiumData 讀取雲端
  });
 
  const spreadsheetId = "1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw";
@@ -666,7 +686,11 @@ else { value += char; }
  });
  const results = await Promise.all(fetchPromises);
  keys.forEach((key, index) => { premiumDB[key] = results[index]; });
- statusEl.innerHTML = '✅ 雲端保費與中央分頁數據已同步';
+ 
+ // 同步保費後，順便同步雲端的手術情境資料
+ await syncCloudScenarios();
+
+ statusEl.innerHTML = '✅ 雲端保費與中央數據已同步';
  statusEl.className = 'status-ok';
  } catch (e) {
  statusEl.innerHTML = '⚠️ 網絡異常，請重新整理頁面';
@@ -710,7 +734,7 @@ function toggleConditions() {
  rcBox.style.display = (rcBox.style.display === 'none' || rcBox.style.display === '') ? 'block' : 'none';
  }
 
- // 預設手術數據模板
+ // 預設手術數據模板 (不可刪除的核心資料)
  const defaultSurgeryData = {
  day: [
  { name: '腸胃鏡 (連瘜肉切除)', cost: 'HK$ 20,000 - $30,000', tradOOP: 'HK$ 500 - $2,500' },
@@ -734,25 +758,41 @@ function toggleConditions() {
  ]
  };
 
- let surgeryData = {};
+ let surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
 
- function loadActiveScenarios() {
- const savedScenarios = localStorage.getItem('ava_active_scenarios_v4');
- if (savedScenarios) {
- try {
- surgeryData = JSON.parse(savedScenarios);
- } catch(e) {
- surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
- }
- } else {
- surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
- }
+ // 🚀 1. 從 Google Sheet 抓取自訂手術名單
+ async function syncCloudScenarios() {
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('自訂手術情境')}`;
+    try {
+        const response = await fetch(url, { cache: "no-store" });
+        if(!response.ok) return;
+        const text = await response.text();
+        const lines = text.split('\n');
+
+        // 先重置回預設，然後加上雲端抓回來的資料
+        surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
+
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            const cols = parseCSVLine(lines[i]);
+            const cat = cols[0];
+            const name = cols[1];
+            const cost = cols[2];
+            const tradOOP = cols[3];
+
+            if (cat && surgeryData[cat]) {
+                surgeryData[cat].push({ name, cost, tradOOP, isCustom: true });
+            }
+        }
+        // 更新當前畫面
+        switchCategory(currentCategory);
+        renderScenarioManageList();
+    } catch (e) {
+        console.error("無法同步雲端手術資料", e);
+    }
  }
 
- function saveActiveScenarios() {
- localStorage.setItem('ava_active_scenarios_v4', JSON.stringify(surgeryData));
- }
-
+ // 🚀 2. 將新增的手術名單 POST 去 Google Sheet
  function addCustomScenario() {
  const cat = document.getElementById('custom-cat-select').value;
  const name = document.getElementById('custom-name-input').value.trim();
@@ -764,37 +804,67 @@ function toggleConditions() {
  return;
  }
 
- if (!surgeryData[cat]) surgeryData[cat] = [];
- surgeryData[cat].push({ name, cost, tradOOP });
- saveActiveScenarios();
+ const btn = document.getElementById('add-scenario-btn');
+ btn.disabled = true;
+ btn.innerText = "⏳ 正在同步至雲端...";
 
- alert(`✅ 已成功新增【${name}】至前台選單！`);
- document.getElementById('custom-name-input').value = '';
- document.getElementById('custom-cost-input').value = '';
- document.getElementById('custom-trad-input').value = '';
-
- switchCategory(currentCategory, document.querySelector('.tab.active'));
+ // 立即在畫面顯示 (Optimistic UI Update)
+ surgeryData[cat].push({ name, cost, tradOOP, isCustom: true });
+ switchCategory(currentCategory);
  renderScenarioManageList();
+
+ // 發送至 GAS
+ fetch(scriptUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+        action: 'add_scenario',
+        cat: cat,
+        name: name,
+        cost: cost,
+        tradOOP: tradOOP
+    })
+ }).then(() => {
+    alert(`✅ 已成功新增【${name}】並同步至雲端！`);
+    document.getElementById('custom-name-input').value = '';
+    document.getElementById('custom-cost-input').value = '';
+    document.getElementById('custom-trad-input').value = '';
+    
+    // 恢復靈活計劃欄位預設
+    const tradInput = document.getElementById('custom-trad-input');
+    tradInput.disabled = false;
+    tradInput.style.background = '#fff';
+    document.getElementById('custom-plan-type').value = 'trad';
+
+    btn.disabled = false;
+    btn.innerText = "🚀 新增並同步至全隊雲端";
+ }).catch(err => {
+    alert("❌ 雲端同步失敗，請檢查權限");
+    btn.disabled = false;
+    btn.innerText = "🚀 新增並同步至全隊雲端";
+ });
  }
 
+ // 🚀 3. 從 Google Sheet 刪除
  function deleteScenario(cat, index) {
  const item = surgeryData[cat][index];
- if (!confirm(`⚠️ 確定要刪除案例【${item.name}】嗎？`)) return;
+ if (!confirm(`⚠️ 確定要從雲端刪除案例【${item.name}】嗎？`)) return;
 
+ // 畫面即時移除
  surgeryData[cat].splice(index, 1);
- saveActiveScenarios();
- 
- switchCategory(currentCategory, document.querySelector('.tab.active'));
+ switchCategory(currentCategory);
  renderScenarioManageList();
- }
 
- function resetDefaultScenarios() {
- if (!confirm("⚠️ 確定要將所有手術情境案例重置回系統初始預設值嗎？")) return;
- surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
- saveActiveScenarios();
- switchCategory(currentCategory, document.querySelector('.tab.active'));
- renderScenarioManageList();
- alert("✅ 已成功恢復預設手術案例！");
+ // 發送刪除指令至 GAS
+ fetch(scriptUrl, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+        action: 'delete_scenario',
+        cat: cat,
+        name: item.name
+    })
+ });
  }
 
  function renderScenarioManageList() {
@@ -803,17 +873,20 @@ function toggleConditions() {
  container.innerHTML = '';
 
  const list = surgeryData[cat] || [];
- if (list.length === 0) {
- container.innerHTML = '<div style="color:#999; text-align:center; padding:10px;">此分類下目前無任何案例</div>';
+ // 只列出「自訂/雲端」的手術供刪除，不允許刪除核心預設資料
+ const customList = list.map((item, index) => ({ item, index })).filter(obj => obj.item.isCustom);
+
+ if (customList.length === 0) {
+ container.innerHTML = '<div style="color:#999; text-align:center; padding:10px;">此分類下目前無任何【自訂】雲端案例</div>';
  return;
  }
 
- list.forEach((item, idx) => {
+ customList.forEach((obj) => {
  const div = document.createElement('div');
- div.className = 'scenario-manage-item';
+ div.className = 'scenario-manage-item custom-tag';
  div.innerHTML = `
- <div><b>${item.name}</b> <span style="color:#777;">(${item.cost})</span></div>
- <button class="admin-btn danger" style="padding:2px 8px; font-size:11px;" onclick="deleteScenario('${cat}', ${idx})">🗑️ 刪除</button>
+ <div><b>${obj.item.name}</b> <span style="color:#777;">(${obj.item.cost})</span></div>
+ <button class="admin-btn danger" style="padding:2px 8px; font-size:11px;" onclick="deleteScenario('${cat}', ${obj.index})">🗑️ 刪除</button>
  `;
  container.appendChild(div);
  });
@@ -822,9 +895,12 @@ function toggleConditions() {
  let currentCategory = 'day';
 
  function switchCategory(category, element) {
- currentCategory = category;
- document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
- if(element) element.classList.add('active');
+ if(category) currentCategory = category;
+ 
+ if(element) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    element.classList.add('active');
+ }
  
 document.getElementById('main-settings-panel').style.display = 'flex';
  document.getElementById('main-surgery-selector').style.display = 'block';
@@ -834,7 +910,7 @@ document.getElementById('main-settings-panel').style.display = 'flex';
  document.getElementById('cancer-warning').style.display = 'none';
  document.getElementById('claims-gallery-container').style.display = 'none';
  
-if (category === 'claims') {
+if (currentCategory === 'claims') {
  document.getElementById('main-settings-panel').style.display = 'none';
  document.getElementById('main-surgery-selector').style.display = 'none';
  document.getElementById('scenario-container').style.display = 'none';
@@ -843,14 +919,22 @@ if (category === 'claims') {
  document.getElementById('claims-gallery-container').style.display = 'block';
  loadClaimsFromFirebase(); 
 } else {
- if (category === 'cancer') document.getElementById('cancer-warning').style.display = 'block';
+ if (currentCategory === 'cancer') document.getElementById('cancer-warning').style.display = 'block';
  const select = document.getElementById('surgery-select');
+ 
+ // 保留客人原本的選擇位置
+ const prevSelected = select.value;
  select.innerHTML = '';
- if (surgeryData[category]) {
- surgeryData[category].forEach((item, index) => {
+ 
+ if (surgeryData[currentCategory]) {
+ surgeryData[currentCategory].forEach((item, index) => {
  const opt = document.createElement('option'); opt.value = index;
- opt.textContent = `📍 選擇情境：${item.name}`; select.appendChild(opt);
+ opt.textContent = `📍 選擇情境：${item.name} ${item.isCustom ? '(☁️ 雲端)' : ''}`; 
+ select.appendChild(opt);
  });
+ }
+ if(prevSelected && select.options[prevSelected]) {
+    select.value = prevSelected;
  }
  renderScenario();
  }
@@ -876,6 +960,11 @@ const container = document.getElementById('scenario-container');
  const wiseDisplay = planVisibility.wise ? '' : 'display:none;';
  const flexiDisplay = planVisibility.flexi ? '' : 'display:none;';
 
+ const isNotApplicable = (item.tradOOP === '不適用' || item.tradOOP === 'N/A' || item.tradOOP === 'NA');
+ const flexiValueHtml = isNotApplicable 
+    ? `<span class="oop-value" style="color:#888; font-size:22px;">不適用</span>`
+    : `<span class="oop-value">${item.tradOOP}</span>`;
+
  container.innerHTML = `
  <div class="scenario-card">
  <h4 class="scenario-title">${item.name}</h4>
@@ -887,7 +976,7 @@ const container = document.getElementById('scenario-container');
  <div class="oop-comparison">
  <div class="oop-box elite-oop" style="${eliteDisplay}"><span class="oop-label">尊顯 自付上限</span><span class="oop-value">${eliteText}</span></div>
  <div class="oop-box wise-oop" style="${wiseDisplay}"><span class="oop-label">睿選 自付上限</span><span class="oop-value">${wiseText}</span></div>
- <div class="oop-box flexi-oop" style="${flexiDisplay}"><span class="oop-label">靈活 客人自付</span><span class="oop-value">${item.tradOOP}</span></div>
+ <div class="oop-box flexi-oop" style="${flexiDisplay}"><span class="oop-label">靈活 客人自付</span>${flexiValueHtml}</div>
  </div>
  </div>
  `;
@@ -977,13 +1066,12 @@ const isVitality = document.getElementById('vitality-check').checked;
  await storageRef.child('medical_claims/' + fileName).put(file);
  }
 
- const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec";
-
  try {
   await fetch(scriptUrl, {
     method: 'POST',
     mode: 'no-cors',
     body: JSON.stringify({
+      action: 'add_claim', // 確保這行有加
       type: typeInput,
       total: totalInput,
       claim: claimInput,
@@ -1101,7 +1189,7 @@ const isVitality = document.getElementById('vitality-check').checked;
  const grid = document.getElementById('claims-gallery-grid');
  const loader = document.getElementById('claims-loading');
 
- const cachedData = localStorage.getItem('ava_claims_cache_v4.0');
+ const cachedData = localStorage.getItem('ava_claims_cache_v4.2');
  if (cachedData) {
    try {
      allClaimsCached = JSON.parse(cachedData);
@@ -1152,7 +1240,7 @@ const isVitality = document.getElementById('vitality-check').checked;
 
    allClaimsCached = Object.values(groups);
    
-   localStorage.setItem('ava_claims_cache_v4.0', JSON.stringify(allClaimsCached));
+   localStorage.setItem('ava_claims_cache_v4.2', JSON.stringify(allClaimsCached));
    
    loader.style.display = "none";
    renderFilteredClaims();
