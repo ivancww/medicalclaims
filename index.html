@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v4.3.0 | AVA專屬</title>
+ <title>醫療保障實況對比 v4.3.1 | AVA專屬</title>
  
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -210,7 +210,7 @@
 
  <div class="main-container">
  <div class="header-section">
- <h1 class="main-title">醫療保障實況對比 v4.3.0</h1>
+ <h1 class="main-title">醫療保障實況對比 v4.3.1</h1>
  <div id="sync-status">🔄 正在連接雲端數據庫...</div>
  </div>
 
@@ -404,7 +404,6 @@
  <label style="font-weight: bold; font-size:13px;">5. 靈活計劃客人自付金額：</label>
  <input type="text" id="custom-trad-input" placeholder="例如輸入: 2000 - 4500" oninput="autoFormatCurrencyRange(this)" style="margin-bottom:8px;">
  
- <!-- 👶 新增：專為小朋友住院／特定情境特設的「高端醫療自付額」選擇欄位 -->
  <div id="high-oop-container" style="display:none; background:#fffdf0; padding:10px; border:1.5px dashed #f5b041; border-radius:6px; margin-bottom:10px;">
  <label style="font-weight: bold; font-size:13px; color:#b9770e;">6. 👑 高端醫療特設自付額 (選填，如指定小朋友自付額)：</label>
  <input type="text" id="custom-high-oop-input" placeholder="例如: HK$ 10,000 / 留空則跟隨頁面頂部選擇" oninput="autoFormatSingleCurrency(this)">
@@ -487,9 +486,11 @@
  firebase.initializeApp(firebaseConfig);
  }
 
- const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec";
+ // 🎯 關鍵正確連結配置：
+ const scriptUrl = "https://script.google.com/macros/s/AKfycbxnzbfRE7RpixHcKDfZpxU1HsoJWYlv8CwQCJRyV9QlCa6-BSTG20ddTL3ovW_s90Zf/exec"; // GAS POST 連結
+ const claimsSpreadsheetId = "11F_4xtQVAUCfonf02jkWbz7XNaUBAY1Ekib9Yt5dT2w"; // 醫療索償與自訂手術 Sheet ID
+ const premiumSpreadsheetId = "1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw"; // 保費表 Sheet ID
 
- // 👶 當選擇「小朋友住院」分類時，自動開啓「高端醫療特設自付額」輸入框
  function handleCatChange(selectEl) {
     const highContainer = document.getElementById('high-oop-container');
     if (selectEl.value === 'child_inpatient') {
@@ -607,7 +608,6 @@
  }
  });
 
- const spreadsheetId = "1G6JirabWJPrTtsdPuzzfyo-D-EPIbbdCM3HvFUW7ZCw";
  const tabNames = {
  "flexi_f": "女靈活計劃", "flexi_m": "男靈活計劃",
  "wise_0": "睿選0自付額", "wise_8800": "睿選8800自付額", "wise_18000": "睿選18000自付額", "wise_30000": "睿選30000自付額",
@@ -680,7 +680,7 @@ else { value += char; }
  try {
  const keys = Object.keys(tabNames);
  const fetchPromises = keys.map(k => {
- const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabNames[k])}`;
+ const url = `https://docs.google.com/spreadsheets/d/${premiumSpreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabNames[k])}`;
  return fetchCSV(url);
  });
  const results = await Promise.all(fetchPromises);
@@ -757,8 +757,9 @@ function toggleConditions() {
 
  let surgeryData = JSON.parse(JSON.stringify(defaultSurgeryData));
 
+ // 🎯 修正讀取：使用 claimsSpreadsheetId 讀取「自訂手術情境」分頁 CSV
  async function syncCloudScenarios() {
-    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('自訂手術情境')}`;
+    const url = `https://docs.google.com/spreadsheets/d/${claimsSpreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('自訂手術情境')}`;
     try {
         const response = await fetch(url, { cache: "no-store" });
         if(!response.ok) return;
@@ -774,7 +775,7 @@ function toggleConditions() {
             const name = cols[1];
             const cost = cols[2];
             const tradOOP = cols[3];
-            const highOOP = cols[4] || ''; // 👈 E欄：高端特設自付
+            const highOOP = cols[4] || '';
 
             if (cat && surgeryData[cat]) {
                 surgeryData[cat].push({ name, cost, tradOOP, highOOP, isCustom: true });
@@ -941,7 +942,6 @@ if (currentCategory === 'claims') {
 const eliteVal = parseInt(document.getElementById('elite-deductible').value);
  const wiseVal = parseInt(document.getElementById('wise-deductible').value);
  
- // 👶 若案例本身有指定特設的高端自付額（如小朋友自訂案），優先顯示特設數值
  const eliteText = item.highOOP ? item.highOOP : (eliteVal === 0 ? "HK$ 0" : `HK$ ${eliteVal.toLocaleString()}`);
  const wiseText = item.highOOP ? item.highOOP : (wiseVal === 0 ? "HK$ 0" : `HK$ ${wiseVal.toLocaleString()}`);
  
