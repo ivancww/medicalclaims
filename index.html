@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v4.4.0 | AVA專屬</title>
+ <title>醫療保障實況對比 v4.5.0 | AVA專屬</title>
  
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -33,13 +33,12 @@
  .status-ok { background: #d4edda !important; color: #155724 !important; }
 
  .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
- .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed #ccc; background: #f8f9fa; color: #555; transition: 0.2s; }
+ .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed #f8d7da; background: #f8f9fa; color: #555; transition: 0.2s; }
  .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
  .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
  .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
  .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
 
- /* 📱/📱摺疊機專用媒體查詢：只有在摺起小螢幕 (<600px) 時才切換為單欄 */
  .limit-banner { display: flex; gap: 10px; margin-bottom: 20px; }
  @media (max-width: 599px) { .limit-banner { flex-direction: column; } }
  .limit-badge { flex: 1; padding: 12px 8px; border-radius: 8px; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
@@ -47,7 +46,6 @@
  .limit-badge.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: #0056b3; }
  .limit-badge.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: #c62828; }
 
- /* 設定區：展開後 (>=600px) 保持 3 欄式 iPad 平板排版 */
  .settings-panel { display: flex; gap: 10px; margin-bottom: 25px; }
  @media (max-width: 599px) { .settings-panel { flex-direction: column; } }
  .plan-setting { flex: 1; padding: 15px 12px; border-radius: 10px; display: flex; flex-direction: column;}
@@ -59,12 +57,13 @@
  .wise-setting h3 { color: #0056b3; }
  .flexi-setting h3 { color: #c62828; }
 
+ /* 🎯 需求 3：所有手動輸入框與選單，外框統一使用「淺粉紅微點虛線」 */
  select, input[type="number"], input[type="text"], input[type="password"] { 
     width: 100%; 
     padding: 10px; 
     font-size: 14px; 
     border-radius: 8px; 
-    border: 2px dashed #a0aec0; 
+    border: 2px dashed #f8d7da; /* 👈 淺粉紅微點虛線外框 */
     background: #fff; 
     font-family: inherit; 
     font-weight: 700; 
@@ -74,14 +73,14 @@
     transition: border-color 0.2s, box-shadow 0.2s;
  }
  select:focus, input[type="number"]:focus, input[type="text"]:focus, input[type="password"]:focus {
-    border-color: #1a3a6e;
+    border-color: #dc3545;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(26, 58, 110, 0.15);
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
  }
 
  .input-dashed-box {
-    border: 2px dashed #b3d4fc !important;
-    background: #f8fafc;
+    border: 2px dashed #f8d7da !important; /* 👈 淺粉紅微點虛線 */
+    background: #fffafa;
     border-radius: 8px;
     padding: 12px;
     margin-bottom: 15px;
@@ -95,12 +94,12 @@
  .condition-highlight { color: #1a3a6e; font-weight: 700; }
 
  .category-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
- .tab { flex: 1; text-align: center; padding: 10px 6px; background: #f4f4f4; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent; min-width: 100px; }
+ .tab { flex: 1; text-align: center; padding: 10px 6px; background: #f4f4f4; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; border: 2px dashed #f8d7da; min-width: 100px; }
  .tab.active { background: #1a3a6e; color: #fff; border-color: #1a3a6e; }
  .tab.tab-cancer { color: #d9534f; }
- .tab.tab-cancer.active { background: #d9534f; color: #fff; }
+ .tab.tab-cancer.active { background: #d9534f; color: #fff; border-color: #d9534f; }
  .tab.tab-claims { background: #fff2cc; color: #b78103; border-color: #ffe599; }
- .tab.tab-claims.active { background: #f1c232; color: #fff; }
+ .tab.tab-claims.active { background: #f1c232; color: #fff; border-color: #f1c232; }
 
  .surgery-selector { margin-bottom: 20px; }
 
@@ -111,7 +110,6 @@
 .rc-toggle-btn { text-align: center; font-size: 13px; color: #1a3a6e; cursor: pointer; text-decoration: underline; margin-bottom: 15px; font-weight: 500; display: inline-block; width: 100%;}
  .rc-info-box { display: none; background: #fdf5f5; border-left: 4px solid #d9534f; padding: 12px 15px; border-radius: 6px; font-size: 13px; color: #555; margin-bottom: 15px; line-height: 1.5; }
 
- /* 👑 摺機/iPad 對比卡片橫向三欄並排優化 */
  .oop-comparison { display: flex; gap: 10px; }
  @media (max-width: 599px) { .oop-comparison { flex-direction: column; } }
  .oop-box { flex: 1; padding: 12px 8px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
@@ -130,7 +128,7 @@
  .highlight-admin-trigger:active { background-color: #ffe599; }
 
  .filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
- .filter-btn { background: #fff; border: 1.5px dashed #ccc; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; color: #555;}
+ .filter-btn { background: #fff; border: 1.5px dashed #f8d7da; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; color: #555;}
  .filter-btn.active { background: #1a3a6e; color: white; border-color: #1a3a6e; }
 
  .claims-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 10px; }
@@ -152,7 +150,7 @@
  .claim-file-link:hover { color: #3b82f6; }
 
  .checklist-section { margin-top: 30px; border-top: 2px dashed #ccc; padding-top: 20px; }
- .checklist-title { text-align: center; margin-bottom: 20px; font-size: 20px; color: #1a3a6e; font-weight: 700;}
+ .checklist-title { text-align: center; margin-bottom: 12px; font-size: 20px; color: #1a3a6e; font-weight: 700;}
  .checklist-grid { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; font-size: 13px;}
  .checklist-row { display: flex; border-bottom: 1px solid #eee; }
  .checklist-row:last-child { border-bottom: none; }
@@ -181,7 +179,7 @@
  
 .checkbox-group { margin-top: 15px; font-size: 13px; }
  .checkbox-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 10px;}
- .tax-select { display: inline-block; width: auto; padding: 4px; font-size: 12px; margin-left: 6px;}
+ .tax-select { display: inline-block; width: auto; padding: 4px; font-size: 12px; margin-left: 6px; border-color: #f8d7da;}
  
 .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; justify-content: center; align-items: center; }
  .admin-content { background: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 550px; max-height: 85vh; overflow-y: auto; }
@@ -196,7 +194,7 @@
 .form-group-row { display: flex; gap: 10px; margin-bottom: 5px; }
  .form-group-row > div { flex: 1; }
 
- .scenario-manage-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1.5px dashed #ccc; font-size: 12px; }
+ .scenario-manage-item { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1.5px dashed #f8d7da; font-size: 12px; }
  .scenario-manage-item.custom-tag { border-left: 4px solid #0056b3; }
  </style>
 </head>
@@ -213,7 +211,7 @@
 
  <div class="main-container">
  <div class="header-section">
- <h1 class="main-title">醫療保障實況對比 v4.4.0</h1>
+ <h1 class="main-title">醫療保障實況對比 v4.5.0</h1>
  <div id="sync-status">🔄 正在連接雲端數據庫...</div>
  </div>
 
@@ -318,6 +316,18 @@
 
  <div id="main-checklist-section" class="checklist-section">
  <h2 class="checklist-title">📋 康復及附加保障對比</h2>
+ 
+ <!-- 🎯 需求 1：康復對比表新增睿選未符合條件 Toggle 開關 -->
+ <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+   <div style="max-width: 320px; width: 100%;">
+     <div class="toggle-container" onclick="toggleConditions()">
+       <div id="rehab-condition-toggle" class="toggle-switch active">
+         <span class="toggle-text">✅ 符合睿選條件 (享半私家)</span>
+       </div>
+     </div>
+   </div>
+ </div>
+
  <div class="checklist-grid">
  <div class="checklist-row header-row">
  <div class="col-item">保障項目</div>
@@ -371,9 +381,24 @@
  </div>
  </div>
  <div class="calc-results">
- <div class="result-box elite plan-col-elite"><h4>尊顯計劃</h4><div id="elite-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="elite-tax-display"></div></div>
- <div class="result-box wise plan-col-wise"><h4>睿選計劃</h4><div id="wise-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="wise-tax-display"></div></div>
- <div class="result-box flexi plan-col-flexi"><h4>靈活計劃</h4><div id="flexi-premium-display" class="result-price">計算中...</div><div style="font-size: 11px;" id="flexi-tax-display"></div></div>
+ <div class="result-box elite plan-col-elite">
+   <h4>尊顯計劃</h4>
+   <div id="elite-premium-display" class="result-price">計算中...</div>
+   <div style="font-size: 11px;" id="elite-vitality-display"></div>
+   <div style="font-size: 11px;" id="elite-tax-display"></div>
+ </div>
+ <div class="result-box wise plan-col-wise">
+   <h4>睿選計劃</h4>
+   <div id="wise-premium-display" class="result-price">計算中...</div>
+   <div style="font-size: 11px;" id="wise-vitality-display"></div>
+   <div style="font-size: 11px;" id="wise-tax-display"></div>
+ </div>
+ <div class="result-box flexi plan-col-flexi">
+   <h4>靈活計劃</h4>
+   <div id="flexi-premium-display" class="result-price">計算中...</div>
+   <div style="font-size: 11px;" id="flexi-vitality-display"></div>
+   <div style="font-size: 11px;" id="flexi-tax-display"></div>
+ </div>
  </div>
  </div>
  </div>
@@ -407,7 +432,7 @@
  <label style="font-weight: bold; font-size:13px;">5. 靈活計劃客人自付金額：</label>
  <input type="text" id="custom-trad-input" placeholder="例如輸入: 2000 - 4500" oninput="autoFormatCurrencyRange(this)" style="margin-bottom:8px;">
  
- <div id="high-oop-container" style="display:none; background:#fffdf0; padding:10px; border:1.5px dashed #f5b041; border-radius:6px; margin-bottom:10px;">
+ <div id="high-oop-container" style="display:none; background:#fffdf0; padding:10px; border:1.5px dashed #f8d7da; border-radius:6px; margin-bottom:10px;">
  <label style="font-weight: bold; font-size:13px; color:#b9770e;">6. 👑 高端醫療特設自付額 (選填，如指定小朋友自付額)：</label>
  <input type="text" id="custom-high-oop-input" placeholder="例如: HK$ 10,000 / 留空則跟隨頁面頂部選擇" oninput="autoFormatSingleCurrency(this)">
  </div>
@@ -415,7 +440,7 @@
  <button id="add-scenario-btn" class="admin-btn" style="background:#0056b3; width:100%; padding:10px; font-size:14px;" onclick="addCustomScenario()">🚀 新增並同步至全隊雲端</button>
  </div>
 
- <div style="background: #fff5f5; padding: 15px; border: 2px dashed #ffdce0; border-radius: 8px; margin-bottom: 20px;">
+ <div style="background: #fff5f5; padding: 15px; border: 2px dashed #f8d7da; border-radius: 8px; margin-bottom: 20px;">
  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
  <h4 style="margin:0; color:#c62828;">🗑️ 管理雲端手術案例</h4>
  </div>
@@ -435,7 +460,7 @@
  <span style="color:#d9534f;">⚠️ 🛡️ 重要提示：為保障私隱，上載收據前請務必手動塗黑或遮蓋所有客人的姓名、身分證號碼及電話號碼！</span>
  </div>
 
- <div style="background: #fafafa; padding: 15px; border: 2px dashed #e0e0e0; border-radius: 8px;">
+ <div style="background: #fafafa; padding: 15px; border: 2px dashed #f8d7da; border-radius: 8px;">
  <label style="font-weight: bold; font-size:14px;">1. 選取索償證明（多選，最多10份，支援圖片及PDF）：</label>
  <input type="file" id="upload-file-input" accept="image/*, application/pdf" multiple style="margin-top:5px; margin-bottom:12px;">
  
@@ -703,12 +728,18 @@ function toggleConditions() {
  isConditionMet = !isConditionMet;
  const toggleEl = document.getElementById('condition-toggle');
  const toggleText = toggleEl.querySelector('.toggle-text');
+ 
+ const rehabToggleEl = document.getElementById('rehab-condition-toggle');
+ const rehabToggleText = rehabToggleEl ? rehabToggleEl.querySelector('.toggle-text') : null;
+
  if (isConditionMet) {
- toggleEl.className = 'toggle-switch active'; toggleText.textContent = '✅ 符合條件 (享半私家)';
- updateChecklist(true);
+   if (toggleEl) { toggleEl.className = 'toggle-switch active'; toggleText.textContent = '✅ 符合條件 (享半私家)'; }
+   if (rehabToggleEl) { rehabToggleEl.className = 'toggle-switch active'; rehabToggleText.textContent = '✅ 符合睿選條件 (享半私家)'; }
+   updateChecklist(true);
  } else {
- toggleEl.className = 'toggle-switch inactive'; toggleText.textContent = '⚠️ 未符合 (跌落普通房)';
- updateChecklist(false);
+   if (toggleEl) { toggleEl.className = 'toggle-switch inactive'; toggleText.textContent = '⚠️ 未符合 (跌落普通房)'; }
+   if (rehabToggleEl) { rehabToggleEl.className = 'toggle-switch inactive'; rehabToggleText.textContent = '⚠️ 未符合睿選條件 (跌落普通房)'; }
+   updateChecklist(false);
  }
  }
 
@@ -979,6 +1010,7 @@ const container = document.getElementById('scenario-container');
  const safeAge = age > 100 ? 100 : age; return db[safeAge] || 0;
  }
 
+ // 🎯 需求 2：勾選 AIA Vitality 後，顯示模仿扣稅金額的「已省保費 ~$XXX (9折)」
  function calculatePremium() {
  const age = parseInt(document.getElementById('age-input').value) || 0;
  const gender = document.getElementById('gender-select').value;
@@ -989,12 +1021,20 @@ const isVitality = document.getElementById('vitality-check').checked;
  const isTax = document.getElementById('tax-check').checked;
  const taxRate = parseFloat(document.getElementById('tax-rate').value);
 
- let elitePrem = getRate(premiumDB["elite_" + eliteDeduc], age);
- let wisePrem = getRate(premiumDB["wise_" + wiseDeduc], age);
- let flexiPrem = getRate(premiumDB["flexi_" + gender.toLowerCase()], age);
+ let rawElitePrem = getRate(premiumDB["elite_" + eliteDeduc], age);
+ let rawWisePrem = getRate(premiumDB["wise_" + wiseDeduc], age);
+ let rawFlexiPrem = getRate(premiumDB["flexi_" + gender.toLowerCase()], age);
 
- if (elitePrem === 0 && wisePrem === 0 && flexiPrem === 0) return;
- if(isVitality) { elitePrem *= 0.9; wisePrem *= 0.9; flexiPrem *= 0.9; }
+ if (rawElitePrem === 0 && rawWisePrem === 0 && rawFlexiPrem === 0) return;
+
+ let elitePrem = isVitality ? rawElitePrem * 0.9 : rawElitePrem;
+ let wisePrem = isVitality ? rawWisePrem * 0.9 : rawWisePrem;
+ let flexiPrem = isVitality ? rawFlexiPrem * 0.9 : rawFlexiPrem;
+
+ // 計算 Vitality 慳幾多錢
+ let eliteVitSavings = rawElitePrem * 0.1;
+ let wiseVitSavings = rawWisePrem * 0.1;
+ let flexiVitSavings = rawFlexiPrem * 0.1;
 
  let eliteTax = 0, wiseTax = 0, flexiTax = 0;
  if(isTax) {
@@ -1006,6 +1046,10 @@ const isVitality = document.getElementById('vitality-check').checked;
  document.getElementById('elite-premium-display').textContent = `HK$ ${Math.round(elitePrem - eliteTax).toLocaleString()}`;
  document.getElementById('wise-premium-display').textContent = `HK$ ${Math.round(wisePrem - wiseTax).toLocaleString()}`;
  document.getElementById('flexi-premium-display').textContent = `HK$ ${Math.round(flexiPrem - flexiTax).toLocaleString()}`;
+
+ document.getElementById('elite-vitality-display').innerHTML = isVitality ? `<span style="color:#28a745">已省保費 ~$${Math.round(eliteVitSavings)} (9折)</span>` : '';
+ document.getElementById('wise-vitality-display').innerHTML = isVitality ? `<span style="color:#28a745">已省保費 ~$${Math.round(wiseVitSavings)} (9折)</span>` : '';
+ document.getElementById('flexi-vitality-display').innerHTML = isVitality ? `<span style="color:#28a745">已省保費 ~$${Math.round(flexiVitSavings)} (9折)</span>` : '';
 
  document.getElementById('elite-tax-display').innerHTML = isTax ? `<span style="color:#28a745">已扣稅 ~$${Math.round(eliteTax)}</span>` : '';
  document.getElementById('wise-tax-display').innerHTML = isTax ? `<span style="color:#28a745">已扣稅 ~$${Math.round(wiseTax)}</span>` : '';
@@ -1181,7 +1225,7 @@ const isVitality = document.getElementById('vitality-check').checked;
  const grid = document.getElementById('claims-gallery-grid');
  const loader = document.getElementById('claims-loading');
 
- const cachedData = localStorage.getItem('ava_claims_cache_v4.4');
+ const cachedData = localStorage.getItem('ava_claims_cache_v4.5');
  if (cachedData) {
    try {
      allClaimsCached = JSON.parse(cachedData);
@@ -1232,7 +1276,7 @@ const isVitality = document.getElementById('vitality-check').checked;
 
    allClaimsCached = Object.values(groups);
    
-   localStorage.setItem('ava_claims_cache_v4.4', JSON.stringify(allClaimsCached));
+   localStorage.setItem('ava_claims_cache_v4.5', JSON.stringify(allClaimsCached));
    
    loader.style.display = "none";
    renderFilteredClaims();
