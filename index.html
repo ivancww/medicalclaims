@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v5.8 | AVA專屬</title>
+ <title>醫療保障實況對比 v5.8.1 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -19,6 +19,7 @@
     --primary: #1a3a6e;
     --primary-light: #eff6ff;
     --accent: #d97706;
+    --accent-light: #fffbeb;
     --danger: #dc2626;
     --danger-light: #fef2f2;
     --warning-bg: #fef3c7;
@@ -35,6 +36,14 @@
   
   .app-shell { max-width: 860px; margin: 0 auto; }
   
+  .header-version-bar {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    font-size: 13px; font-weight: 700; color: #64748b;
+  }
+  .v-badge {
+    font-size: 11px; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 10px;
+  }
+
   /* 階段卡片 */
   .stage-card {
     background: #fff; border-radius: var(--radius); padding: 26px 20px;
@@ -53,6 +62,7 @@
     display: flex; flex-direction: column; gap: 4px; text-align: left; width: 100%; padding: 15px 18px;
     background: #fff; border: 2px dashed var(--pink-border); border-radius: 12px; cursor: pointer; transition: 0.2s;
   }
+  .choice-btn * { pointer-events: none; } /* 避免子元素干擾點擊事件 */
   .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
   .choice-btn.selected { background: var(--primary-light); border-color: var(--primary); border-style: solid; box-shadow: 0 0 0 1px var(--primary); }
   .choice-btn .c-title { font-size: 15px; font-weight: 800; color: #2c3e50; }
@@ -84,7 +94,7 @@
   .limit-badge.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: var(--wise-color); }
   .limit-badge.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
 
-  /* 產品計劃設定面板 (截圖 5, 6) */
+  /* 產品計劃設定面板 */
   .settings-panel { display: flex; gap: 10px; margin-bottom: 20px; }
   @media (max-width: 599px) { .settings-panel { flex-direction: column; } }
   .plan-setting { flex: 1; padding: 15px 12px; border-radius: 10px; display: flex; flex-direction: column; }
@@ -96,7 +106,7 @@
   .wise-setting h3 { color: var(--wise-color); }
   .flexi-setting h3 { color: var(--flexi-color); }
 
-  select, input[type="text"], input[type="number"], input[type="password"] {
+  select, input[type="text"], input[type="number"] {
     width: 100%; padding: 9px; font-size: 14px; border-radius: 8px; border: 2px dashed var(--pink-border);
     background: #fff; font-weight: 700; color: #333; outline: none; margin-top: 4px; box-sizing: border-box;
   }
@@ -106,7 +116,7 @@
   .toggle-switch.active { background: #28a745; color: #fff; }
   .condition-list { font-size: 11.5px; color: #444; padding-left: 16px; margin-top: 6px; line-height: 1.4; }
 
-  /* 康復附加保障對比表 (截圖 6) */
+  /* 康復附加保障對比表 */
   .checklist-grid { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; font-size: 12.5px; margin-top: 15px; }
   .checklist-row { display: flex; border-bottom: 1px solid #eee; }
   .checklist-row:last-child { border-bottom: none; }
@@ -127,7 +137,7 @@
   .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
   .oop-mini-val { font-size: 18px; font-weight: 900; margin-top: 4px; }
 
-  /* 案例圖片置中彈窗 Modal (3x3 網格) */
+  /* 案例圖片置中彈窗 Modal */
   .modal-overlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); z-index: 999999; justify-content: center; align-items: center; padding: 16px;
@@ -152,6 +162,11 @@
 <body>
 
 <div class="app-shell">
+
+  <div class="header-version-bar">
+    <span>AVA HEALTHCARE PLANNER</span>
+    <span class="v-badge">v5.8.1</span>
+  </div>
 
  <!-- ========================================================
       【階段 1】前置 5 部曲：從痛點引導到自付缺口
@@ -181,7 +196,7 @@
    </div>
  </div>
 
- <!-- STEP 2：想像一下情境 -->
+ <!-- STEP 2：想像一下情境 (修復點擊無反應問題) -->
  <div class="stage-card" id="stage-m2">
    <span class="stage-tag">02｜想像一下情境</span>
    <h2 class="stage-title">如果有一日，需要即時接受治療……</h2>
@@ -205,7 +220,7 @@
    </div>
  </div>
 
- <!-- STEP 3：現在有的保障 (回顧前設) -->
+ <!-- STEP 3：現在有的保障 -->
  <div class="stage-card" id="stage-m3">
    <span class="stage-tag">03｜現在有的保障</span>
    <h2 class="stage-title">回顧你的第一道防線</h2>
@@ -231,7 +246,7 @@
    </div>
  </div>
 
- <!-- STEP 4：如果第一道防線改變 (已移除未清楚選項) -->
+ <!-- STEP 4：如果第一道防線改變 -->
  <div class="stage-card" id="stage-m4">
    <span class="stage-tag">04｜如果第一道防線改變</span>
    <h2 class="stage-title">如果將來轉工、離職、退休，第一道防線改變，你會點？</h2>
@@ -310,23 +325,18 @@
    <h2 class="stage-title">按照你剛才嘅情況</h2>
    <p class="stage-desc">你真正需要的，其實係建立專屬你個人嘅<strong>「第二道醫療防線」</strong>：</p>
 
-   <!-- 動態文案框（無公司醫保時自動切換） -->
    <div class="success-box">
      <ul class="bullet-list" id="prod-bullet-list">
-       <!-- JS 動態渲染 -->
      </ul>
    </div>
 
-   <!-- 三欄保額 Banner (截圖 5) -->
    <div class="limit-banner">
      <div class="limit-badge elite">👑 尊顯：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
      <div class="limit-badge wise">🛡️ 睿選：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
      <div class="limit-badge flexi">⚠️ 靈活：細項分項嚴重受限 ❌</div>
    </div>
 
-   <!-- 產品設定與特權 (截圖 5, 6) -->
    <div class="settings-panel">
-     <!-- 尊顯 -->
      <div class="plan-setting elite-setting">
        <h3>👑 高端尊顯計劃</h3>
        <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
@@ -341,7 +351,6 @@
        </div>
      </div>
 
-     <!-- 睿選 (含點擊切換) -->
      <div class="plan-setting wise-setting">
        <h3>🛡️ 高端睿選計劃</h3>
        <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
@@ -363,7 +372,6 @@
        </ul>
      </div>
 
-     <!-- 靈活 -->
      <div class="plan-setting flexi-setting">
        <h3>⚠️ 靈活計劃</h3>
        <p style="color: #d9534f; font-weight: bold; font-size: 12.5px; margin: 0; line-height: 1.5;">
@@ -374,7 +382,6 @@
      </div>
    </div>
 
-   <!-- 康復及附加保障對比表 (截圖 6) -->
    <div class="checklist-grid">
      <div class="checklist-row header-row">
        <div class="col-item">保障項目</div>
@@ -409,7 +416,7 @@
  </div>
 
  <!-- ========================================================
-      【階段 3】情景案例：互動探索 (手動實時千位輸入 + 雲端 3x3 案例彈窗)
+      【階段 3】情景案例：互動探索
       ======================================================== -->
  <div class="stage-card" id="stage-interactive-scenarios">
    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -435,20 +442,17 @@
      </button>
    </div>
 
-   <!-- 動態推演結算展示框 -->
    <div id="dynamic-scenario-box" class="scenario-calc-box" style="display:none;">
      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
        <h4 style="margin:0; font-size:16px; color:var(--primary);" id="dyn-scn-title">腸胃鏡檢查</h4>
        <button type="button" class="btn-secondary" onclick="openClaimPhotosModal()" style="padding:5px 10px; font-size:12px; background:#fff2cc; border-color:#f1c232; color:#b78103; font-weight:bold;">📂 查看真實索償收據 (雲端)</button>
      </div>
      
-     <!-- 支援自訂開支 (實時千位符) -->
      <div style="margin-top:12px; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
        <label style="font-size:12px; font-weight:bold; color:#475569;">✏️ 醫療開支預算 (可手動輸入壓力測試)：</label>
        <input type="text" id="manual-cost-input" value="HK$ 25,000" oninput="handleManualCostInput(this)">
      </div>
      
-     <!-- 癌症專屬用藥提示 -->
      <div id="cancer-drug-addon" class="info-quote-box" style="display:none; margin:10px 0; font-size:13px;">
        💊 <strong>非手術癌症用藥費用（標靶/免疫治療）：</strong> 預估每年需 <strong>HK$ 300,000 - $600,000</strong>。<br>
        高端尊顯/睿選：<strong>全數賠償</strong> ｜ 傳統靈活計劃：<strong>受限於每年 $96,000 上限</strong>。
@@ -518,7 +522,6 @@
      </label>
    </div>
 
-   <!-- 方案月繳價格比較 -->
    <div class="plan-card-grid" style="margin-top:15px;">
      <div class="plan-card elite">
        <h4>尊顯計劃 (月供)</h4>
@@ -544,14 +547,14 @@
  </div>
 
  <!-- ========================================================
-      【階段 5】保障確認：極簡 Summary (截圖 4)
+      【階段 5】保障確認：極簡 Summary
       ======================================================== -->
  <div class="stage-card" id="stage-confirm-summary">
    <span class="stage-tag">保障確認｜方案總結</span>
    <h2 class="stage-title">如果以上方案符合你的需要</h2>
    <p class="stage-desc">以下為你專屬量身定制的醫療防線確認摘要：</p>
 
-   <div class="summary-confirm-card" style="background:#fff; border:2px solid var(--primary); border-radius:12px; padding:18px; line-height:1.8; font-size:14px;">
+   <div style="background:#fff; border:2px solid var(--primary); border-radius:12px; padding:18px; line-height:1.8; font-size:14px; margin: 15px 0;">
      <div>🎯 <strong>你希望解決：</strong> 醫療第二道防線</div>
      <div>🏢 <strong>現有第一道防線：</strong> <span id="sum-company-status">公司醫保</span></div>
      <div>🛡️ <strong>建議方案：</strong> <span id="sum-plan-name" style="color:var(--wise-color); font-weight:800;">高端睿選醫療計劃（半私家房）</span></div>
@@ -595,7 +598,7 @@
 </div>
 
 <!-- ========================================================
-     【置中彈窗 Modal】真實索償收據（最多 6 張 3x3 展示）
+     【置中彈窗 Modal】真實索償收據
      ======================================================== -->
 <div id="claimsModal" class="modal-overlay" onclick="closeClaimPhotosModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
@@ -610,7 +613,7 @@
 </div>
 
 <!-- ========================================================
-     【後台管理 Modal】案例新增與刪除
+     【後台管理 Modal】案例管理
      ======================================================== -->
 <div id="adminModal" class="modal-overlay" onclick="closeAdminModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
@@ -630,7 +633,6 @@
 </div>
 
 <script>
-  // Firebase 配置[span_10](start_span)[span_10](end_span)
   const firebaseConfig = {
     apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
     authDomain: "medical-and-ci.firebaseapp.com",
@@ -639,9 +641,8 @@
     messagingSenderId: "857984223277",
     appId: "1:857984223277:web:bd64aa72fc7e374c3450a4"
   };
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);[span_11](start_span)[span_11](end_span)
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
-  // 全局狀態管理
   const appState = {
     cost: 200000,
     hasCompany: true,
@@ -653,10 +654,12 @@
     gap: 120000,
     selectedScenario: 'day',
     isWiseMet: true,
-    currentSimCost: 25000
+    currentSimCost: 25000,
+    m1Selected: '',
+    m2Selected: '',
+    m4Selected: ''
   };
 
-  // 1. 讀取 URL 參數
   function initFromURL() {
     const params = new URLSearchParams(window.location.search);
     if (params.has('cost')) appState.cost = Number(params.get('cost')) || 200000;
@@ -672,7 +675,6 @@
     }
     appState.gap = Math.max(0, appState.cost - appState.companyPay - appState.personalPay);
 
-    // 填入 Step 3 & Step 5
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
     document.getElementById('m3-rate-badge').innerText = appState.companyRate + '%';
     document.getElementById('m3-comp-text').innerText = 'HK$ ' + Math.round(appState.companyPay).toLocaleString();
@@ -681,7 +683,6 @@
     document.getElementById('m5-pers-val').innerText = '- HK$ ' + Math.round(appState.personalPay).toLocaleString();
     document.getElementById('m5-gap-val').innerText = 'HK$ ' + Math.round(appState.gap).toLocaleString();
 
-    // 渲染產品頁 bullet list (無公司醫保時切換)
     const bulletContainer = document.getElementById('prod-bullet-list');
     if (appState.hasCompany) {
       bulletContainer.innerHTML = `
@@ -701,18 +702,27 @@
     }
   }
 
-  // 2. 階段切換
   function goToStage(stageId) {
     document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('active'));
     const target = document.getElementById('stage-' + stageId);
-    if (target) target.classList.add('active');
+    if (target) {
+      target.classList.add('active');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (stageId === 'premium-calc') calculateRealPremium();
     if (stageId === 'interactive-scenarios') selectScenarioCase(appState.selectedScenario);
   }
 
+  // 修復第 2 步點擊推進邏輯
   function proceedFromM2() {
+    if (!appState.m2Selected) {
+      // 若尚未點選，預設選取 A 項目
+      const defaultBtn = document.querySelector('[data-m2="A"]');
+      if (defaultBtn) defaultBtn.classList.add('selected');
+      appState.m2Selected = 'A';
+    }
+
     if (appState.hasCompany) {
       goToStage('m3');
     } else {
@@ -721,6 +731,7 @@
   }
 
   function selectM4(val) {
+    appState.m4Selected = val;
     document.querySelectorAll('#stage-m4 .choice-btn').forEach(b => b.classList.remove('selected'));
     const btn = document.querySelector(`[data-m4="${val}"]`);
     if (btn) btn.classList.add('selected');
@@ -741,7 +752,6 @@
     alert("明白！此評估結果已留存。若日後需要升級或檢視防線，可隨時重新開啟。");
   }
 
-  // 3. 睿選半私家房條件切換 (截圖 5, 6)[span_12](start_span)[span_12](end_span)
   function toggleWiseCondition() {
     appState.isWiseMet = !appState.isWiseMet;
     const toggleEl = document.getElementById('wise-condition-toggle');
@@ -763,7 +773,6 @@
     renderDynamicScenario();
   }
 
-  // 4. 情景案例互動動態推演
   const scenarioData = {
     day: { title: '☀️ 腸胃鏡連瘜肉切除', cost: 25000, isCancer: false, flexiOOP: 1500 },
     inpatient: { title: '🏥 通波仔心臟手術 (微創)', cost: 180000, isCancer: false, flexiOOP: 45000 },
@@ -773,7 +782,8 @@
   function selectScenarioCase(type) {
     appState.selectedScenario = type;
     document.querySelectorAll('#stage-interactive-scenarios .choice-btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('scn-btn-' + type).classList.add('selected');
+    const targetBtn = document.getElementById('scn-btn-' + type);
+    if (targetBtn) targetBtn.classList.add('selected');
 
     const item = scenarioData[type];
     appState.currentSimCost = item.cost;
@@ -785,7 +795,6 @@
     renderDynamicScenario();
   }
 
-  // 實時千位符手動輸入格式化
   function handleManualCostInput(input) {
     let raw = input.value.replace(/[^0-9]/g, '');
     if (!raw) raw = '0';
@@ -799,22 +808,17 @@
     const cost = appState.currentSimCost;
     document.getElementById('dyn-comp-rate-badge').innerText = appState.companyRate + '%';
 
-    // 計算第一層公司醫保
     let compPay = 0;
     if (appState.hasCompany) {
       compPay = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
     }
     document.getElementById('dyn-comp-pay').innerText = 'HK$ ' + Math.round(compPay).toLocaleString();
 
-    // 讀取自付額選項[span_13](start_span)[span_13](end_span)
     const eliteDed = parseInt(document.getElementById('elite-deductible').value, 10);
     const wiseDed = parseInt(document.getElementById('wise-deductible').value, 10);
 
-    // 尊顯/睿選自付差額 (自付額減去公司醫保已賠)
     let eliteOOP = Math.max(0, eliteDed - compPay);
     let wiseOOP = Math.max(0, wiseDed - compPay);
-
-    // 靈活分項估算 (約 25% 自理)
     let flexiOOP = Math.max(0, Math.round(cost * 0.25) - compPay);
 
     document.getElementById('dyn-oop-elite').innerText = eliteOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + eliteOOP.toLocaleString();
@@ -822,7 +826,6 @@
     document.getElementById('dyn-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString() + ' (自付)';
   }
 
-  // 5. 保費實時計算 (結合年齡、扣稅、Vitality)[span_14](start_span)[span_14](end_span)
   function calculateRealPremium() {
     const age = parseInt(document.getElementById('calc-age').value) || 35;
     const isVitality = document.getElementById('calc-vitality').checked;
@@ -853,7 +856,6 @@
     document.getElementById('sum-final-prem').innerText = 'HK$ ' + wiseM.toLocaleString() + ' / 月';
   }
 
-  // 6. 雲端真實索償案例置中彈窗 Modal (最多 6 張 3x3 展示)
   let cloudClaims = [
     { name: '腸胃鏡瘜肉切除', url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400' },
     { name: '通波仔微創支架', url: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400' },
@@ -884,7 +886,6 @@
     }
   }
 
-  // 後台管理
   function openAdminModal() {
     renderAdminCaseList();
     document.getElementById('adminModal').style.display = 'flex';
@@ -927,21 +928,24 @@
     renderAdminCaseList();
   }
 
-  // 點選按鈕選取
+  // 全域安全點擊代理監聽
   document.addEventListener('click', function(e) {
     const btn = e.target.closest('.choice-btn');
     if (!btn) return;
+
     if (btn.dataset.m1) {
       document.querySelectorAll('#stage-m1 .choice-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
+      appState.m1Selected = btn.dataset.m1;
     }
+
     if (btn.dataset.m2) {
       document.querySelectorAll('#stage-m2 .choice-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
+      appState.m2Selected = btn.dataset.m2;
     }
   });
 
-  // 初始化
   window.onload = function() {
     initFromURL();
   };
