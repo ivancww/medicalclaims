@@ -1,425 +1,498 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v6.6.1 | AVA專屬</title>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ <title>醫療保障實況對比 v6.5.0 | AVA專屬</title>
+ 
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+ <meta http-equiv="Pragma" content="no-cache">
+ <meta name="Expires" content="0">
+ <meta name="theme-color" content="#1a3a6e">
+ 
+ <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+ 
+ <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700;900&display=swap');
+  :root {
+    --primary: #1a3a6e;
+    --primary-light: #eff6ff;
+    --accent: #d97706;
+    --accent-light: #fffbeb;
+    --danger: #dc2626;
+    --danger-light: #fef2f2;
+    --warning-bg: #fef3c7;
+    --border: #cbd5e1;
+    --pink-border: #f8d7da;
+    --radius: 14px;
+    --elite-color: #b9770e;
+    --wise-color: #0056b3;
+    --flexi-color: #c62828;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Noto Sans HK', sans-serif; background-color: #eef2f5; color: #333; margin: 0; padding: 15px; }
   
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta name="Expires" content="0">
-  <meta name="theme-color" content="#1a3a6e">
+  .app-shell { max-width: 860px; margin: 0 auto; }
   
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700;900&display=swap');
-    :root {
-      --primary: #1a3a6e;
-      --primary-light: #eff6ff;
-      --accent: #d97706;
-      --accent-light: #fffbeb;
-      --danger: #dc2626;
-      --danger-light: #fef2f2;
-      --warning-bg: #fef3c7;
-      --border: #cbd5e1;
-      --pink-border: #f8d7da;
-      --radius: 14px;
-      --elite-color: #b9770e;
-      --wise-color: #0056b3;
-      --flexi-color: #c62828;
-    }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Noto Sans HK', sans-serif; background-color: #eef2f5; color: #333; margin: 0; padding: 15px; }
-    
-    .app-shell { max-width: 860px; margin: 0 auto; }
-    
-    .header-version-bar {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-      font-size: 13px; font-weight: 700; color: #64748b;
-    }
-    .v-badge {
-      font-size: 11px; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 10px; cursor: pointer;
-    }
-    #sync-status-badge {
-      font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; background: #eee; color: #666;
-    }
-    .status-ok { background: #d4edda !important; color: #155724 !important; }
-    
-    /* 顯示計劃切換 Bar */
-    .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed var(--pink-border); background: #f8f9fa; color: #555; transition: 0.2s; }
-    .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
-    .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
-    .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
-    .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
-    
-    .stage-card {
-      background: #fff; border-radius: var(--radius); padding: 26px 20px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.06); display: none; margin-bottom: 20px;
-    }
-    .stage-card.active { display: block; animation: fadeIn 0.25s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .stage-tag { display: inline-block; font-size: 12px; font-weight: 800; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
-    .stage-title { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
-    .stage-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 18px; }
-    .choice-list { display: flex; flex-direction: column; gap: 10px; }
-    .choice-btn {
-      display: flex; flex-direction: column; gap: 4px; text-align: left; width: 100%; padding: 15px 18px;
-      background: #fff; border: 2px dashed var(--pink-border); border-radius: 12px; cursor: pointer; transition: 0.2s;
-    }
-    .choice-btn * { pointer-events: none; }
-    .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-    .choice-btn.selected { background: var(--primary-light); border-color: var(--primary); border-style: solid; box-shadow: 0 0 0 1px var(--primary); }
-    .choice-btn .c-title { font-size: 15px; font-weight: 800; color: #2c3e50; }
-    .choice-btn .c-desc { font-size: 13px; color: #7f8c8d; }
-    .nav-btn-group { display: flex; gap: 10px; margin-top: 22px; }
-    .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; text-align: center; }
-    .btn-secondary { background: #f1f5f9; border: 1px solid var(--border); color: #333; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
-    .info-quote-box { background: #fffdf5; border-left: 4px solid #f39c12; border-radius: 8px; padding: 14px; margin: 14px 0; font-size: 14px; line-height: 1.6; color: #78350f; }
-    .danger-alert-box { background: var(--danger-light); border-left: 4px solid var(--danger); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
-    .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
-    
-    .bullet-list { margin: 12px 0; padding-left: 0; list-style: none; }
-    .bullet-list li { font-size: 14px; color: #334155; line-height: 1.8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .bullet-list li::before { content: "✓"; color: #059669; font-weight: 900; font-size: 16px; }
-    .stat-grid-box { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin: 15px 0; }
-    .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
-    .stat-row.total { border-top: 1.5px dashed var(--border); padding-top: 10px; margin-top: 10px; font-weight: 900; font-size: 16px; }
-    .limit-banner { display: flex; gap: 8px; margin-bottom: 15px; }
-    @media (max-width: 599px) { .limit-banner { flex-direction: column; } }
-    .limit-badge { flex: 1; padding: 10px 8px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
-    .limit-badge.elite { background: #fffaf0; border: 1px solid #fdebd0; color: var(--elite-color); }
-    .limit-badge.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: var(--wise-color); }
-    .limit-badge.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
-    
-    .settings-panel { display: flex; gap: 10px; margin-bottom: 20px; }
-    @media (max-width: 599px) { .settings-panel { flex-direction: column; } }
-    .plan-setting { flex: 1; padding: 15px 12px; border-radius: 10px; display: flex; flex-direction: column; }
-    .elite-setting { background-color: #fffaf0; border: 1px solid #fdebd0; } 
-    .wise-setting { background-color: #f0f7ff; border: 1px solid #cce5ff; } 
-    .flexi-setting { background-color: #fff5f5; border: 1px solid #ffdce0; text-align: center; } 
-    .plan-setting h3 { margin-top: 0; margin-bottom: 10px; font-size: 15px; text-align: center; }
-    .elite-setting h3 { color: var(--elite-color); }
-    .wise-setting h3 { color: var(--wise-color); }
-    .flexi-setting h3 { color: var(--flexi-color); }
-    select, input[type="text"], input[type="number"], textarea {
-      width: 100%; padding: 9px; font-size: 14px; border-radius: 8px; border: 2px dashed var(--pink-border);
-      background: #fff; font-weight: 700; color: #333; outline: none; margin-top: 4px; box-sizing: border-box;
-    }
-    
-    .checklist-grid { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; font-size: 12.5px; margin-top: 15px; }
-    .checklist-row { display: flex; border-bottom: 1px solid #eee; }
-    .checklist-row:last-child { border-bottom: none; }
-    .header-row { background: #f8f9fa; font-weight: 700; text-align: center; }
-    .col-item { flex: 1.2; padding: 10px 8px; background: #fafafa; font-weight: 600; display: flex; align-items: center; border-right: 1px solid #eee; }
-    .col-elite, .col-wise, .col-flexi { flex: 1; padding: 10px 6px; text-align: center; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid #eee; }
-    .col-elite { background: #fffaf0; color: var(--elite-color); }
-    .col-wise { background: #f0f7ff; color: var(--wise-color); }
-    .col-flexi { background: #fff5f5; color: var(--flexi-color); border-right: none; }
-    
-    /* 案例黑底置中彈窗 Modal */
-    .modal-overlay {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85); z-index: 999999; justify-content: center; align-items: center; padding: 16px;
-    }
-    .modal-box {
-      background: #111827; color: #f9fafb; border-radius: 14px; width: 100%; max-width: 640px; max-height: 90vh;
-      overflow-y: auto; padding: 24px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid #374151;
-    }
-    .modal-close-btn {
-      position: absolute; top: 12px; right: 14px; background: rgba(255,255,255,0.15); border: none; font-size: 18px;
-      font-weight: 900; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #fff;
-    }
-
-    /* 管理員後台 Modal */
-    #adminModal {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.7); z-index: 9999999; justify-content: center; align-items: center; padding: 16px;
-    }
-    .admin-card {
-      background: #ffffff; width: 100%; max-width: 600px; max-height: 90vh; border-radius: 16px;
-      display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .admin-header {
-      padding: 16px 20px; background: #0f172a; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
-    }
-    .admin-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    .admin-section-title {
-      font-size: 14px; font-weight: 800; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 4px; margin-top: 8px;
-    }
-    .admin-item {
-      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
-    }
-    .admin-footer {
-      padding: 14px 20px; background: #f1f5f9; display: flex; gap: 10px; border-top: 1px solid #e2e8f0;
-    }
-  </style>
+  .header-version-bar {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    font-size: 13px; font-weight: 700; color: #64748b;
+  }
+  .v-badge {
+    font-size: 11px; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 10px; cursor: pointer;
+  }
+  #sync-status-badge {
+    font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; background: #eee; color: #666;
+  }
+  .status-ok { background: #d4edda !important; color: #155724 !important; }
+  /* 顯示計劃切換 Bar */
+  .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed var(--pink-border); background: #f8f9fa; color: #555; transition: 0.2s; }
+  .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
+  .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
+  .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
+  .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
+  .stage-card {
+    background: #fff; border-radius: var(--radius); padding: 26px 20px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.06); display: none; margin-bottom: 20px;
+  }
+  .stage-card.active { display: block; animation: fadeIn 0.25s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  .stage-tag { display: inline-block; font-size: 12px; font-weight: 800; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
+  .stage-title { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
+  .stage-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 18px; }
+  .choice-list { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    display: flex; flex-direction: column; gap: 4px; text-align: left; width: 100%; padding: 15px 18px;
+    background: #fff; border: 2px dashed var(--pink-border); border-radius: 12px; cursor: pointer; transition: 0.2s;
+  }
+  .choice-btn * { pointer-events: none; }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .choice-btn.selected { background: var(--primary-light); border-color: var(--primary); border-style: solid; box-shadow: 0 0 0 1px var(--primary); }
+  .choice-btn .c-title { font-size: 15px; font-weight: 800; color: #2c3e50; }
+  .choice-btn .c-desc { font-size: 13px; color: #7f8c8d; }
+  .nav-btn-group { display: flex; gap: 10px; margin-top: 22px; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; text-align: center; }
+  .btn-secondary { background: #f1f5f9; border: 1px solid var(--border); color: #333; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .info-quote-box { background: #fffdf5; border-left: 4px solid #f39c12; border-radius: 8px; padding: 14px; margin: 14px 0; font-size: 14px; line-height: 1.6; color: #78350f; }
+  .danger-alert-box { background: var(--danger-light); border-left: 4px solid var(--danger); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
+  .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
+  
+  .bullet-list { margin: 12px 0; padding-left: 0; list-style: none; }
+  .bullet-list li { font-size: 14px; color: #334155; line-height: 1.8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .bullet-list li::before { content: "✓"; color: #059669; font-weight: 900; font-size: 16px; }
+  .stat-grid-box { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin: 15px 0; }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
+  .stat-row.total { border-top: 1.5px dashed var(--border); padding-top: 10px; margin-top: 10px; font-weight: 900; font-size: 16px; }
+  .limit-banner { display: flex; gap: 8px; margin-bottom: 15px; }
+  @media (max-width: 599px) { .limit-banner { flex-direction: column; } }
+  .limit-badge { flex: 1; padding: 10px 8px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+  .limit-badge.elite { background: #fffaf0; border: 1px solid #fdebd0; color: var(--elite-color); }
+  .limit-badge.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: var(--wise-color); }
+  .limit-badge.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
+  .settings-panel { display: flex; gap: 10px; margin-bottom: 20px; }
+  @media (max-width: 599px) { .settings-panel { flex-direction: column; } }
+  .plan-setting { flex: 1; padding: 15px 12px; border-radius: 10px; display: flex; flex-direction: column; }
+  .elite-setting { background-color: #fffaf0; border: 1px solid #fdebd0; } 
+  .wise-setting { background-color: #f0f7ff; border: 1px solid #cce5ff; } 
+  .flexi-setting { background-color: #fff5f5; border: 1px solid #ffdce0; text-align: center; } 
+  .plan-setting h3 { margin-top: 0; margin-bottom: 10px; font-size: 15px; text-align: center; }
+  .elite-setting h3 { color: var(--elite-color); }
+  .wise-setting h3 { color: var(--wise-color); }
+  .flexi-setting h3 { color: var(--flexi-color); }
+  select, input[type="text"], input[type="number"], textarea {
+    width: 100%; padding: 9px; font-size: 14px; border-radius: 8px; border: 2px dashed var(--pink-border);
+    background: #fff; font-weight: 700; color: #333; outline: none; margin-top: 4px; box-sizing: border-box;
+  }
+  
+  .checklist-grid { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; font-size: 12.5px; margin-top: 15px; }
+  .checklist-row { display: flex; border-bottom: 1px solid #eee; }
+  .checklist-row:last-child { border-bottom: none; }
+  .header-row { background: #f8f9fa; font-weight: 700; text-align: center; }
+  .col-item { flex: 1.2; padding: 10px 8px; background: #fafafa; font-weight: 600; display: flex; align-items: center; border-right: 1px solid #eee; }
+  .col-elite, .col-wise, .col-flexi { flex: 1; padding: 10px 6px; text-align: center; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid #eee; }
+  .col-elite { background: #fffaf0; color: var(--elite-color); }
+  .col-wise { background: #f0f7ff; color: var(--wise-color); }
+  .col-flexi { background: #fff5f5; color: var(--flexi-color); border-right: none; }
+  .scenario-calc-box { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin-top: 15px; }
+  .oop-row-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+  @media (max-width: 600px) { .oop-row-grid { grid-template-columns: 1fr; } }
+  .oop-mini-card { padding: 10px 8px; border-radius: 8px; text-align: center; }
+  .oop-mini-card.elite { background: #fffaf0; border: 1px solid #fdebd0; color: var(--elite-color); }
+  .oop-mini-card.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: var(--wise-color); }
+  .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
+  .oop-mini-val { font-size: 18px; font-weight: 900; margin-top: 4px; }
+  
+  /* 保費可勾選卡片 */
+  .plan-select-card {
+    border: 2px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; transition: 0.2s; position: relative;
+  }
+  .plan-select-card:hover { border-color: var(--primary); }
+  .plan-select-card.selected {
+    border-color: var(--primary); background: #f0f7ff; box-shadow: 0 0 0 1.5px var(--primary);
+  }
+  .plan-select-card input[type="radio"] {
+    position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; cursor: pointer;
+  }
+  
+  /* 案例黑底置中大字彈窗 Modal */
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.92); z-index: 999999; justify-content: center; align-items: center; padding: 16px;
+  }
+  .modal-box {
+    background: #111827; color: #f9fafb; border-radius: 14px; width: 100%; max-width: 680px; max-height: 90vh;
+    overflow-y: auto; padding: 24px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid #374151;
+  }
+  .modal-close-btn {
+    position: absolute; top: 12px; right: 14px; background: rgba(255,255,255,0.15); border: none; font-size: 18px;
+    font-weight: 900; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #fff;
+  }
+  .case-detail-text {
+    font-size: 16.5px; font-weight: 700; line-height: 1.8; color: #f3f4f6; margin-bottom: 16px; background: rgba(255,255,255,0.06); padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;
+  }
+ </style>
 </head>
 <body>
 <div class="app-shell">
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" title="點擊開啟後台管理">v6.6.1</span>
-      <span id="roleIndicator" style="font-size:11.5px; font-weight:800; padding:2px 8px; border-radius:10px; background:#e0e7ff; color:#3730a3; margin-left:6px;">👨‍👩‍👧 成人模式</span>
+      <span class="v-badge">v6.5.0</span>
+      <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button type="button" id="btnOpenAdmin" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
-      <div id="sync-status-badge">🔄 連接雲端庫...</div>
-    </div>
+    <div id="sync-status-badge">🔄 連接雲端費率庫...</div>
   </div>
 
-  <!-- ==================== 階段 1：前置 5 部曲 ==================== -->
-  <!-- STEP 1：關注／重視 -->
-  <div class="stage-card active" id="stage-m1">
-    <span class="stage-tag" id="m1-tag">01｜關注／重視</span>
-    <h2 class="stage-title" id="m1-title">當需要醫療時，你最重視的是甚麼？</h2>
-    <p class="stage-desc" id="m1-desc">確認你真正的價值取向，建立本次檢視的方向：</p>
-    <div class="choice-list" id="m1-choices"></div>
-    <div class="nav-btn-group">
-      <button type="button" class="btn-primary" onclick="goToStage('m2')">下一步 →</button>
-    </div>
-  </div>
+ <!-- ==================== 階段 1：前置 5 部曲 ==================== -->
+ <!-- STEP 1：關注／重視 -->
+ <div class="stage-card active" id="stage-m1">
+   <span class="stage-tag" id="m1-tag">01｜關注／重視</span>
+   <h2 class="stage-title" id="m1-title">當需要醫療時，你最重視的是甚麼？</h2>
+   <p class="stage-desc" id="m1-desc">確認你真正的價值取向，建立本次檢視的方向：</p>
+   <div class="choice-list" id="m1-choice-list">
+     <button type="button" class="choice-btn" data-m1="choiceA" onclick="selectM1(this, 'A')">
+       <span class="c-title" id="m1-optA-title">🏥 可以即時選擇合適嘅醫療</span>
+       <span class="c-desc" id="m1-optA-desc">享有治療自主權，不希望因費用而先作取捨。</span>
+     </button>
+     <button type="button" class="choice-btn" data-m1="choiceB" onclick="selectM1(this, 'B')">
+       <span class="c-title" id="m1-optB-title">🛡️ 唔希望醫療費影響家庭財務</span>
+       <span class="c-desc" id="m1-optB-desc">重視醫療發生後的家庭開支與儲蓄承托。</span>
+     </button>
+     <button type="button" class="choice-btn" data-m1="choiceBoth" onclick="selectM1(this, 'Both')">
+       <span class="c-title" id="m1-optBoth-title">⚖️ 兩樣都重視</span>
+       <span class="c-desc" id="m1-optBoth-desc">既想保留醫療選擇，也想保留家庭財務安全。</span>
+     </button>
+   </div>
+   <div class="nav-btn-group">
+     <button type="button" class="btn-primary" onclick="goToStage('m2')">下一步 →</button>
+   </div>
+ </div>
 
-  <!-- STEP 2：想像一下情境 -->
-  <div class="stage-card" id="stage-m2">
-    <span class="stage-tag" id="m2-tag">02｜想像一下情境</span>
-    <h2 class="stage-title" id="m2-title">如果有一日，需要即時接受治療……</h2>
-    <p class="stage-desc" id="m2-desc">用一個非常簡單嘅生活情境，你希望自己可以：</p>
-    <div class="choice-list" id="m2-choices"></div>
-    <div class="info-quote-box" id="m2-quote" style="margin-top: 15px;">
-      💭 <strong>如果係你，你會比較希望係 A 定 B？</strong>
-    </div>
-    <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('m1')">← 返回</button>
-      <button type="button" class="btn-primary" onclick="proceedFromM2()">下一步：檢視現有防線 →</button>
-    </div>
-  </div>
+ <!-- STEP 2：想像一下情境 -->
+ <div class="stage-card" id="stage-m2">
+   <span class="stage-tag" id="m2-tag">02｜想像一下情境</span>
+   <h2 class="stage-title" id="m2-title">如果有一日，需要即時接受治療……</h2>
+   <p class="stage-desc" id="m2-desc">用一個非常簡單嘅生活情境，你希望自己可以：</p>
+   <div class="choice-list" id="m2-choice-list">
+     <button type="button" class="choice-btn" data-m2="A" onclick="selectM2(this, 'A')">
+       <span class="c-title" id="m2-optA-title">A ｜ 按醫療需要作選擇</span>
+       <span class="c-desc" id="m2-optA-desc">以醫生專業建議與最好療效為首要考量。</span>
+     </button>
+     <button type="button" class="choice-btn" data-m2="B" onclick="selectM2(this, 'B')">
+       <span class="c-title" id="m2-optB-title">B ｜ 先考慮費用，再決定醫療選擇</span>
+       <span class="c-desc" id="m2-optB-desc">需先計算自付差額與荷包負擔，再決定在哪裡治療。</span>
+     </button>
+   </div>
+   <div class="info-quote-box" id="m2-quote-box" style="margin-top: 15px;">
+     💭 <strong>如果係你，你會比較希望係 A 定 B？</strong>
+   </div>
+   <div class="nav-btn-group">
+     <button type="button" class="btn-secondary" onclick="goToStage('m1')">← 返回</button>
+     <button type="button" class="btn-primary" onclick="proceedFromM2()">下一步：檢視現有防線 →</button>
+   </div>
+ </div>
 
-  <!-- STEP 3：現在有的保障 -->
-  <div class="stage-card" id="stage-m3">
-    <span class="stage-tag" id="m3-tag">03｜現在有的保障</span>
-    <h2 class="stage-title" id="m3-title">回顧你的第一道防線</h2>
-    <p class="stage-desc" id="m3-desc">檢視目前擁有的醫療資源支持：</p>
-    
-    <div class="stat-grid-box">
-      <div class="stat-row">
-        <span>假設預計醫療費用：</span>
-        <strong id="m3-cost-text">HK$ 200,000</strong>
-      </div>
-      <div class="stat-row" id="m3-comp-row">
-        <span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span>
-        <strong style="color:#059669;" id="m3-comp-text">HK$ 80,000</strong>
-      </div>
-    </div>
-    <div class="info-quote-box" id="m3-quote" style="font-size:15px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
-      🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
-    </div>
-    <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('m2')">← 返回</button>
-      <button type="button" class="btn-primary" onclick="goToStage('m4')">下一步：如果第一道防線改變 →</button>
-    </div>
-  </div>
+ <!-- STEP 3：現在有的保障 -->
+ <div class="stage-card" id="stage-m3">
+   <span class="stage-tag" id="m3-tag">03｜現在有的保障</span>
+   <h2 class="stage-title" id="m3-title">回顧你的第一道防線</h2>
+   
+   <div class="stat-grid-box">
+     <div class="stat-row">
+       <span>假設預計醫療費用：</span>
+       <strong id="m3-cost-text">HK$ 200,000</strong>
+     </div>
+     <div class="stat-row" id="m3-comp-row">
+       <span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span>
+       <strong style="color:#059669;" id="m3-comp-text">HK$ 80,000</strong>
+     </div>
+   </div>
+   <div class="info-quote-box" id="m3-quote-box" style="font-size:15px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
+     🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
+   </div>
+   <div class="nav-btn-group">
+     <button type="button" class="btn-secondary" onclick="goToStage('m2')">← 返回</button>
+     <button type="button" class="btn-primary" onclick="goToStage('m4')">下一步：如果第一道防線改變 →</button>
+   </div>
+ </div>
 
-  <!-- STEP 4：如果第一道防線改變 -->
-  <div class="stage-card" id="stage-m4">
-    <span class="stage-tag" id="m4-tag">04｜如果第一道防線改變</span>
-    <h2 class="stage-title" id="m4-title">如果將來轉工、離職、退休，第一道防線改變，你會點？</h2>
-    <div class="choice-list" id="m4-choices"></div>
-    <div id="m4-alert" class="danger-alert-box">
-      📢 <strong>核心本質：</strong> 公司醫保可以幫你解決今日嘅醫療需要；但佢未必可以解決你離開公司之後嘅醫療需要。
-    </div>
-    <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('m3')">← 返回</button>
-      <button type="button" class="btn-primary" id="btn-m4-next" onclick="goToStage('m5')">下一步：檢視最終缺口 →</button>
-    </div>
-  </div>
+ <!-- STEP 4：如果第一道防線改變 -->
+ <div class="stage-card" id="stage-m4">
+   <span class="stage-tag" id="m4-tag">04｜如果第一道防線改變</span>
+   <h2 class="stage-title" id="m4-title">如果將來轉工、離職、退休，第一道防線改變，你會點？</h2>
+   
+   <div class="choice-list" id="m4-choice-list">
+     <button type="button" class="choice-btn" data-m4="yes" onclick="selectM4('yes')">
+       <span class="c-title" id="m4-optA-title">🛡️ 有個人醫保（第二層防線）</span>
+       <span class="c-desc" id="m4-optA-desc">已有個人專屬保單，可獨立銜接保障。</span>
+     </button>
+     <button type="button" class="choice-btn" data-m4="no" onclick="selectM4('no')">
+       <span class="c-title" id="m4-optB-title">⚠️ 沒有個人醫保</span>
+       <span class="c-desc" id="m4-optB-desc">離開現有職位後，醫療保障將即時變成零。</span>
+     </button>
+   </div>
+   <div id="m4-no-alert" class="danger-alert-box" style="display:none;">
+     📢 <strong>核心本質：</strong> 公司醫保可以幫你解決<strong>今日嘅醫療需要</strong>；但佢未必可以解決你<strong>離開公司之後嘅醫療需要</strong>。
+   </div>
+   <div class="nav-btn-group">
+     <button type="button" class="btn-secondary" onclick="goToStage('m3')">← 返回</button>
+     <button type="button" class="btn-primary" id="btn-m4-next" onclick="goToStage('m5')">下一步：檢視最終缺口 →</button>
+   </div>
+ </div>
 
-  <!-- STEP 5：缺口 ➔ 解決方案決策 -->
-  <div class="stage-card" id="stage-m5">
-    <span class="stage-tag" id="m5-tag">05｜缺口 ➔ 解決方案</span>
-    <h2 class="stage-title" id="m5-title">醫療自付差額總結</h2>
-    <div class="stat-grid-box">
-      <div class="stat-row">
-        <span>預計醫療開支：</span>
-        <span id="m5-cost-val">HK$ 200,000</span>
-      </div>
-      <div class="stat-row" id="m5-comp-row">
-        <span>第一層現有保障（預計賠付）：</span>
-        <span style="color:#059669;" id="m5-comp-val">- HK$ 80,000</span>
-      </div>
-      <div class="stat-row" id="m5-pers-row">
-        <span>第二層個人醫保：</span>
-        <span style="color:#059669;" id="m5-pers-val">- HK$ 0</span>
-      </div>
-      <div class="stat-row total">
-        <span style="color:var(--danger);">自身需承擔自付缺口：</span>
-        <span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 120,000</span>
-      </div>
-    </div>
-    <div class="info-quote-box" id="m5-quote" style="font-size:16px; font-weight:800; color:var(--primary); text-align:center;">
-      ❓「呢個缺口由你自己應付，你認為可接受嗎？」
-    </div>
-    <div class="choice-list" style="margin-top: 15px;">
-      <button type="button" class="choice-btn" onclick="alert('建議審慎考慮自付風險！');" style="border-color:#059669; background:#f4fbf7;">
-        <span class="c-title" style="color:#059669;">✅ 可以，完全接受</span>
-        <span class="c-desc">我願意以個人儲備承擔可能出現的差額，暫不用額外安排。</span>
-      </button>
-      <button type="button" class="choice-btn" onclick="goToStage('prod-intro')" style="border-color:var(--primary); background:var(--primary-light);">
-        <span class="c-title" style="color:var(--primary);">❌ 不可以，希望能解決此缺口</span>
-        <span class="c-desc">希望享有全數賠償及高階醫療選擇，進入專屬方案。</span>
-      </button>
-    </div>
-    <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('m4')">← 返上一頁</button>
-    </div>
-  </div>
+ <!-- STEP 5：缺口 ➔ 解決方案決策 -->
+ <div class="stage-card" id="stage-m5">
+   <span class="stage-tag" id="m5-tag">05｜缺口 ➔ 解決方案</span>
+   <h2 class="stage-title" id="m5-title">醫療自付差額總結</h2>
+   <div class="stat-grid-box">
+     <div class="stat-row">
+       <span>預計醫療開支：</span>
+       <span id="m5-cost-val">HK$ 200,000</span>
+     </div>
+     <div class="stat-row" id="m5-comp-row">
+       <span>第一層公司醫保（預計賠付）：</span>
+       <span style="color:#059669;" id="m5-comp-val">- HK$ 80,000</span>
+     </div>
+     <div class="stat-row" id="m5-pers-row">
+       <span>第二層個人醫保：</span>
+       <span style="color:#059669;" id="m5-pers-val">- HK$ 0</span>
+     </div>
+     <div class="stat-row total">
+       <span style="color:var(--danger);">自身需承擔自付缺口：</span>
+       <span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 120,000</span>
+     </div>
+   </div>
+   <div class="info-quote-box" id="m5-quote-box" style="font-size:16px; font-weight:800; color:var(--primary); text-align:center;">
+     ❓「呢個缺口由你自己應付，你認為可接受嗎？」
+   </div>
+   <div class="choice-list" style="margin-top: 15px;">
+     <button type="button" class="choice-btn" onclick="acceptGapAlert()" style="border-color:#059669; background:#f4fbf7;">
+       <span class="c-title" style="color:#059669;">✅ 可以，完全接受</span>
+       <span class="c-desc">我願意以個人儲備承擔可能出現的差額，暫不用額外安排。</span>
+     </button>
+     
+     <button type="button" class="choice-btn" onclick="goToStage('prod-intro')" style="border-color:var(--primary); background:var(--primary-light);">
+       <span class="c-title" style="color:var(--primary);">❌ 不可以，希望能解決此缺口</span>
+       <span class="c-desc">希望享有全數賠償及高階醫療選擇，進入專屬第二層防線方案。</span>
+     </button>
+   </div>
+   <div class="nav-btn-group">
+     <button type="button" class="btn-secondary" onclick="goToStage(appState.hasCompany && appState.role==='adult' ? 'm4' : 'm2')">← 返上一頁</button>
+   </div>
+ </div>
 
-  <!-- ==================== 階段 2：產品介紹 ==================== -->
-  <div class="stage-card" id="stage-prod-intro">
-    <div class="plan-visibility-bar">
-      <span style="font-size: 12px; font-weight: bold; color: #666; align-self: center;">顯示計劃：</span>
-      <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVisibility('elite')">👑 尊顯：顯示</button>
-      <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVisibility('wise')">🛡️ 睿選：顯示</button>
-      <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVisibility('flexi')">⚠️ 靈活：顯示</button>
-    </div>
-    
-    <span class="stage-tag">專屬方案｜第二道醫療防線</span>
-    <h2 class="stage-title">按照你剛才嘅情況</h2>
-    <p class="stage-desc">你真正需要的，其實係建立專屬你嘅<strong>「第二道醫療防線」</strong>：</p>
-    
-    <div class="success-box">
-      <ul class="bullet-list" id="prod-bullet-list"></ul>
-    </div>
+ <!-- ==================== 階段 2：產品介紹 ==================== -->
+ <div class="stage-card" id="stage-prod-intro">
+   
+   <div class="plan-visibility-bar">
+     <span style="font-size: 12px; font-weight: bold; color: #666; align-self: center;">顯示計劃：</span>
+     <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVisibility('elite')">👑 尊顯：顯示</button>
+     <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVisibility('wise')">🛡️ 睿選：顯示</button>
+     <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVisibility('flexi')">⚠️ 靈活：顯示</button>
+   </div>
+   <span class="stage-tag">專屬方案｜第二道醫療防線</span>
+   <h2 class="stage-title">按照你剛才嘅情況</h2>
+   <p class="stage-desc">你真正需要的，其實係建立專屬你個人嘅<strong>「第二道醫療防線」</strong>：</p>
+   <div class="success-box">
+     <ul class="bullet-list" id="prod-bullet-list">
+       <li>終身 $6,000 萬高額醫療保障，實報實銷</li>
+       <li>自帶半私家房級別，無需指定網絡醫院限制</li>
+       <li>特設自付額完美銜接現有保障，槓桿最高</li>
+     </ul>
+   </div>
+   
+   <div class="limit-banner">
+     <div class="limit-badge elite plan-col-elite" id="banner-elite">👑 尊顯：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
+     <div class="limit-badge wise plan-col-wise" id="banner-wise">🛡️ 睿選：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
+     <div class="limit-badge flexi plan-col-flexi" id="banner-flexi">⚠️ 靈活：細項分項嚴重受限 ❌</div>
+   </div>
+   
+   <div class="settings-panel">
+     <div class="plan-setting elite-setting plan-col-elite">
+       <h3>👑 高端尊顯計劃</h3>
+       <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
+       <select id="elite-deductible" onchange="syncDeductibles('elite', this.value)">
+         <option value="0">HK$ 0</option>
+         <option value="16000">HK$ 16,000</option>
+         <option value="25000" selected>HK$ 25,000</option>
+       </select>
+       <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #f5b041; text-align: center;">
+         <strong style="color: #b9770e; font-size:12px;">✨ 尊貴特權</strong>
+         <p style="font-size: 11px; margin: 3px 0 0 0; color: #555;">無需指定醫院<br>自帶半私家房級別服務</p>
+       </div>
+     </div>
+     <div class="plan-setting wise-setting plan-col-wise">
+       <h3>🛡️ 中端睿選計劃</h3>
+       <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
+       <select id="wise-deductible" onchange="syncDeductibles('wise', this.value)">
+         <option value="0">HK$ 0</option>
+         <option value="8800">HK$ 8,800</option>
+         <option value="18000">HK$ 18,000</option>
+         <option value="30000" selected>HK$ 30,000</option>
+       </select>
+       <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #3498db; text-align: center;">
+         <strong style="color: #0056b3; font-size:12px;">🏥 優質醫療網絡</strong>
+         <p style="font-size: 11px; margin: 3px 0 0 0; color: #555;">指定網絡醫院／醫生<br>全數賠償半私家房級別</p>
+       </div>
+     </div>
+     <div class="plan-setting flexi-setting plan-col-flexi">
+       <h3>⚠️ 傳統靈活計劃</h3>
+       <p style="font-size: 11px; color: #c62828; font-weight: bold; margin: 4px 0;">設細項上限 / $0 自付額</p>
+       <p style="font-size: 11px; color: #666; margin: 0;">只作基本預算對比參考</p>
+     </div>
+   </div>
 
-    <div class="limit-banner">
-      <div class="limit-badge elite plan-col-elite" id="badge-elite-limit">👑 尊顯：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
-      <div class="limit-badge wise plan-col-wise" id="badge-wise-limit">🛡️ 睿選：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
-      <div class="limit-badge flexi plan-col-flexi" id="badge-flexi-limit">⚠️ 靈活：細項分項嚴重受限 ❌</div>
-    </div>
+   <!-- 保障對照表 Checklist -->
+   <div class="checklist-grid">
+     <div class="checklist-row header-row">
+       <div class="col-item">核心保障對比</div>
+       <div class="col-elite plan-col-elite">👑 尊顯 (高端)</div>
+       <div class="col-wise plan-col-wise">🛡️ 睿選 (中端)</div>
+       <div class="col-flexi plan-col-flexi">⚠️ 靈活 (傳統)</div>
+     </div>
+     <div class="checklist-row">
+       <div class="col-item">每年保障額度</div>
+       <div class="col-elite plan-col-elite"><strong>HK$ 1,200 萬</strong></div>
+       <div class="col-wise plan-col-wise"><strong>HK$ 1,200 萬</strong></div>
+       <div class="col-flexi plan-col-flexi">HK$ 42 萬</div>
+     </div>
+     <div class="checklist-row">
+       <div class="col-item">終身保障額度</div>
+       <div class="col-elite plan-col-elite"><strong>HK$ 6,000 萬</strong></div>
+       <div class="col-wise plan-col-wise"><strong>HK$ 6,000 萬</strong></div>
+       <div class="col-flexi plan-col-flexi">無終身限額</div>
+     </div>
+     <div class="checklist-row">
+       <div class="col-item">住房級別</div>
+       <div class="col-elite plan-col-elite">半私家房</div>
+       <div class="col-wise plan-col-wise">半私家房</div>
+       <div class="col-flexi plan-col-flexi">普通大房</div>
+     </div>
+     <div class="checklist-row">
+       <div class="col-item">手術及雜費賠償</div>
+       <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">100% 全數索償</div>
+       <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">100% 全數索償</div>
+       <div class="col-flexi plan-col-flexi" style="color:var(--danger); font-weight:bold;">設細項分項上限</div>
+     </div>
+     <div class="checklist-row">
+       <div class="col-item">非手術癌症治療</div>
+       <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">全數賠償 (標靶/免疫)</div>
+       <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">全數賠償 (標靶/免疫)</div>
+       <div class="col-flexi plan-col-flexi" style="color:var(--danger);">每年 HK$ 8 萬上限</div>
+     </div>
+   </div>
 
-    <!-- 年齡及性別選擇 -->
-    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:15px; display:flex; gap:10px;">
-      <div style="flex:1;">
-        <label style="font-size:12px; font-weight:bold;">受保人年齡：</label>
-        <input type="number" id="calcAge" value="30" min="0" max="80" onchange="calcPremiums()">
-      </div>
-      <div style="flex:1;">
-        <label style="font-size:12px; font-weight:bold;">性別：</label>
-        <select id="calcGender" onchange="calcPremiums()">
-          <option value="male" selected>男 Male</option>
-          <option value="female">女 Female</option>
-        </select>
-      </div>
-    </div>
+   <!-- 模擬情境自付試算 -->
+   <div class="scenario-calc-box">
+     <h4 style="margin:0 0 10px 0; color:var(--primary); font-size:15px;">📊 試算：面對不同醫療開支時的「自付差額」</h4>
+     <div style="display:flex; gap:10px; align-items:center;">
+       <label style="font-size:13px; font-weight:bold;">測試手術總開支：</label>
+       <select id="scenario-cost-select" onchange="calcScenarioOOP(this.value)" style="flex:1;">
+         <option value="50000">小手術 (約 HK$ 50,000)</option>
+         <option value="200000" selected>中型/微創手術 (約 HK$ 200,000)</option>
+         <option value="500000">嚴重疾病/癌症標靶 (約 HK$ 500,000)</option>
+       </select>
+     </div>
+     
+     <div class="oop-row-grid">
+       <div class="oop-mini-card elite plan-col-elite">
+         <div style="font-size:11px;">👑 尊顯 (自付額後全數)</div>
+         <div class="oop-mini-val" id="oop-elite-val">HK$ 0</div>
+       </div>
+       <div class="oop-mini-card wise plan-col-wise">
+         <div style="font-size:11px;">🛡️ 睿選 (網絡全數索償)</div>
+         <div class="oop-mini-val" id="oop-wise-val">HK$ 0</div>
+       </div>
+       <div class="oop-mini-card flexi plan-col-flexi">
+         <div style="font-size:11px; color:var(--danger);">⚠️ 靈活 (細項超額爆煲)</div>
+         <div class="oop-mini-val" id="oop-flexi-val" style="color:var(--danger);">HK$ 115,000</div>
+       </div>
+     </div>
+   </div>
 
-    <div class="settings-panel">
-      <div class="plan-setting elite-setting plan-col-elite">
-        <h3>👑 高端尊顯計劃</h3>
-        <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
-        <select id="elite-deductible" onchange="calcPremiums()">
-          <option value="0">HK$ 0</option>
-          <option value="16000">HK$ 16,000</option>
-          <option value="25000" selected>HK$ 25,000</option>
-        </select>
-        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #f5b041; text-align: center;">
-          <strong style="color: #b9770e; font-size:12px;">✨ 尊貴特權</strong>
-          <p style="font-size: 11px; margin: 3px 0 0 0; color: #555;">無需指定醫院<br>自帶半私家房級別服務</p>
-        </div>
-        <div style="margin-top: 10px; font-size:18px; font-weight:900; color:var(--elite-color); text-align:center;" id="price-elite-val">HK$ -- /年</div>
-      </div>
-      
-      <div class="plan-setting wise-setting plan-col-wise">
-        <h3>🛡️ 中端睿選計劃</h3>
-        <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
-        <select id="wise-deductible" onchange="calcPremiums()">
-          <option value="0">HK$ 0</option>
-          <option value="8800">HK$ 8,800</option>
-          <option value="18000">HK$ 18,000</option>
-          <option value="30000" selected>HK$ 30,000</option>
-        </select>
-        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #3498db; text-align: center;">
-          <strong style="color: #0056b3; font-size:12px;">🏥 優質醫療網絡</strong>
-          <p style="font-size: 11px; margin: 3px 0 0 0; color: #555;">指定網絡醫院／醫生<br>全數賠償半私家房級別</p>
-        </div>
-        <div style="margin-top: 10px; font-size:18px; font-weight:900; color:var(--wise-color); text-align:center;" id="price-wise-val">HK$ -- /年</div>
-      </div>
-      
-      <div class="plan-setting flexi-setting plan-col-flexi">
-        <h3>⚠️ 傳統靈活計劃</h3>
-        <p style="font-size:12px; color:#666; margin:6px 0;">設細項上限 / $0 自付額</p>
-        <div style="margin-top: 25px; font-size:18px; font-weight:900; color:var(--flexi-color); text-align:center;" id="price-flexi-val">HK$ -- /年</div>
-      </div>
-    </div>
+   <!-- 保費與年齡試算 -->
+   <div style="background:#f8fafc; border:1.5px solid var(--border); border-radius:10px; padding:16px; margin-top:16px;">
+     <h4 style="margin:0 0 12px 0; font-size:15px; color:var(--primary);">💰 實時年繳保費預算</h4>
+     <div style="display:flex; gap:10px; margin-bottom:12px;">
+       <div style="flex:1;">
+         <label style="font-size:12px; font-weight:bold;">受保人年齡：</label>
+         <input type="number" id="inputAge" value="30" min="0" max="80" oninput="updatePremiums()">
+       </div>
+       <div style="flex:1;">
+         <label style="font-size:12px; font-weight:bold;">性別：</label>
+         <select id="inputGender" onchange="updatePremiums()">
+           <option value="male" selected>男 Male</option>
+           <option value="female">女 Female</option>
+         </select>
+       </div>
+     </div>
+     
+     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;" id="premCardsGrid">
+       <div class="plan-select-card elite plan-col-elite" style="background:#fffaf0; border-color:#fdebd0;">
+         <div style="font-size:12px; font-weight:bold; color:var(--elite-color);">👑 尊顯</div>
+         <div style="font-size:16px; font-weight:900; margin-top:6px; color:var(--elite-color);" id="card-prem-elite">HK$ --</div>
+       </div>
+       <div class="plan-select-card wise plan-col-wise" style="background:#f0f7ff; border-color:#cce5ff;">
+         <div style="font-size:12px; font-weight:bold; color:var(--wise-color);">🛡️ 睿選</div>
+         <div style="font-size:16px; font-weight:900; margin-top:6px; color:var(--wise-color);" id="card-prem-wise">HK$ --</div>
+       </div>
+       <div class="plan-select-card flexi plan-col-flexi" style="background:#fff5f5; border-color:#ffdce0;">
+         <div style="font-size:12px; font-weight:bold; color:var(--flexi-color);">⚠️ 靈活</div>
+         <div style="font-size:16px; font-weight:900; margin-top:6px; color:var(--flexi-color);" id="card-prem-flexi">HK$ --</div>
+       </div>
+     </div>
+   </div>
 
-    <!-- 原版詳細保障 Checklist 結構完整保留 -->
-    <div class="checklist-grid">
-      <div class="checklist-row header-row">
-        <div class="col-item">保障項目</div>
-        <div class="col-elite plan-col-elite">👑 尊顯 (高端)</div>
-        <div class="col-wise plan-col-wise">🛡️ 睿選 (中端)</div>
-        <div class="col-flexi plan-col-flexi">⚠️ 靈活 (傳統)</div>
-      </div>
-      <div class="checklist-row">
-        <div class="col-item">每年保額</div>
-        <div class="col-elite plan-col-elite"><strong>HK$ 1,200 萬</strong></div>
-        <div class="col-wise plan-col-wise"><strong>HK$ 1,200 萬</strong></div>
-        <div class="col-flexi plan-col-flexi">HK$ 42 萬</div>
-      </div>
-      <div class="checklist-row">
-        <div class="col-item">終身保額</div>
-        <div class="col-elite plan-col-elite"><strong>HK$ 6,000 萬</strong></div>
-        <div class="col-wise plan-col-wise"><strong>HK$ 6,000 萬</strong></div>
-        <div class="col-flexi plan-col-flexi">無終身限額</div>
-      </div>
-      <div class="checklist-row">
-        <div class="col-item">住院病房級別</div>
-        <div class="col-elite plan-col-elite">半私家房 (全球/亞洲)</div>
-        <div class="col-wise plan-col-wise">半私家房 (指定網絡)</div>
-        <div class="col-flexi plan-col-flexi">普通大房</div>
-      </div>
-      <div class="checklist-row">
-        <div class="col-item">手術及雜費賠償</div>
-        <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">100% 全數索償</div>
-        <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">100% 全數索償</div>
-        <div class="col-flexi plan-col-flexi" style="color:var(--danger); font-weight:bold;">設細項嚴格上限</div>
-      </div>
-      <div class="checklist-row">
-        <div class="col-item">家長陪床費</div>
-        <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">全數索償</div>
-        <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">全數索償</div>
-        <div class="col-flexi plan-col-flexi" style="color:var(--danger);">不設保障</div>
-      </div>
-    </div>
+   <!-- 案例黑底置中大字彈窗按鈕 -->
+   <div style="margin-top:16px; text-align:center;">
+     <button type="button" class="btn-secondary" style="width:100%; border-color:var(--primary); color:var(--primary);" onclick="openClaimsModal()">
+       📑 點擊開啟：真實索償個案數據庫對比
+     </button>
+   </div>
 
-    <!-- 索償案例快速檢視 -->
-    <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
-      <h3 style="font-size:16px; font-weight:800; color:var(--primary); margin-bottom:10px;">📋 真實醫療索償數據參考</h3>
-      <div id="claimCasesList" style="display:flex; flex-direction:column; gap:8px;"></div>
-    </div>
+   <div class="nav-btn-group">
+     <button type="button" class="btn-secondary" onclick="goToStage('m5')">← 返上一頁</button>
+   </div>
+ </div>
 
-    <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('m5')">← 返上一頁</button>
-    </div>
-  </div>
-</div>
+ <!-- 案例彈窗 Modal -->
+ <div class="modal-overlay" id="claimsModal">
+   <div class="modal-box">
+     <button class="modal-close-btn" onclick="closeClaimsModal()">✕</button>
+     <h3 style="color:#fff; margin-top:0; font-size:18px;">📋 真實醫療索償數據庫</h3>
+     <div class="case-detail-text" id="modalCaseText">
+       點擊以下個案，檢視不同醫保計劃的實際自付差額：
+     </div>
+     <div id="modalCasesList" style="display:flex; flex-direction:column; gap:10px;"></div>
+   </div>
+ </div>
 
-<!-- 後台管理彈窗 (Admin Panel) -->
-<div id="adminModal">
-  <div class="admin-card">
-    <div class="admin-header">
-      <span style="font-weight:800; font-size:16px;">🛠️ 醫療 App 後台管理 (Google Sheet 同步)</span>
-      <button type="button" id="btnCloseAdmin" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
-    </div>
-    <div class="admin-body" id="adminBodyContent"></div>
-    <div class="admin-footer">
-      <button type="button" class="btn btn-secondary" id="btnCancelAdmin" style="flex:1;">取消</button>
-      <button type="button" class="btn btn-primary" id="btnSaveAdmin" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
-    </div>
-  </div>
 </div>
 
 <script>
+  // 最新 GAS 統一後端 API
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
 
   var appState = {
@@ -430,13 +503,16 @@
     companyRate: 80,
     companyPay: 80000,
     hasPersonal: false,
-    finalGap: 120000
+    finalGap: 120000,
+    m1Selection: null,
+    m2Selection: null,
+    m4Selection: null
   };
 
   var db = null;
 
-  // 自動根據 URL 參數連動角色（無需手動再選）
-  function initUrlParams() {
+  // 1. 自動從 URL 讀取連動參數（一氣呵成）
+  function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = Number(p.get('cost')) || 200000;
     if (p.get('hasCompany')) appState.hasCompany = p.get('hasCompany') === 'yes';
@@ -444,7 +520,7 @@
     if (p.get('companyRate')) appState.companyRate = Number(p.get('companyRate')) || 80;
     if (p.get('hasPersonal')) appState.hasPersonal = p.get('hasPersonal') === 'yes';
     
-    // 自動判斷模式（若 URL 帶有 child 則完全進入兒童模式）
+    // 自動判斷成人／兒童模式
     var urlRole = p.get('role');
     var urlFocus = p.get('focus');
     if (urlRole === 'child' || (urlFocus && urlFocus.includes('child'))) {
@@ -453,7 +529,6 @@
       appState.role = 'adult';
     }
 
-    // 計算缺口
     if (appState.hasCompany && appState.role === 'adult') {
       appState.companyPay = Math.min(appState.cost, appState.companyLimit) * (appState.companyRate / 100);
     } else {
@@ -462,181 +537,94 @@
     appState.finalGap = Math.max(0, appState.cost - appState.companyPay);
   }
 
-  function applyRoleUI() {
+  // 2. 根據模式載入對應的文案
+  function applyRoleContent() {
     var isChild = appState.role === 'child';
-    var badge = document.getElementById('roleIndicator');
-    if (badge) badge.innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
+    document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
     
+    // 預設年齡
+    document.getElementById('inputAge').value = isChild ? "5" : "30";
     if (isChild) {
-      document.getElementById('calcAge').value = "5";
       document.getElementById('elite-deductible').value = "0";
       document.getElementById('wise-deductible').value = "0";
+    }
+
+    if (db && db.pages) {
+      var r = appState.role;
+      var p1 = db.pages.find(p => p.pageId === `m1_${r}`);
+      if (p1) {
+        document.getElementById('m1-title').innerText = p1.title;
+        document.getElementById('m1-desc').innerText = p1.subtitle;
+      }
+      var p2 = db.pages.find(p => p.pageId === `m2_${r}`);
+      if (p2) {
+        document.getElementById('m2-title').innerText = p2.title;
+        document.getElementById('m2-desc').innerText = p2.subtitle;
+        document.getElementById('m2-quote-box').innerHTML = `💭 <strong>${p2.quoteAlert || '如果係你，你會比較希望係 A 定 B？'}</strong>`;
+      }
+      var p3 = db.pages.find(p => p.pageId === `m3_${r}`);
+      if (p3) {
+        document.getElementById('m3-title').innerText = p3.title;
+        document.getElementById('m3-quote-box').innerHTML = `🤔 <strong>關鍵思考：</strong>「${p3.quoteAlert}」`;
+      }
+      var p4 = db.pages.find(p => p.pageId === `m4_${r}`);
+      if (p4) {
+        document.getElementById('m4-title').innerText = p4.title;
+        document.getElementById('m4-no-alert').innerHTML = `📢 <strong>核心本質：</strong> ${p4.quoteAlert}`;
+      }
+      var p5 = db.pages.find(p => p.pageId === `m5_${r}`);
+      if (p5) {
+        document.getElementById('m5-title').innerText = p5.title;
+        document.getElementById('m5-quote-box').innerHTML = `❓「${p5.quoteAlert}」`;
+      }
+
+      // 產品亮點
+      if (db.highlights) {
+        var hlList = db.highlights.filter(h => h.role === r).sort((a,b)=>a.order-b.order);
+        var hlHtml = '';
+        hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
+        document.getElementById('prod-bullet-list').innerHTML = hlHtml;
+      }
+
+      // 額度 Banner
+      if (db.config) {
+        document.getElementById('banner-elite').innerText = `👑 尊顯：${db.config[isChild ? '兒童尊顯額度' : '成人尊顯額度'] || '每年 $1,200 萬'}`;
+        document.getElementById('banner-wise').innerText = `🛡️ 睿選：${db.config[isChild ? '兒童睿選額度' : '成人睿選額度'] || '每年 $1,200 萬'}`;
+        document.getElementById('banner-flexi').innerText = db.config[isChild ? '兒童靈活額度' : '成人靈活額度'] || '⚠️ 靈活：細項受限';
+      }
     } else {
-      document.getElementById('calcAge').value = "30";
-      document.getElementById('elite-deductible').value = "25000";
-      document.getElementById('wise-deductible').value = "30000";
+      // 內建備用兒童話術
+      if (isChild) {
+        document.getElementById('m1-title').innerText = "當孩子需要醫療時，作為父母你最重視甚麼？";
+        document.getElementById('m1-optA-title').innerText = "🏥 把握黃金治療期，即時享有私家頂尖資源";
+        document.getElementById('m1-optB-title').innerText = "🛡️ 確保醫療開支不影響孩子既定教育基金";
+        document.getElementById('m2-title').innerText = "如果孩子急病需要入院治療，你希望……";
+        document.getElementById('m3-title').innerText = "檢視孩子現有的醫療防線";
+        document.getElementById('m3-quote-box').innerHTML = "🤔 <strong>關鍵思考：</strong>「公立兒科固然有基本安全網，但面對漫長排期與擠迫病房，係咪你首選？」";
+        document.getElementById('m4-title').innerText = "如果面對新式兒童微創手術或先進標靶藥物，你會點？";
+        document.getElementById('m4-no-alert').innerHTML = "📢 <strong>核心本質：</strong> 醫療通脹與先進標靶治療費用龐大，若無全數索償醫保，自費開支將直接動用孩子教育基金。";
+      }
     }
-    renderStages();
-    calcPremiums();
-  }
 
-  function renderStages() {
-    if (!db || !db.pages) return;
-    var r = appState.role;
-
-    // 1. 01 頁
-    var p1 = db.pages.find(p => p.pageId === `m1_${r}`);
-    if (p1) {
-      document.getElementById('m1-title').innerText = p1.title;
-      document.getElementById('m1-desc').innerText = p1.subtitle;
-    }
-    var o1 = db.options.filter(o => o.pageId === `m1_${r}`).sort((a,b)=>a.order-b.order);
-    var h1 = '';
-    o1.forEach(o => {
-      h1 += `
-        <button type="button" class="choice-btn" data-m1="${o.optionKey}" onclick="selectBtn(this)">
-          <span class="c-title">${o.icon ? o.icon + ' ' : ''}${o.title}</span>
-          <span class="c-desc">${o.desc}</span>
-        </button>`;
-    });
-    document.getElementById('m1-choices').innerHTML = h1;
-
-    // 2. 02 頁
-    var p2 = db.pages.find(p => p.pageId === `m2_${r}`);
-    if (p2) {
-      document.getElementById('m2-title').innerText = p2.title;
-      document.getElementById('m2-desc').innerText = p2.subtitle;
-      document.getElementById('m2-quote').innerHTML = `💭 <strong>${p2.quoteAlert || '如果係你，你會比較希望係 A 定 B？'}</strong>`;
-    }
-    var o2 = db.options.filter(o => o.pageId === `m2_${r}`).sort((a,b)=>a.order-b.order);
-    var h2 = '';
-    o2.forEach(o => {
-      h2 += `
-        <button type="button" class="choice-btn" data-m2="${o.optionKey}" onclick="selectBtn(this)">
-          <span class="c-title">${o.icon ? o.icon + ' ' : ''}${o.title}</span>
-          <span class="c-desc">${o.desc}</span>
-        </button>`;
-    });
-    document.getElementById('m2-choices').innerHTML = h2;
-
-    // 3. 03 頁
-    var p3 = db.pages.find(p => p.pageId === `m3_${r}`);
-    if (p3) {
-      document.getElementById('m3-title').innerText = p3.title;
-      document.getElementById('m3-quote').innerHTML = `🤔 <strong>關鍵思考：</strong>「${p3.quoteAlert}」`;
-    }
+    // 03 & 05 數據更新
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
-    if (r === 'child') {
+    if (isChild) {
       document.getElementById('m3-comp-row').style.display = 'none';
+      document.getElementById('m5-comp-row').style.display = 'none';
     } else {
       document.getElementById('m3-comp-row').style.display = 'flex';
       document.getElementById('m3-comp-text').innerText = 'HK$ ' + Math.round(appState.companyPay).toLocaleString();
-    }
-
-    // 4. 04 頁
-    var p4 = db.pages.find(p => p.pageId === `m4_${r}`);
-    if (p4) {
-      document.getElementById('m4-title').innerText = p4.title;
-      document.getElementById('m4-alert').innerHTML = `📢 <strong>核心本質：</strong> ${p4.quoteAlert}`;
-    }
-    var o4 = db.options.filter(o => o.pageId === `m4_${r}`).sort((a,b)=>a.order-b.order);
-    var h4 = '';
-    o4.forEach(o => {
-      h4 += `
-        <button type="button" class="choice-btn" data-m4="${o.optionKey}" onclick="selectBtn(this)">
-          <span class="c-title">${o.icon ? o.icon + ' ' : ''}${o.title}</span>
-          <span class="c-desc">${o.desc}</span>
-        </button>`;
-    });
-    document.getElementById('m4-choices').innerHTML = h4;
-
-    // 5. 05 頁
-    var p5 = db.pages.find(p => p.pageId === `m5_${r}`);
-    if (p5) {
-      document.getElementById('m5-title').innerText = p5.title;
-      document.getElementById('m5-quote').innerHTML = `❓「${p5.quoteAlert}」`;
+      document.getElementById('m5-comp-row').style.display = 'flex';
+      document.getElementById('m5-comp-val').innerText = '- HK$ ' + Math.round(appState.companyPay).toLocaleString();
     }
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
-    document.getElementById('m5-comp-val').innerText = '- HK$ ' + Math.round(appState.companyPay).toLocaleString();
     document.getElementById('m5-gap-val').innerText = 'HK$ ' + Math.round(appState.finalGap).toLocaleString();
 
-    // 6. 產品亮點
-    var hlList = db.highlights ? db.highlights.filter(h => h.role === r).sort((a,b)=>a.order-b.order) : [];
-    var hlHtml = '';
-    hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
-    document.getElementById('prod-bullet-list').innerHTML = hlHtml;
-
-    // 7. 額度 Banner
-    if (db.config) {
-      document.getElementById('badge-elite-limit').innerText = `👑 尊顯：${db.config[r === 'child' ? '兒童尊顯額度' : '成人尊顯額度'] || '每年 $1,200 萬'}`;
-      document.getElementById('badge-wise-limit').innerText = `🛡️ 睿選：${db.config[r === 'child' ? '兒童睿選額度' : '成人睿選額度'] || '每年 $1,200 萬'}`;
-      document.getElementById('badge-flexi-limit').innerText = db.config[r === 'child' ? '兒童靈活額度' : '成人靈活額度'] || '⚠️ 靈活：細項受限';
-    }
-
-    // 8. 索償案例列表
-    renderClaimCases();
+    calcScenarioOOP(document.getElementById('scenario-cost-select').value);
+    updatePremiums();
   }
 
-  function renderClaimCases() {
-    var cList = document.getElementById('claimCasesList');
-    if (!db || !db.claimCases || db.claimCases.length === 0) {
-      cList.innerHTML = '<p style="font-size:13px; color:#999;">暫無案例資料</p>';
-      return;
-    }
-    var html = '';
-    db.claimCases.forEach(c => {
-      var isHigh = c.category === 'high';
-      html += `
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <span style="font-size:11px; padding:2px 6px; border-radius:4px; font-weight:800; background:${isHigh ? '#eff6ff' : '#fef2f2'}; color:${isHigh ? '#1e40af' : '#991b1b'};">
-              ${isHigh ? '高端全數索償' : '傳統設限醫保'}
-            </span>
-            <span style="font-size:13px; font-weight:700; margin-left:6px;">${c.caseName}</span>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:12px; color:#64748b;">總開支 HK$ ${c.totalCost.toLocaleString()}</div>
-            <div style="font-size:13px; font-weight:800; color:${c.outOfPocket > 0 ? 'var(--danger)' : '#059669'};">
-              自付差額: HK$ ${c.outOfPocket.toLocaleString()}
-            </div>
-          </div>
-        </div>`;
-    });
-    cList.innerHTML = html;
-  }
-
-  function calcPremiums() {
-    if (!db || !db.premiumTables) return;
-    var age = Number(document.getElementById('calcAge').value) || 30;
-    var gender = document.getElementById('calcGender').value;
-    var eliteDed = document.getElementById('elite-deductible').value;
-    var wiseDed = document.getElementById('wise-deductible').value;
-
-    // 尊顯
-    var eliteSheetName = `尊顯${eliteDed}自付額`;
-    var eliteTable = db.premiumTables[eliteSheetName];
-    var elitePrice = (eliteTable && eliteTable[age]) ? eliteTable[age] : '--';
-    document.getElementById('price-elite-val').innerText = elitePrice !== '--' ? `HK$ ${Number(elitePrice).toLocaleString()} /年` : 'HK$ --';
-
-    // 睿選
-    var wiseSheetName = `睿選${wiseDed}自付額`;
-    var wiseTable = db.premiumTables[wiseSheetName];
-    var wisePrice = (wiseTable && wiseTable[age]) ? wiseTable[age] : '--';
-    document.getElementById('price-wise-val').innerText = wisePrice !== '--' ? `HK$ ${Number(wisePrice).toLocaleString()} /年` : 'HK$ --';
-
-    // 靈活計劃
-    var flexiSheetName = (gender === 'female') ? '女靈活計劃' : '男靈活計劃';
-    var flexiTable = db.premiumTables[flexiSheetName];
-    var flexiPrice = (flexiTable && flexiTable[age]) ? flexiTable[age] : '--';
-    document.getElementById('price-flexi-val').innerText = flexiPrice !== '--' ? `HK$ ${Number(flexiPrice).toLocaleString()} /年` : 'HK$ --';
-  }
-
-  function selectBtn(btn) {
-    var p = btn.closest('.choice-list');
-    p.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  }
-
+  // 3. 步驟切換控制
   function goToStage(stageId) {
     document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
     var target = document.getElementById('stage-' + stageId);
@@ -646,10 +634,42 @@
     }
   }
 
+  function selectM1(btn, val) {
+    document.querySelectorAll('#m1-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    appState.m1Selection = val;
+  }
+
+  function selectM2(btn, val) {
+    document.querySelectorAll('#m2-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    appState.m2Selection = val;
+  }
+
   function proceedFromM2() {
     goToStage('m3');
   }
 
+  function selectM4(val) {
+    document.querySelectorAll('#m4-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
+    var btn = document.querySelector(`[data-m4="${val}"]`);
+    if (btn) btn.classList.add('selected');
+    appState.m4Selection = val;
+    var alertBox = document.getElementById('m4-no-alert');
+    if (alertBox) alertBox.style.display = (val === 'no') ? 'block' : 'none';
+  }
+
+  function acceptGapAlert() {
+    alert('感謝你的檢視！請留意若將來醫療通脹或自費藥物增加，建議定期覆檢防線。');
+  }
+
+  // 4. 自付額同步
+  function syncDeductibles(type, val) {
+    calcScenarioOOP(document.getElementById('scenario-cost-select').value);
+    updatePremiums();
+  }
+
+  // 5. 顯示計劃切換
   function togglePlanVisibility(plan) {
     var btn = document.getElementById('vis-btn-' + plan);
     var cols = document.querySelectorAll('.plan-col-' + plan);
@@ -657,106 +677,95 @@
     cols.forEach(c => c.style.display = btn.classList.contains('off') ? 'none' : '');
   }
 
-  // 後台管理
-  function openAdminPanel() {
-    var modal = document.getElementById('adminModal');
-    var body = document.getElementById('adminBodyContent');
-    body.innerHTML = '';
+  // 6. 試算自付差額
+  function calcScenarioOOP(costVal) {
+    var cost = Number(costVal) || 200000;
+    var eliteDed = Number(document.getElementById('elite-deductible').value) || 0;
+    var wiseDed = Number(document.getElementById('wise-deductible').value) || 0;
 
-    var secConfig = document.createElement('div');
-    secConfig.innerHTML = `<div class="admin-section-title">⚙️ 系統設定 & 標籤額度</div>`;
-    for (const [k, v] of Object.entries(db.config || {})) {
-      secConfig.innerHTML += `
-        <div class="admin-item">
-          <label>${k}</label>
-          <input type="text" data-admin-config="${k}" value="${v}">
-        </div>`;
+    // 尊顯：自付額後 100% 全數
+    var eliteOOP = Math.min(cost, eliteDed);
+    document.getElementById('oop-elite-val').innerText = 'HK$ ' + eliteOOP.toLocaleString();
+
+    // 睿選：網絡半私家 100% 全數
+    var wiseOOP = Math.min(cost, wiseDed);
+    document.getElementById('oop-wise-val').innerText = 'HK$ ' + wiseOOP.toLocaleString();
+
+    // 靈活：細項分項設限，大額手術自付極高
+    var flexiOOP = cost > 100000 ? Math.round(cost * 0.55) : Math.round(cost * 0.2);
+    document.getElementById('oop-flexi-val').innerText = 'HK$ ' + flexiOOP.toLocaleString();
+  }
+
+  // 7. 保費讀取與計算
+  function updatePremiums() {
+    if (!db || !db.premiumTables) return;
+    var age = Number(document.getElementById('inputAge').value) || 30;
+    var gender = document.getElementById('inputGender').value;
+    var eliteDed = document.getElementById('elite-deductible').value;
+    var wiseDed = document.getElementById('wise-deductible').value;
+
+    // 尊顯
+    var eliteSheet = `尊顯${eliteDed}自付額`;
+    var eliteTbl = db.premiumTables[eliteSheet];
+    var pElite = (eliteTbl && eliteTbl[age]) ? eliteTbl[age] : '--';
+    document.getElementById('card-prem-elite').innerText = pElite !== '--' ? `HK$ ${Number(pElite).toLocaleString()}` : 'HK$ --';
+
+    // 睿選
+    var wiseSheet = `睿選${wiseDed}自付額`;
+    var wiseTbl = db.premiumTables[wiseSheet];
+    var pWise = (wiseTbl && wiseTbl[age]) ? wiseTbl[age] : '--';
+    document.getElementById('card-prem-wise').innerText = pWise !== '--' ? `HK$ ${Number(pWise).toLocaleString()}` : 'HK$ --';
+
+    // 靈活
+    var flexiSheet = (gender === 'female') ? '女靈活計劃' : '男靈活計劃';
+    var flexiTbl = db.premiumTables[flexiSheet];
+    var pFlexi = (flexiTbl && flexiTbl[age]) ? flexiTbl[age] : '--';
+    document.getElementById('card-prem-flexi').innerText = pFlexi !== '--' ? `HK$ ${Number(pFlexi).toLocaleString()}` : 'HK$ --';
+  }
+
+  // 8. 案例黑底置中彈窗
+  function openClaimsModal() {
+    var modal = document.getElementById('claimsModal');
+    var list = document.getElementById('modalCasesList');
+    list.innerHTML = '';
+    
+    if (db && db.claimCases && db.claimCases.length > 0) {
+      db.claimCases.forEach(c => {
+        var isHigh = c.category === 'high';
+        list.innerHTML += `
+          <div style="background:rgba(255,255,255,0.08); border:1px solid #374151; border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-size:11px; padding:2px 6px; border-radius:4px; font-weight:800; background:${isHigh ? '#1e3a8a' : '#7f1d1d'}; color:#fff;">
+                ${isHigh ? '高端全數索償' : '傳統設限醫保'}
+              </span>
+              <span style="font-size:14px; font-weight:700; color:#f3f4f6; margin-left:8px;">${c.caseName}</span>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px; color:#9ca3af;">總開支 HK$ ${c.totalCost.toLocaleString()}</div>
+              <div style="font-size:14px; font-weight:800; color:${c.outOfPocket > 0 ? '#ef4444' : '#10b981'};">
+                自付差額: HK$ ${c.outOfPocket.toLocaleString()}
+              </div>
+            </div>
+          </div>`;
+      });
+    } else {
+      list.innerHTML = '<p style="color:#9ca3af;">暫無案例資料</p>';
     }
-    body.appendChild(secConfig);
-
-    var secPages = document.createElement('div');
-    secPages.innerHTML = `<div class="admin-section-title">📄 題目與副標題文案</div>`;
-    (db.pages || []).forEach((p, idx) => {
-      secPages.innerHTML += `
-        <div class="admin-item">
-          <label>【${p.role === 'adult' ? '成人' : '兒童'} - 第 ${p.stepOrder} 步】${p.tagName}</label>
-          <input type="text" placeholder="主標題" data-admin-page-title="${idx}" value="${p.title}">
-          <textarea placeholder="副標題" data-admin-page-sub="${idx}">${p.subtitle}</textarea>
-          <input type="text" placeholder="關鍵思考/警示語" data-admin-page-alert="${idx}" value="${p.quoteAlert || ''}">
-        </div>`;
-    });
-    body.appendChild(secPages);
-
     modal.style.display = 'flex';
   }
 
-  function saveAdminPanel() {
-    if (!confirm("確定儲存並同步至 Google Sheet？")) return;
-    var btnSave = document.getElementById('btnSaveAdmin');
-    btnSave.innerText = "⏳ 正在同步至 Google Sheet...";
-    btnSave.disabled = true;
-
-    document.querySelectorAll('[data-admin-config]').forEach(inp => {
-      db.config[inp.dataset.adminConfig] = inp.value;
-    });
-
-    var curVer = String(db.config["資料版本"] || "6.6.1").split('.');
-    if (curVer.length === 3) {
-      curVer[2] = Number(curVer[2]) + 1;
-      db.config["資料版本"] = curVer.join('.');
-    } else {
-      db.config["資料版本"] = "6.6.2";
-    }
-
-    document.querySelectorAll('[data-admin-page-title]').forEach(inp => {
-      var idx = Number(inp.dataset.adminPageTitle);
-      db.pages[idx].title = inp.value;
-    });
-    document.querySelectorAll('[data-admin-page-sub]').forEach(inp => {
-      var idx = Number(inp.dataset.adminPageSub);
-      db.pages[idx].subtitle = inp.value;
-    });
-    document.querySelectorAll('[data-admin-page-alert]').forEach(inp => {
-      var idx = Number(inp.dataset.adminPageAlert);
-      db.pages[idx].quoteAlert = inp.value;
-    });
-
-    fetch(GAS_API_URL, {
-      method: "POST",
-      body: JSON.stringify(db)
-    })
-    .then(res => res.json())
-    .then(res => {
-      alert("✅ 成功同步至 Google Sheet！最新版本號：" + db.config["資料版本"]);
-      localStorage.setItem('MEDICAL_APP_DB_V7', JSON.stringify(db));
-      document.getElementById('appVersion').innerText = 'v' + db.config["資料版本"];
-      document.getElementById('adminModal').style.display = 'none';
-      renderStages();
-      calcPremiums();
-    })
-    .catch(err => {
-      alert("❌ 同步失敗：" + err);
-    })
-    .finally(() => {
-      btnSave.innerText = "💾 儲存並同步至 Google Sheet";
-      btnSave.disabled = false;
-    });
+  function closeClaimsModal() {
+    document.getElementById('claimsModal').style.display = 'none';
   }
 
-  document.getElementById('btnOpenAdmin').addEventListener('click', openAdminPanel);
-  document.getElementById('appVersion').addEventListener('click', openAdminPanel);
-  document.getElementById('btnCloseAdmin').addEventListener('click', () => document.getElementById('adminModal').style.display = 'none');
-  document.getElementById('btnCancelAdmin').addEventListener('click', () => document.getElementById('adminModal').style.display = 'none');
-  document.getElementById('btnSaveAdmin').addEventListener('click', saveAdminPanel);
-
+  // 9. 雲端資料同步
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('MEDICAL_APP_DB_V7');
+    var cached = localStorage.getItem('AVA_MED_V65_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
-        document.getElementById('appVersion').innerText = 'v' + (db.version || '6.6.1');
-        applyRoleUI();
+        applyRoleContent();
       } catch(e) {}
     }
 
@@ -765,19 +774,18 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('MEDICAL_APP_DB_V7', JSON.stringify(remote));
-          document.getElementById('appVersion').innerText = 'v' + (remote.version || '6.6.1');
-          syncBadge.innerText = '● 線上同步完成';
+          localStorage.setItem('AVA_MED_V65_CACHE', JSON.stringify(remote));
+          syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
-          applyRoleUI();
+          applyRoleContent();
         }
       })
       .catch(err => {
-        syncBadge.innerText = '○ 使用離線快取';
+        syncBadge.innerText = '○ 離線快取模式';
       });
   }
 
-  initUrlParams();
+  initParams();
   syncDatabase();
 </script>
 </body>
