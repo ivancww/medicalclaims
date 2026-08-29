@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.7.6 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.8.1 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -181,7 +181,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v6.7.6</span>
+      <span class="v-badge" id="appVersion">v6.8.1</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -191,24 +191,24 @@
 
  <!-- ==================== 01 - 05 前置步驟 ==================== -->
  <div class="stage-card active" id="stage-m1">
-   <span class="stage-tag" id="m1-tag">01 ｜ 關注／重視</span>
+   <span class="stage-tag">01 ｜ 關注／重視</span>
    <h2 class="stage-title" id="m1-title">當需要醫療時，你最重視的是甚麼？</h2>
    <p class="stage-desc" id="m1-desc">確認你真正的價值取向，建立本次檢視的方向：</p>
-   <div class="choice-list" id="m1-choice-list">
-     <button type="button" class="choice-btn" data-m1="choiceA" onclick="selectBtn(this)"><span class="c-title" id="m1-optA-title">🏥 可以即時選擇合適嘅醫療</span><span class="c-desc" id="m1-optA-desc">享有治療自主權，不希望因費用而先作取捨。</span></button>
-     <button type="button" class="choice-btn" data-m1="choiceB" onclick="selectBtn(this)"><span class="c-title" id="m1-optB-title">🛡️ 唔希望醫療費影響家庭財務</span><span class="c-desc" id="m1-optB-desc">重視醫療發生後的家庭開支與儲蓄承托。</span></button>
-     <button type="button" class="choice-btn" data-m1="choiceBoth" onclick="selectBtn(this)"><span class="c-title" id="m1-optBoth-title">⚖️ 兩樣都重視</span><span class="c-desc" id="m1-optBoth-desc">既想保留醫療選擇，也想保留家庭財務安全。</span></button>
+   <div class="choice-list">
+     <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">🏥 可以即時選擇合適嘅醫療</span><span class="c-desc">享有治療自主權，不希望因費用而先作取捨。</span></button>
+     <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">🛡️ 唔希望醫療費影響家庭財務</span><span class="c-desc">重視醫療發生後的家庭開支與儲蓄承托。</span></button>
+     <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">⚖️ 兩樣都重視</span><span class="c-desc">既想保留醫療選擇，也想保留家庭財務安全。</span></button>
    </div>
    <div class="nav-btn-group"><button type="button" class="btn-primary" onclick="goToStage('m2')">下一步 →</button></div>
  </div>
 
  <div class="stage-card" id="stage-m2">
-   <span class="stage-tag" id="m2-tag">02 ｜ 想像一下情境</span>
+   <span class="stage-tag">02 ｜ 想像一下情境</span>
    <h2 class="stage-title" id="m2-title">如果有一日，需要即時接受治療……</h2>
    <p class="stage-desc" id="m2-desc">用一個非常簡單嘅生活情境，你希望自己可以：</p>
-   <div class="choice-list" id="m2-choice-list">
-     <button type="button" class="choice-btn" data-m2="A" onclick="selectBtn(this)"><span class="c-title" id="m2-optA-title">A ｜ 按醫療需要作選擇</span><span class="c-desc" id="m2-optA-desc">以醫生專業建議與最好療效為首要考量。</span></button>
-     <button type="button" class="choice-btn" data-m2="B" onclick="selectBtn(this)"><span class="c-title" id="m2-optB-title">B ｜ 先考慮費用，再決定醫療選擇</span><span class="c-desc" id="m2-optB-desc">需先計算自付差額與荷包負擔，再決定在哪裡治療。</span></button>
+   <div class="choice-list">
+     <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">A ｜ 按醫療需要作選擇</span><span class="c-desc">以醫生專業建議與最好療效為首要考量。</span></button>
+     <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">B ｜ 先考慮費用，再決定醫療選擇</span><span class="c-desc">需先計算自付差額與荷包負擔，再決定在哪裡治療。</span></button>
    </div>
    <div class="info-quote-box" id="m2-quote-box" style="margin-top: 15px;">💭 <strong>如果係你，你會比較希望係 A 定 B？</strong></div>
    <div class="nav-btn-group">
@@ -218,7 +218,7 @@
  </div>
 
  <div class="stage-card" id="stage-m3">
-   <span class="stage-tag" id="m3-tag">03 ｜ 現在有的保障</span>
+   <span class="stage-tag">03 ｜ 現在有的保障</span>
    <h2 class="stage-title" id="m3-title">回顧你的第一道防線</h2>
    <div class="stat-grid-box">
      <div class="stat-row"><span>假設預計醫療費用：</span><strong id="m3-cost-text">HK$ 500,000</strong></div>
@@ -235,11 +235,11 @@
  </div>
 
  <div class="stage-card" id="stage-m4">
-   <span class="stage-tag" id="m4-tag">04 ｜ 如果第一道防線改變</span>
+   <span class="stage-tag">04 ｜ 如果第一道防線改變</span>
    <h2 class="stage-title" id="m4-title">如果將來轉工、離職、退休，第一道防線改變，你會點？</h2>
-   <div class="choice-list" id="m4-choice-list">
-     <button type="button" class="choice-btn" data-m4="yes" onclick="selectM4('yes')"><span class="c-title" id="m4-optA-title">🛡️ 有個人醫保（第二層防線）</span><span class="c-desc" id="m4-optA-desc">已有個人專屬保單，可獨立銜接保障。</span></button>
-     <button type="button" class="choice-btn" data-m4="no" onclick="selectM4('no')"><span class="c-title" id="m4-optB-title">⚠️ 沒有個人醫保</span><span class="c-desc" id="m4-optB-desc">離開現有職位後，醫療保障將即時變成零。</span></button>
+   <div class="choice-list">
+     <button type="button" class="choice-btn" onclick="selectM4('yes')"><span class="c-title">🛡️ 有個人醫保（第二層防線）</span><span class="c-desc">已有個人專屬保單，可獨立銜接保障。</span></button>
+     <button type="button" class="choice-btn" onclick="selectM4('no')"><span class="c-title">⚠️ 沒有個人醫保</span><span class="c-desc">離開現有職位後，醫療保障將即時變成零。</span></button>
    </div>
    <div id="m4-no-alert" class="danger-alert-box" style="display:none;">
      📢 <strong>核心本質：</strong> 公司醫保可以幫你解決<strong>今日嘅醫療需要</strong>；但佢未必可以解決你<strong>離開公司之後嘅醫療需要</strong>。
@@ -251,7 +251,7 @@
  </div>
 
  <div class="stage-card" id="stage-m5">
-   <span class="stage-tag" id="m5-tag">05 ｜ 缺口 ➔ 解決方案</span>
+   <span class="stage-tag">05 ｜ 缺口 ➔ 解決方案</span>
    <h2 class="stage-title" id="m5-title">醫療自付差額總結</h2>
    <div class="stat-grid-box">
      <div class="stat-row"><span>預計醫療開支：</span><span id="m5-cost-val">HK$ 500,000</span></div>
@@ -349,17 +349,13 @@
    <h2 class="stage-title">常見醫療開支壓力測試</h2>
    
    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
-     <div class="scenario-tab-btn" id="scTab-day" onclick="selectCaseCategory('day')">
-       <div style="font-size:14px; font-weight:800;">☀️ 日間手術（例如：腸胃鏡連瘜肉切除）</div>
-       <div style="font-size:12px; color:#666; margin-top:2px;">常見日間微創檢查，檢視門診免住院賠償。</div>
+     <div class="scenario-tab-btn" id="scTab-high" onclick="selectCaseCategory('high')">
+       <div style="font-size:14px; font-weight:800;">👑 高端全數索償案例（例如：子宮肌瘤/腸/發燒住院）</div>
+       <div style="font-size:12px; color:#666; margin-top:2px;">檢視突破細項限制，自付額後全額賠付。</div>
      </div>
-     <div class="scenario-tab-btn" id="scTab-inpatient" onclick="selectCaseCategory('inpatient')">
-       <div style="font-size:14px; font-weight:800;">🏥 住院手術（例如：子宮肌瘤引致尿滯留）</div>
-       <div style="font-size:12px; color:#666; margin-top:2px;">大型私院手術，檢視高額支架與手術自付差額。</div>
-     </div>
-     <div class="scenario-tab-btn selected" id="scTab-critical" onclick="selectCaseCategory('critical')">
-       <div style="font-size:14px; font-weight:800;">🎗️ 重大疾病手術及用藥（例如：早期乳癌切除連標靶治療）</div>
-       <div style="font-size:12px; color:#666; margin-top:2px;">包含單次腫瘤切除及後續昂貴標靶、化療非手術長遠開支。</div>
+     <div class="scenario-tab-btn selected" id="scTab-trad" onclick="selectCaseCategory('trad')">
+       <div style="font-size:14px; font-weight:800;">⚠️ 傳統設限醫保案例（例如：肺炎8天/急性視網膜/腸胃鏡）</div>
+       <div style="font-size:12px; color:#666; margin-top:2px;">檢視細項分項設限，大額手術產生龐大自付差額。</div>
      </div>
    </div>
 
@@ -370,18 +366,18 @@
 
    <div style="background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:16px;">
      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-       <h3 style="margin:0; font-size:17px; font-weight:800;" id="case-title-display">早期乳癌切除連標靶治療</h3>
+       <h3 style="margin:0; font-size:17px; font-weight:800;" id="case-title-display">案例病症名稱</h3>
        <span style="font-size:11px; background:#fef3c7; color:#92400e; padding:3px 8px; border-radius:6px; font-weight:bold;">📑 實況案例 (雲端)</span>
      </div>
      
      <div style="margin-bottom:12px;">
        <label style="font-size:12px; font-weight:bold; color:#666;">✏️ 手術/住院基本開支 (可手動輸入壓力測試)：</label>
-       <input type="text" id="case-total-input" value="HK$ 520,000" onchange="recalcCustomCost(this.value)" style="font-size:16px; font-weight:800;">
+       <input type="text" id="case-total-input" value="HK$ 174,397" onchange="recalcCustomCost(this.value)" style="font-size:16px; font-weight:800;">
      </div>
 
      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7; margin:12px 0;">
        <div id="case-comp-line">第一層公司醫保預計賠：<strong style="color:#059669;" id="case-comp-text">HK$ 0</strong></div>
-       <div id="case-pers-line">第二層個人醫保預計賠：<strong style="color:#059669;" id="case-pers-text">HK$ 0 (全數賠償)</strong></div>
+       <div id="case-pers-line">第二層個人醫保預計賠：<strong style="color:#059669;" id="case-pers-text">HK$ 0</strong></div>
      </div>
 
      <div class="oop-row-grid">
@@ -395,7 +391,7 @@
        </div>
        <div class="oop-mini-card flexi plan-col-flexi">
          <div style="font-size:11px; font-weight:bold;">⚠️ 靈活 客人自付</div>
-         <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 185,000 (嚴重超額)</div>
+         <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 0</div>
        </div>
      </div>
    </div>
@@ -585,11 +581,21 @@
     selectedFinalPlan: 'wise',
     selectedFinalPrice: '--',
     selectedRawAnnualNum: 5528,
-    currentCaseCat: 'critical',
+    currentCaseCat: 'trad',
     planVis: { elite: true, wise: true, flexi: true }
   };
 
   var db = null;
+
+  // 100% 依據你原本 Google Sheet 的案例預設備用
+  var DEFAULT_CLAIM_CASES = [
+    { category: "high", totalCost: 200000, paidAmount: 2000, outOfPocket: 10000, caseName: "腸" },
+    { category: "high", totalCost: 174397, paidAmount: 158394, outOfPocket: 16000, caseName: "子宮肌瘤引起滯留" },
+    { category: "high", totalCost: 34207, paidAmount: 34207, outOfPocket: 0, caseName: "小朋友發燒住院" },
+    { category: "trad", totalCost: 17714, paidAmount: 17714, outOfPocket: 0, caseName: "(網絡) 腸胃鏡檢查" },
+    { category: "trad", totalCost: 81446, paidAmount: 68086, outOfPocket: 13360, caseName: "小朋友肺炎住院8天" },
+    { category: "trad", totalCost: 275073, paidAmount: 144259, outOfPocket: 130814, caseName: "急性視網膜脫落" }
+  ];
 
   function parseSafeNum(val) {
     if (!val) return 0;
@@ -600,22 +606,18 @@
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
     
-    // 公司醫保判定
     var hasCompStr = (p.get('hasCompany') || '').toLowerCase();
     appState.hasCompany = (hasCompStr === 'yes' || hasCompStr === 'true' || hasCompStr === '有');
     appState.companyLimit = parseSafeNum(p.get('companyLimit'));
     appState.companyRate = parseSafeNum(p.get('companyRate')) || 80;
     
-    // 個人醫保判定
     var hasPersStr = (p.get('hasPersonal') || '').toLowerCase();
     appState.hasPersonal = (hasPersStr === 'yes' || hasPersStr === 'true' || hasPersStr === '有');
     
-    // 個人醫保類型判定 (全數 vs 傳統)
     var pTypeStr = decodeURIComponent(p.get('persType') || '').toLowerCase();
     var pDedVal = parseSafeNum(p.get('deductible'));
     var pLimitVal = parseSafeNum(p.get('persLimit'));
     
-    // 智能容錯：若有填 persLimit，或 pTypeStr 包含傳統/細項，一律視為傳統醫保
     if (pLimitVal > 0 || pTypeStr.includes('trad') || pTypeStr.includes('傳統') || pTypeStr.includes('細項')) {
       appState.persType = 'trad';
     } else {
@@ -635,7 +637,6 @@
       appState.role = 'adult';
     }
 
-    // 計算公司醫保賠償
     var cost = appState.cost;
     var compPay = 0;
     if (appState.hasCompany && appState.role === 'adult' && appState.companyLimit > 0) {
@@ -643,14 +644,11 @@
     }
     appState.companyPay = compPay;
 
-    // 計算個人醫保賠償
     var remain = Math.max(0, cost - compPay);
     var persPay = 0;
     if (appState.hasPersonal) {
       if (appState.persType === 'trad') {
-        if (appState.persLimit > 0) {
-          persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
-        }
+        if (appState.persLimit > 0) persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
       } else {
         persPay = Math.max(0, remain - appState.personalDed);
       }
@@ -748,7 +746,7 @@
     }
 
     renderPlanChecklist();
-    selectCaseCategory('critical');
+    selectCaseCategory('trad');
     updateValPremiums();
   }
 
@@ -820,71 +818,41 @@
     renderPlanChecklist();
   }
 
-  var CASES = {
-    day: [
-      { name: '腸胃鏡連瘜肉切除', total: 17714 }
-    ],
-    inpatient: [
-      { name: '子宮肌瘤引致尿滯留', total: 175341 },
-      { name: '小朋友肺炎住院8天', total: 81446 }
-    ],
-    critical: [
-      { name: '早期乳癌切除連標靶治療', total: 520000 }
-    ]
-  };
-
+  // 07 情境案例：選單分類切換 (high / trad)
   function selectCaseCategory(cat) {
     appState.currentCaseCat = cat;
     document.querySelectorAll('.scenario-tab-btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('scTab-' + cat).classList.add('selected');
+    var tab = document.getElementById('scTab-' + cat);
+    if (tab) tab.classList.add('selected');
+
+    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_CLAIM_CASES;
+    var filtered = cList.filter(c => c.category === cat);
+    if (filtered.length === 0) filtered = DEFAULT_CLAIM_CASES.filter(c => c.category === cat);
 
     var drop = document.getElementById('case-select-dropdown');
     drop.innerHTML = '';
-    CASES[cat].forEach((c, idx) => {
-      drop.innerHTML += `<option value="${idx}">📍 案例：${c.name} (開支: $${c.total.toLocaleString()})</option>`;
+    filtered.forEach((c, idx) => {
+      drop.innerHTML += `<option value="${idx}">📍 案例：${c.caseName} (總開支: $${c.totalCost.toLocaleString()})</option>`;
     });
 
     renderSelectedCase(0);
   }
 
+  // 07 情境案例：渲染選中之案例
   function renderSelectedCase(idx) {
-    var c = CASES[appState.currentCaseCat][Number(idx)] || CASES[appState.currentCaseCat][0];
-    document.getElementById('case-title-display').innerText = c.name;
-    document.getElementById('case-total-input').value = 'HK$ ' + c.total.toLocaleString();
+    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_CLAIM_CASES;
+    var filtered = cList.filter(c => c.category === appState.currentCaseCat);
+    if (filtered.length === 0) filtered = DEFAULT_CLAIM_CASES.filter(c => c.category === appState.currentCaseCat);
+
+    var c = filtered[Number(idx)] || filtered[0];
+    document.getElementById('case-title-display').innerText = c.caseName;
+    document.getElementById('case-total-input').value = 'HK$ ' + c.totalCost.toLocaleString();
     
-    var cost = c.total;
-    var comp = 0;
-    if (appState.hasCompany && appState.role === 'adult' && appState.companyLimit > 0) {
-      comp = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
-    }
-    
-    var remain = Math.max(0, cost - comp);
-    var persPay = 0;
-    if (appState.hasPersonal) {
-      if (appState.persType === 'trad') {
-        if (appState.persLimit > 0) persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
-      } else {
-        persPay = Math.max(0, remain - appState.personalDed);
-      }
-    }
-    
-    var compText = 'HK$ ' + Math.round(comp).toLocaleString();
-    if (comp > 0) {
-      if (cost * (appState.companyRate / 100) >= appState.companyLimit) compText += ' (已達公司上限)';
-    } else {
-      compText += ' (無公司醫保)';
-    }
-    document.getElementById('case-comp-text').innerText = compText;
-    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + (persPay > 0 ? ' (全數賠償)' : ' (無個人賠償)');
-    
-    var flexiOOP = cost > 100000 ? Math.round((cost - comp) * 0.45) : 0;
-    document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-    document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString() + (flexiOOP > 30000 ? ' (嚴重超額)' : '');
+    recalcCustomCost(c.totalCost);
   }
 
   function recalcCustomCost(val) {
-    var num = Number(val.replace(/[^0-9]/g, '')) || 200000;
+    var num = parseSafeNum(val) || 200000;
     document.getElementById('case-total-input').value = 'HK$ ' + num.toLocaleString();
     
     var comp = 0;
@@ -902,15 +870,25 @@
     }
     
     var compText = 'HK$ ' + Math.round(comp).toLocaleString();
-    if (comp > 0 && num * (appState.companyRate / 100) >= appState.companyLimit) {
-      compText += ' (已達公司上限)';
+    if (comp > 0) {
+      if (num * (appState.companyRate / 100) >= appState.companyLimit) compText += ' (已達公司上限)';
+    } else {
+      compText += ' (無公司醫保)';
     }
     document.getElementById('case-comp-text').innerText = compText;
     document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + (persPay > 0 ? ' (全數賠償)' : ' (無個人賠償)');
     
-    var flexiOOP = num > 100000 ? Math.round((num - comp) * 0.45) : 0;
-    document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-    document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
+    // 尊顯 & 睿選：自付額後全額索償
+    var eliteDed = Number(document.getElementById('elite-deductible').value) || 0;
+    var wiseDed = Number(document.getElementById('wise-deductible').value) || 0;
+    var eliteOOP = Math.min(num, eliteDed);
+    var wiseOOP = Math.min(num, wiseDed);
+
+    // 靈活計劃：設分項限額
+    var flexiOOP = num > 60000 ? Math.round((num - comp) * 0.45) : 0;
+    
+    document.getElementById('case-oop-elite').innerText = eliteOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + eliteOOP.toLocaleString();
+    document.getElementById('case-oop-wise').innerText = wiseOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + wiseOOP.toLocaleString();
     document.getElementById('case-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString() + (flexiOOP > 30000 ? ' (嚴重超額)' : '');
   }
 
@@ -924,6 +902,7 @@
   function syncDeductibles(type, val) {
     if (type === 'elite') document.getElementById('valEliteDed').value = val;
     if (type === 'wise') document.getElementById('valWiseDed').value = val;
+    recalcCustomCost(document.getElementById('case-total-input').value);
     updateValPremiums();
   }
 
@@ -1083,7 +1062,7 @@
 
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V676_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V681_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -1096,7 +1075,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V676_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V681_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
