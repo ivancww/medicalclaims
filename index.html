@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.7.1 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.7.2 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -83,6 +83,11 @@
   
   .info-quote-box { background: #fffdf5; border-left: 4px solid #f39c12; border-radius: 8px; padding: 14px; margin: 14px 0; font-size: 14px; line-height: 1.6; color: #78350f; }
   .danger-alert-box { background: var(--danger-light); border-left: 4px solid var(--danger); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
+  .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
+  
+  .bullet-list { margin: 12px 0; padding-left: 0; list-style: none; }
+  .bullet-list li { font-size: 14px; color: #334155; line-height: 1.8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .bullet-list li::before { content: "✓"; color: #059669; font-weight: 900; font-size: 16px; }
   
   .stat-grid-box { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin: 15px 0; }
   .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
@@ -153,15 +158,17 @@
     background: var(--primary); color: #fff; border-color: var(--primary);
   }
   
-  .promo-box {
-    background: #fffcf5; border: 1.5px solid #fde68a; border-radius: 10px; padding: 14px; margin-top: 14px; font-size: 13px; line-height: 1.6;
+  .promo-toggle-box {
+    background: #fffcf5; border: 1.5px solid #fde68a; border-radius: 10px; padding: 14px; margin-top: 14px; cursor: pointer; text-align: center; font-size: 13.5px; font-weight: bold; color: #92400e;
+  }
+  .promo-content-panel {
+    display: none; background: #fffdf9; border: 1px dashed #fde68a; border-radius: 10px; padding: 14px; margin-top: 8px; font-size: 13px; line-height: 1.6;
   }
 
   .cross-sell-alert {
     background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700;
   }
 
-  /* 管理員後台 Modal */
   #adminModal {
     display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(15, 23, 42, 0.7); z-index: 9999999; justify-content: center; align-items: center; padding: 16px;
@@ -190,7 +197,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminPanel()">v6.7.1</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminPanel()">v6.7.2</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -233,7 +240,7 @@
    <div class="stat-grid-box">
      <div class="stat-row"><span>假設預計醫療費用：</span><strong id="m3-cost-text">HK$ 200,000</strong></div>
      <div class="stat-row" id="m3-comp-row"><span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span><strong style="color:#059669;" id="m3-comp-text">HK$ 80,000</strong></div>
-     <div class="stat-row" id="m3-pers-row" style="display:none;"><span>第二層（現有個人醫保自付額）：</span><strong style="color:#0056b3;" id="m3-pers-text">HK$ 20,000</strong></div>
+     <div class="stat-row" id="m3-pers-row" style="display:none;"><span id="m3-pers-label">第二層（個人醫保）：</span><strong style="color:#0056b3;" id="m3-pers-text">HK$ 0</strong></div>
    </div>
    <div class="info-quote-box" id="m3-quote-box" style="font-size:14.5px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
      🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
@@ -266,6 +273,7 @@
    <div class="stat-grid-box">
      <div class="stat-row"><span>預計醫療開支：</span><span id="m5-cost-val">HK$ 200,000</span></div>
      <div class="stat-row" id="m5-comp-row"><span>第一層公司醫保（預計賠付）：</span><span style="color:#059669;" id="m5-comp-val">- HK$ 80,000</span></div>
+     <div class="stat-row" id="m5-pers-row" style="display:none;"><span>第二層個人醫保（預計賠付）：</span><span style="color:#059669;" id="m5-pers-val">- HK$ 0</span></div>
      <div class="stat-row total"><span style="color:var(--danger);">自身需承擔自付缺口：</span><span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 120,000</span></div>
    </div>
    <div class="info-quote-box" id="m5-quote-box" style="font-size:15px; font-weight:800; color:var(--primary); text-align:center;">
@@ -288,11 +296,20 @@
        <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVis('flexi')">⚠️ 靈活</button>
      </div>
    </div>
+
+   <!-- 產品亮點綠色框 (已修復) -->
+   <div class="success-box">
+     <ul class="bullet-list" id="prod-bullet-list">
+       <li>終身 $6,000 萬高額醫療保障，實報實銷</li>
+       <li>自帶半私家房級別，無需指定網絡醫院限制</li>
+       <li>特設自付額完美銜接現有保障，槓桿最高</li>
+     </ul>
+   </div>
    
    <div class="limit-banner">
      <div class="limit-badge elite plan-col-elite" id="banner-elite">👑 尊顯：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
      <div class="limit-badge wise plan-col-wise" id="banner-wise">🛡️ 睿選：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
-     <div class="limit-badge flexi plan-col-flexi" id="banner-flexi">⚠️ 靈活：細項分項嚴重受限 ❌</div>
+     <div class="limit-badge flexi plan-col-flexi" id="banner-flexi">⚠️ 靈活：受細項設有索償上限 ❌</div>
    </div>
    
    <div class="settings-panel">
@@ -391,11 +408,11 @@
        <div style="font-size:14px; font-weight:800;">☀️ 日間手術（例如：腸胃鏡連瘜肉切除）</div>
        <div style="font-size:12px; color:#666; margin-top:2px;">常見日間微創檢查，檢視門診免住院賠償。</div>
      </div>
-     <div class="scenario-tab-btn selected" id="scTab-inpatient" onclick="selectCaseCategory('inpatient')">
+     <div class="scenario-tab-btn" id="scTab-inpatient" onclick="selectCaseCategory('inpatient')">
        <div style="font-size:14px; font-weight:800;">🏥 住院手術（例如：子宮肌瘤引致尿滯留）</div>
        <div style="font-size:12px; color:#666; margin-top:2px;">大型私院手術，檢視高額支架與手術自付差額。</div>
      </div>
-     <div class="scenario-tab-btn" id="scTab-critical" onclick="selectCaseCategory('critical')">
+     <div class="scenario-tab-btn selected" id="scTab-critical" onclick="selectCaseCategory('critical')">
        <div style="font-size:14px; font-weight:800;">🎗️ 重大疾病手術及用藥（例如：早期乳癌切除連標靶治療）</div>
        <div style="font-size:12px; color:#666; margin-top:2px;">包含單次腫瘤切除及後續昂貴標靶、化療非手術長遠開支。</div>
      </div>
@@ -540,14 +557,31 @@
      <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
    </div>
 
-   <!-- Health Protection 帶來的二次切入銷售提醒框 -->
+   <!-- 09 頁二次切入銷售提醒 -->
    <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
      ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
      <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
    </div>
 
-   <div class="promo-box" style="text-align:center; cursor:pointer;" onclick="alert('最新推廣優惠已套用！')">
+   <!-- 可展開/收合之專屬優惠計算器 (非 Alert) -->
+   <div class="promo-toggle-box" onclick="togglePromoPanel()">
      🎁 <strong>點擊展開：專屬保費優惠與回贈試算 ▼</strong>
+   </div>
+   <div class="promo-content-panel" id="promoPanel">
+     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:8px;">
+       <div>
+         <label style="font-size:11.5px; font-weight:bold;">手動輸入首年推廣折扣 (%)：</label>
+         <input type="number" id="promoDiscountRate" value="10" min="0" max="100" oninput="calcPromoNet()">
+       </div>
+       <div>
+         <label style="font-size:11.5px; font-weight:bold;">首年保費回贈金額 (HK$)：</label>
+         <input type="number" id="promoRebateVal" value="0" min="0" oninput="calcPromoNet()">
+       </div>
+     </div>
+     <div style="background:#fff; border:1px solid #fde68a; padding:10px; border-radius:8px; text-align:center;">
+       <span style="font-size:12px; color:#666;">折實後首年實際投入：</span>
+       <strong style="color:#059669; font-size:18px; display:block; margin-top:2px;" id="promoNetPrice">HK$ --</strong>
+     </div>
    </div>
 
    <div class="nav-btn-group">
@@ -584,13 +618,18 @@
     companyRate: 80,
     companyPay: 80000,
     hasPersonal: false,
+    persType: 'full',
     personalDed: 20000,
+    persLimit: 80000,
+    persRate: 80,
+    personalPay: 0,
     finalGap: 120000,
     alertMsg: '',
     premMode: 'annual',
     selectedFinalPlan: 'wise',
     selectedFinalPrice: '--',
-    currentCaseCat: 'inpatient'
+    selectedRawAnnualNum: 0,
+    currentCaseCat: 'critical'
   };
 
   var db = null;
@@ -602,7 +641,10 @@
     if (p.get('companyLimit')) appState.companyLimit = Number(p.get('companyLimit')) || 100000;
     if (p.get('companyRate')) appState.companyRate = Number(p.get('companyRate')) || 80;
     if (p.get('hasPersonal')) appState.hasPersonal = p.get('hasPersonal') === 'yes';
+    if (p.get('persType')) appState.persType = p.get('persType');
     if (p.get('deductible')) appState.personalDed = Number(p.get('deductible')) || 20000;
+    if (p.get('persLimit')) appState.persLimit = Number(p.get('persLimit')) || 80000;
+    if (p.get('persRate')) appState.persRate = Number(p.get('persRate')) || 80;
     if (p.get('alertMsg')) appState.alertMsg = p.get('alertMsg');
     
     var urlRole = p.get('role');
@@ -613,12 +655,26 @@
       appState.role = 'adult';
     }
 
+    // 計算第一層與第二層賠償
+    var cost = appState.cost;
+    var compPay = 0;
     if (appState.hasCompany && appState.role === 'adult') {
-      appState.companyPay = Math.min(appState.cost, appState.companyLimit) * (appState.companyRate / 100);
-    } else {
-      appState.companyPay = 0;
+      compPay = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
     }
-    appState.finalGap = Math.max(0, appState.cost - appState.companyPay);
+    appState.companyPay = compPay;
+
+    var remain = Math.max(0, cost - compPay);
+    var persPay = 0;
+    if (appState.hasPersonal) {
+      if (appState.persType === 'full') {
+        persPay = Math.max(0, cost - appState.personalDed);
+        persPay = Math.min(persPay, remain);
+      } else {
+        persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
+      }
+    }
+    appState.personalPay = persPay;
+    appState.finalGap = Math.max(0, cost - compPay - persPay);
   }
 
   function applyRoleContent() {
@@ -669,10 +725,17 @@
       if (db.config) {
         document.getElementById('banner-elite').innerText = `👑 尊顯：${db.config[isChild ? '兒童尊顯額度' : '成人尊顯額度'] || '每年 $1,200 萬'}`;
         document.getElementById('banner-wise').innerText = `🛡️ 睿選：${db.config[isChild ? '兒童睿選額度' : '成人睿選額度'] || '每年 $1,200 萬'}`;
-        document.getElementById('banner-flexi').innerText = db.config[isChild ? '兒童靈活額度' : '成人靈活額度'] || '⚠️ 靈活：細項受限';
+        document.getElementById('banner-flexi').innerText = db.config[isChild ? '兒童靈活額度' : '成人靈活額度'] || '⚠️ 靈活：受細項設有索償上限 ❌';
+      }
+      if (db.highlights) {
+        var hlList = db.highlights.filter(h => h.role === r).sort((a,b)=>a.order-b.order);
+        var hlHtml = '';
+        hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
+        document.getElementById('prod-bullet-list').innerHTML = hlHtml;
       }
     }
 
+    // 03 & 05 數據更新
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (isChild) {
       document.getElementById('m3-comp-row').style.display = 'none';
@@ -684,14 +747,28 @@
       document.getElementById('m5-comp-val').innerText = '- HK$ ' + Math.round(appState.companyPay).toLocaleString();
     }
     
+    // 個人醫保動態顯示
     if (appState.hasPersonal) {
       document.getElementById('m3-pers-row').style.display = 'flex';
-      document.getElementById('m3-pers-text').innerText = 'HK$ ' + appState.personalDed.toLocaleString();
+      document.getElementById('m5-pers-row').style.display = 'flex';
+      if (appState.persType === 'trad') {
+        document.getElementById('m3-pers-label').innerText = '第二層（傳統醫保預計賠償）：';
+        document.getElementById('m3-pers-text').innerText = 'HK$ ' + Math.round(appState.personalPay).toLocaleString();
+        document.getElementById('m5-pers-val').innerText = '- HK$ ' + Math.round(appState.personalPay).toLocaleString();
+      } else {
+        document.getElementById('m3-pers-label').innerText = '第二層（高端醫保自付額）：';
+        document.getElementById('m3-pers-text').innerText = 'HK$ ' + appState.personalDed.toLocaleString();
+        document.getElementById('m5-pers-val').innerText = '- HK$ ' + Math.round(appState.personalPay).toLocaleString();
+      }
+    } else {
+      document.getElementById('m3-pers-row').style.display = 'none';
+      document.getElementById('m5-pers-row').style.display = 'none';
     }
 
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
     document.getElementById('m5-gap-val').innerText = 'HK$ ' + Math.round(appState.finalGap).toLocaleString();
 
+    // 09 頁二次切入銷售提醒
     if (appState.alertMsg) {
       document.getElementById('crossSellBox').style.display = 'block';
       document.getElementById('crossSellMsg').innerText = appState.alertMsg;
@@ -724,9 +801,9 @@
       badge.style.background = '#dc2626';
       badge.innerText = '⚠️ 條件未符（降為普通房級別）';
       wH.innerText = '睿選 (降為普通房)';
-      wc1.innerHTML = '⚠️ 受限於普通房分項';
-      wc2.innerHTML = '⚠️ 每次 $600';
-      wc3.innerHTML = '❌ 不適用 (已是普通房)';
+      wc1.innerHTML = '<strong>⚠️ 受限於普通房分項</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span>';
+      wc2.innerHTML = '<strong>⚠️ 每次 $600</strong><br><span style="font-size:10px; color:#666;">(全年15次)</span>';
+      wc3.innerHTML = '<strong>❌ 不適用</strong><br><span style="font-size:10px; color:#666;">(已是普通房)</span>';
     }
   }
 
@@ -823,6 +900,7 @@
       appState.selectedFinalPrice = document.getElementById('valPriceFlexi').innerText;
     }
     document.getElementById('sumPrice').innerText = appState.selectedFinalPrice;
+    calcPromoNet();
   }
 
   function updateValPremiums() {
@@ -836,12 +914,16 @@
     var isMonthly = appState.premMode === 'monthly';
 
     function calcP(raw) {
-      if (!raw || isNaN(raw)) return '--';
+      if (!raw || isNaN(raw)) return { str: '--', rawNum: 0 };
       var p = Number(raw);
       if (isVitality) p = p * 0.9;
       if (isTax) p = p - Math.min(8000, p) * 0.17;
+      var annualVal = Math.round(p);
       if (isMonthly) p = (p * 1.06) / 12;
-      return 'HK$ ' + Math.round(p).toLocaleString() + (isMonthly ? ' /月' : ' /年');
+      return {
+        str: 'HK$ ' + Math.round(p).toLocaleString() + (isMonthly ? ' /月' : ' /年'),
+        rawNum: annualVal
+      };
     }
 
     var pElite = (db.premiumTables[`尊顯${eliteDed}自付額`] && db.premiumTables[`尊顯${eliteDed}自付額`][age]);
@@ -849,11 +931,33 @@
     var flexiKey = gender === 'female' ? '女靈活計劃' : '男靈活計劃';
     var pFlexi = (db.premiumTables[flexiKey] && db.premiumTables[flexiKey][age]);
 
-    document.getElementById('valPriceElite').innerText = calcP(pElite);
-    document.getElementById('valPriceWise').innerText = calcP(pWise);
-    document.getElementById('valPriceFlexi').innerText = calcP(pFlexi);
+    var resE = calcP(pElite);
+    var resW = calcP(pWise);
+    var resF = calcP(pFlexi);
+
+    document.getElementById('valPriceElite').innerText = resE.str;
+    document.getElementById('valPriceWise').innerText = resW.str;
+    document.getElementById('valPriceFlexi').innerText = resF.str;
+
+    if (appState.selectedFinalPlan === 'elite') appState.selectedRawAnnualNum = resE.rawNum;
+    else if (appState.selectedFinalPlan === 'wise') appState.selectedRawAnnualNum = resW.rawNum;
+    else appState.selectedRawAnnualNum = resF.rawNum;
 
     selectFinalPlan(appState.selectedFinalPlan);
+  }
+
+  function togglePromoPanel() {
+    var p = document.getElementById('promoPanel');
+    p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+    calcPromoNet();
+  }
+
+  function calcPromoNet() {
+    var discRate = Number(document.getElementById('promoDiscountRate').value) || 0;
+    var rebate = Number(document.getElementById('promoRebateVal').value) || 0;
+    var base = appState.selectedRawAnnualNum || 5528;
+    var net = base * (1 - discRate / 100) - rebate;
+    document.getElementById('promoNetPrice').innerText = 'HK$ ' + Math.max(0, Math.round(net)).toLocaleString() + ' (首年投入)';
   }
 
   function togglePlanVis(plan) {
@@ -920,12 +1024,12 @@
       db.config[inp.dataset.adminConfig] = inp.value;
     });
 
-    var curVer = String(db.config["資料版本"] || "6.7.1").split('.');
+    var curVer = String(db.config["資料版本"] || "6.7.2").split('.');
     if (curVer.length === 3) {
       curVer[2] = Number(curVer[2]) + 1;
       db.config["資料版本"] = curVer.join('.');
     } else {
-      db.config["資料版本"] = "6.7.2";
+      db.config["資料版本"] = "6.7.3";
     }
 
     document.querySelectorAll('[data-admin-page-title]').forEach(inp => {
@@ -944,7 +1048,7 @@
     .then(res => res.json())
     .then(res => {
       alert("✅ 成功同步至 Google Sheet！最新版本號：" + db.config["資料版本"]);
-      localStorage.setItem('AVA_MED_V671_CACHE', JSON.stringify(db));
+      localStorage.setItem('AVA_MED_V672_CACHE', JSON.stringify(db));
       document.getElementById('appVersion').innerText = 'v' + db.config["資料版本"];
       closeAdminPanel();
       applyRoleContent();
@@ -960,7 +1064,7 @@
 
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V671_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V672_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -973,7 +1077,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V671_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V672_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
