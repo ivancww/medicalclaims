@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v6.8.7 | AVA專屬</title>
+  <title>醫療保障實況對比 v6.8.8 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta name="Expires" content="0">
   <meta name="theme-color" content="#1a3a6e">
   
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
   
@@ -135,6 +136,7 @@
     .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
     .oop-mini-val { font-size: 19px; font-weight: 900; margin-top: 4px; }
     
+    /* 5x5 預覽網格 */
     .files-gallery-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
     .gallery-thumb {
       width: 100%; aspect-ratio: 1/1; border-radius: 6px; object-fit: cover; border: 1px solid var(--border);
@@ -184,7 +186,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.7</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.8</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -198,11 +200,7 @@
     <span class="stage-tag" id="m1-tag">01 ｜ 關注／重視</span>
     <h2 class="stage-title" id="m1-title">當需要醫療時，你最重視的是甚麼？</h2>
     <p class="stage-desc" id="m1-desc">確認你真正的價值取向，建立本次檢視的方向：</p>
-    <div class="choice-list">
-      <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">🏥 可以即時選擇合適嘅醫療</span><span class="c-desc">享有治療自主權，不希望因費用而先作取捨。</span></button>
-      <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">🛡️ 唔希望醫療費影響家庭財務</span><span class="c-desc">重視醫療發生後的家庭開支與儲蓄承托。</span></button>
-      <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">⚖️ 兩樣都重視</span><span class="c-desc">既想保留醫療選擇，也想保留家庭財務安全。</span></button>
-    </div>
+    <div class="choice-list" id="m1-choice-list"></div>
     <div class="nav-btn-group"><button type="button" class="btn-primary" onclick="goToStage('m2')">下一步 →</button></div>
   </div>
 
@@ -211,10 +209,7 @@
     <span class="stage-tag" id="m2-tag">02 ｜ 想像一下情境</span>
     <h2 class="stage-title" id="m2-title">如果有一日，需要即時接受治療……</h2>
     <p class="stage-desc" id="m2-desc">用一個非常簡單嘅生活情境，你希望自己可以：</p>
-    <div class="choice-list">
-      <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">A ｜ 按醫療需要作選擇</span><span class="c-desc">以醫生專業建議與最好療效為首要考量。</span></button>
-      <button type="button" class="choice-btn" onclick="selectBtn(this)"><span class="c-title">B ｜ 先考慮費用，再決定醫療選擇</span><span class="c-desc">需先計算自付差額與荷包負擔，再決定在哪裡治療。</span></button>
-    </div>
+    <div class="choice-list" id="m2-choice-list"></div>
     <div class="info-quote-box" id="m2-quote-box" style="margin-top: 15px;">💭 <strong>如果係你，你會比較希望係 A 定 B？</strong></div>
     <div class="nav-btn-group">
       <button type="button" class="btn-secondary" onclick="goToStage('m1')">← 返回</button>
@@ -317,12 +312,11 @@
     </div>
   </div>
 
-  <!-- ==================== 07 情境案例 (自由輸入 + 靈活上限25萬) ==================== -->
+  <!-- ==================== 07 情境案例 ==================== -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">07 ｜ 情境案例 ｜ 實況推演</span>
     <h2 class="stage-title">常見醫療開支壓力測試</h2>
     
-    <!-- 三大情境分類 Tab -->
     <div class="scenario-tab-bar">
       <div class="sc-tab-btn selected" id="scTab-day" onclick="selectScenarioCategory('日間手術')">🩺 日間手術</div>
       <div class="sc-tab-btn" id="scTab-inpatient" onclick="selectScenarioCategory('住院治療')">🏥 住院治療</div>
@@ -335,7 +329,6 @@
         <select id="case-select-dropdown" onchange="renderSelectedCase(this.value)" style="flex:1; background:#fff;"></select>
         <button type="button" id="btnToggleFiles" onclick="toggleFilesView()" style="display:none; padding:6px 12px; font-size:12px; font-weight:bold; border-radius:8px; border:1.5px solid var(--primary); background:#fff; color:var(--primary); cursor:pointer; white-space:nowrap;">📎 案例文件 (<span id="filesCount">0</span>)</button>
       </div>
-      <!-- 5x5 圖片/PDF 網格預覽 -->
       <div id="caseFilesGrid" class="files-gallery-grid" style="display:none;"></div>
     </div>
 
@@ -350,7 +343,6 @@
         <input type="text" id="case-total-input" value="HK$ 174,397" oninput="handleManualCostInput(this.value)" style="font-size:17px; font-weight:800; color:#1a3a6e;">
       </div>
 
-      <!-- 紫圈：純自付金額呈現 (靈活計劃按 25 萬上限及 85% 索償率計算) -->
       <div class="oop-row-grid">
         <div class="oop-mini-card elite plan-col-elite">
           <div style="font-size:11px; font-weight:bold;">👑 尊顯 客人自付</div>
@@ -516,7 +508,7 @@
   </div>
 </div>
 
-<!-- ==================== 1:1 粉紅虛線鏡像後台管理 (含上載檔案按鈕) ==================== -->
+<!-- ==================== 1:1 粉紅虛線鏡像後台管理系統 ==================== -->
 <div id="adminModal">
   <div class="admin-card">
     <div class="admin-header">
@@ -524,13 +516,13 @@
       <button type="button" onclick="closeAdminModal()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
     </div>
     <div class="admin-nav-tabs">
-      <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">01-03 頁面鏡像</button>
+      <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">01-03 題目與選項</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案鏡像</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與檔案上載</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
     </div>
     <div class="admin-body">
-      <!-- 1. 01-03 頁面 1:1 鏡像 -->
+      <!-- 1. 01-03 頁面與選項鏡像 -->
       <div id="admTab-p0103" class="adm-section-panel">
         <div id="adminP0103Mirror"></div>
       </div>
@@ -546,7 +538,7 @@
         </div>
       </div>
 
-      <!-- 3. 07 索償案例管理 (含檔案上載按鈕與即時預覽) -->
+      <!-- 3. 07 索償案例管理 (含檔案上載按鈕) -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (支援相片/PDF 上載，最多 10 個)</strong>
@@ -585,19 +577,43 @@
     planVis: { elite: true, wise: true, flexi: true }
   };
   
-  var db = null;
+  // 本地預設數據（秒開即用，無需等待雲端）
+  var DEFAULT_FALLBACK_DB = {
+    pages: [
+      { pageId: "m1_adult", role: "adult", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：" },
+      { pageId: "m2_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：" },
+      { pageId: "m5_adult", role: "adult", stepOrder: 3, tagName: "03 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "" },
+      { pageId: "m1_child", role: "child", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當孩子需要醫療時，你最重視的是甚麼？", subtitle: "為孩子建立黃金治療與最佳資源：" },
+      { pageId: "m2_child", role: "child", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果孩子急病需即時接受治療……", subtitle: "在關鍵治療時刻，你希望如何作決定：" },
+      { pageId: "m5_child", role: "child", stepOrder: 3, tagName: "03 ｜ 缺口 ➔ 解決方案", title: "兒童醫療全數保障總結", subtitle: "" }
+    ],
+    options: [
+      { pageId: "m1_adult", optionKey: "optA", icon: "🏥", title: "可以即時選擇合適嘅醫療", desc: "享有治療自主權，不希望因費用而先作取捨。", order: 1 },
+      { pageId: "m1_adult", optionKey: "optB", icon: "🛡️", title: "唔希望醫療費影響家庭財務", desc: "重視醫療發生後的家庭開支與儲蓄承托。", order: 2 },
+      { pageId: "m1_adult", optionKey: "optBoth", icon: "⚖️", title: "兩樣都重視", desc: "既想保留醫療選擇，也想保留家庭財務安全。", order: 3 },
+      { pageId: "m2_adult", optionKey: "A", icon: "🏥", title: "A ｜ 按醫療需要作選擇", desc: "以醫生專業建議與最好療效為首要考量。", order: 1 },
+      { pageId: "m2_adult", optionKey: "B", icon: "💰", title: "B ｜ 先考慮費用，再決定醫療選擇", desc: "需先計算自付差額與荷包負擔，再決定在哪裡治療。", order: 2 },
+      { pageId: "m1_child", optionKey: "optA", icon: "🏥", title: "把握黃金治療期，直接選擇頂尖醫療資源", desc: "不願孩子因排期等候而錯失最佳治療黃金期。", order: 1 },
+      { pageId: "m1_child", optionKey: "optB", icon: "🛡️", title: "確保醫療開支不影響家庭生活與儲備", desc: "避免突如其來的龐大自費費用動用家庭積蓄。", order: 2 },
+      { pageId: "m1_child", optionKey: "optBoth", icon: "⚖️", title: "頂尖醫療自主 + 家庭財務雙重守護", desc: "兩者兼備，給孩子最好治療同時維持家庭生活。", order: 3 },
+      { pageId: "m2_child", optionKey: "A", icon: "✨", title: "A ｜ 私家即時入住，用最好藥物與設備", desc: "免除公立輪候等候，享有最即時的私家獨立醫療。", order: 1 },
+      { pageId: "m2_child", optionKey: "B", icon: "⏳", title: "B ｜ 公立醫院排期，按負擔能力決定", desc: "依循公立輪候機制，需承擔排期時間與病房擠迫風險。", order: 2 }
+    ],
+    claimCases: [
+      { category: "日間手術", caseName: "(網絡) 腸胃鏡檢查", totalCost: 17714, files: [] },
+      { category: "住院治療", caseName: "子宮肌瘤引起滯留", totalCost: 174397, files: [] },
+      { category: "癌症治療", caseName: "急性視網膜脫落 / 標靶治療", totalCost: 275073, files: [] }
+    ]
+  };
 
-  var DEFAULT_CASES = [
-    { category: "日間手術", caseName: "(網絡) 腸胃鏡檢查", totalCost: 17714, files: [] },
-    { category: "住院治療", caseName: "子宮肌瘤引起滯留", totalCost: 174397, files: [] },
-    { category: "癌症治療", caseName: "急性視網膜脫落 / 標靶治療", totalCost: 275073, files: [] }
-  ];
+  var db = DEFAULT_FALLBACK_DB;
 
   function parseSafeNum(val) {
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
 
+  // 1. 初始化參數（首要判定 role）
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
@@ -624,6 +640,7 @@
     appState.companyPay = compPay;
   }
 
+  // 2. 渲染對應角色模式內容（支援選項動態生成）
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
@@ -641,6 +658,47 @@
       document.getElementById('m5-tag').innerText = "03 ｜ 缺口 ➔ 解決方案";
     }
 
+    // 01 & 02 頁面選項動態渲染
+    var r = appState.role;
+    var p1Id = `m1_${r}`;
+    var p2Id = `m2_${r}`;
+
+    if (db.pages) {
+      var p1 = db.pages.find(p => p.pageId === p1Id);
+      if (p1) { document.getElementById('m1-title').innerText = p1.title; document.getElementById('m1-desc').innerText = p1.subtitle; }
+      var p2 = db.pages.find(p => p.pageId === p2Id);
+      if (p2) { document.getElementById('m2-title').innerText = p2.title; document.getElementById('m2-desc').innerText = p2.subtitle; }
+      var p5 = db.pages.find(p => p.pageId === `m5_${r}`);
+      if (p5) { document.getElementById('m5-title').innerText = p5.title; }
+    }
+
+    if (db.options) {
+      // 01 選項
+      var opts1 = db.options.filter(o => o.pageId === p1Id).sort((a,b)=>a.order-b.order);
+      var html1 = '';
+      opts1.forEach(o => {
+        html1 += `
+          <button type="button" class="choice-btn" onclick="selectBtn(this)">
+            <span class="c-title">${o.icon ? o.icon+' ' : ''}${o.title}</span>
+            <span class="c-desc">${o.desc || ''}</span>
+          </button>`;
+      });
+      if (html1) document.getElementById('m1-choice-list').innerHTML = html1;
+
+      // 02 選項
+      var opts2 = db.options.filter(o => o.pageId === p2Id).sort((a,b)=>a.order-b.order);
+      var html2 = '';
+      opts2.forEach(o => {
+        html2 += `
+          <button type="button" class="choice-btn" onclick="selectBtn(this)">
+            <span class="c-title">${o.icon ? o.icon+' ' : ''}${o.title}</span>
+            <span class="c-desc">${o.desc || ''}</span>
+          </button>`;
+      });
+      if (html2) document.getElementById('m2-choice-list').innerHTML = html2;
+    }
+
+    // 03 缺口
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (appState.hasCompany && appState.companyPay > 0 && !isChild) {
       document.getElementById('m5-comp-row').style.display = 'flex';
@@ -651,33 +709,6 @@
       document.getElementById('m5-company-thought-box').style.display = 'none';
     }
     document.getElementById('m5-gap-val').innerText = 'HK$ ' + Math.max(0, appState.cost - appState.companyPay).toLocaleString();
-
-    if (db && db.pages) {
-      var r = appState.role;
-      var p1 = db.pages.find(p => p.pageId === `m1_${r}`);
-      if (p1) { document.getElementById('m1-title').innerText = p1.title; document.getElementById('m1-desc').innerText = p1.subtitle; }
-      var p2 = db.pages.find(p => p.pageId === `m2_${r}`);
-      if (p2) { document.getElementById('m2-title').innerText = p2.title; document.getElementById('m2-desc').innerText = p2.subtitle; }
-      var p5 = db.pages.find(p => p.pageId === `m5_${r}`);
-      if (p5) { document.getElementById('m5-title').innerText = p5.title; }
-      
-      if (db.config) {
-        document.getElementById('banner-elite').innerText = `👑 尊顯：${db.config[isChild ? '兒童尊顯額度' : '成人尊顯額度'] || '每年 $1,200 萬'}`;
-        document.getElementById('banner-wise').innerText = `🛡️ 睿選：${db.config[isChild ? '兒童睿選額度' : '成人睿選額度'] || '每年 $1,200 萬'}`;
-        document.getElementById('banner-flexi').innerText = db.config[isChild ? '兒童靈活額度' : '成人靈活額度'] || '⚠️ 靈活：受細項設有索償上限 ❌';
-      }
-      if (db.highlights) {
-        var hlList = db.highlights.filter(h => h.role === r).sort((a,b)=>a.order-b.order);
-        var hlHtml = '';
-        hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
-        document.getElementById('prod-bullet-list').innerHTML = hlHtml;
-      }
-    }
-
-    if (appState.alertMsg) {
-      document.getElementById('crossSellBox').style.display = 'block';
-      document.getElementById('crossSellMsg').innerText = appState.alertMsg;
-    }
 
     renderPlanChecklist();
     selectScenarioCategory('日間手術');
@@ -745,9 +776,9 @@
     if (cat === '住院治療') document.getElementById('scTab-inpatient').classList.add('selected');
     if (cat === '癌症治療') document.getElementById('scTab-cancer').classList.add('selected');
 
-    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_CASES;
+    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_FALLBACK_DB.claimCases;
     var filtered = cList.filter(c => c.category === cat);
-    if (filtered.length === 0) filtered = DEFAULT_CASES.filter(c => c.category === cat);
+    if (filtered.length === 0) filtered = DEFAULT_FALLBACK_DB.claimCases.filter(c => c.category === cat);
 
     var drop = document.getElementById('case-select-dropdown');
     drop.innerHTML = '';
@@ -758,9 +789,9 @@
   }
 
   function renderSelectedCase(idx) {
-    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_CASES;
+    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_FALLBACK_DB.claimCases;
     var filtered = cList.filter(c => c.category === appState.currentCaseCat);
-    if (filtered.length === 0) filtered = DEFAULT_CASES.filter(c => c.category === appState.currentCaseCat);
+    if (filtered.length === 0) filtered = DEFAULT_FALLBACK_DB.claimCases.filter(c => c.category === appState.currentCaseCat);
     var c = filtered[Number(idx)] || filtered[0];
 
     document.getElementById('case-title-display').innerText = c.caseName;
@@ -794,13 +825,12 @@
     gallery.style.display = (gallery.style.display === 'grid') ? 'none' : 'grid';
   }
 
-  // 自由輸入事件
   function handleManualCostInput(val) {
     var num = parseSafeNum(val);
     recalcCustomCost(num);
   }
 
-  // 07 頁精確自付計算 (靈活計劃以上限 25 萬計算)
+  // 07 頁精確自付計算 (靈活計劃上限 25 萬計算)
   function recalcCustomCost(val) {
     var num = parseSafeNum(val);
     if (isNaN(num)) num = 0;
@@ -811,7 +841,7 @@
     var eliteOOP = Math.min(num, eliteDed);
     var wiseOOP = Math.min(num, wiseDed);
 
-    // 靈活計劃：上限 25 萬，85% 索償率，餘額為客人自付額
+    // 靈活計劃：上限 25 萬，85% 索償率，餘額為自付額
     var flexiBase = Math.min(num, 250000);
     var flexiClaimable = flexiBase * 0.85;
     var flexiOOP = Math.round(num - flexiClaimable);
@@ -864,7 +894,12 @@
   }
 
   function updateValPremiums() {
-    if (!db || !db.premiumTables) return;
+    if (!db || !db.premiumTables) {
+      document.getElementById('valPriceElite').innerText = "HK$ 6,850 /年";
+      document.getElementById('valPriceWise').innerText = "HK$ 5,528 /年";
+      document.getElementById('valPriceFlexi').innerText = "HK$ 3,890 /年";
+      return;
+    }
     var age = Number(document.getElementById('valAge').value) || 35;
     var gender = document.getElementById('valGender').value;
     var eliteDed = document.getElementById('valEliteDed').value;
@@ -959,7 +994,6 @@
 
   // ==================== 1:1 粉紅虛線鏡像後台管理系統 ====================
   function openAdminModal() {
-    if (!db) { alert("雲端數據加載中..."); return; }
     renderAdminP0103Mirror();
     renderAdminP06Mirror();
     renderAdminCasesList();
@@ -976,19 +1010,38 @@
     document.getElementById('admTab-' + tabId).style.display = 'block';
   }
 
+  // 鏡像 1: 01-03 題目與選項鏡像
   function renderAdminP0103Mirror() {
     var box = document.getElementById('adminP0103Mirror');
     box.innerHTML = '';
-    (db.pages || []).forEach((p, idx) => {
+    
+    // 渲染各頁標題
+    (db.pages || []).forEach((p, pIdx) => {
+      var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b)=>a.order-b.order);
+      var optsHtml = '';
+      opts.forEach((o, oIdx) => {
+        var globalOptIdx = db.options.indexOf(o);
+        optsHtml += `
+          <div style="background:#fff; border:1px dashed var(--pink-border); border-radius:8px; padding:8px; margin-top:6px;">
+            <div style="display:flex; gap:6px;">
+              <span class="editable-mirror" contenteditable="true" data-adm-opt-icon="${globalOptIdx}" style="width:30px; text-align:center;">${o.icon || '📌'}</span>
+              <div class="editable-mirror" contenteditable="true" data-adm-opt-title="${globalOptIdx}" style="flex:1; font-weight:bold;">${o.title}</div>
+            </div>
+            <div class="editable-mirror" contenteditable="true" data-adm-opt-desc="${globalOptIdx}" style="font-size:12px; color:#666; margin-top:4px;">${o.desc}</div>
+          </div>`;
+      });
+
       box.innerHTML += `
-        <div class="stage-card" style="display:block; margin-bottom:12px; box-shadow:none; border:1px solid #cbd5e1;">
+        <div class="stage-card" style="display:block; margin-bottom:14px; box-shadow:none; border:1px solid #cbd5e1;">
           <span class="stage-tag">【${p.role === 'adult' ? '成人' : '兒童'}】${p.tagName}</span>
-          <div class="editable-mirror" contenteditable="true" data-adm-page-title="${idx}" style="font-size:18px; font-weight:800; margin-bottom:6px;">${p.title}</div>
-          <div class="editable-mirror" contenteditable="true" data-adm-page-sub="${idx}" style="font-size:13px; color:#666;">${p.subtitle}</div>
+          <div class="editable-mirror" contenteditable="true" data-adm-page-title="${pIdx}" style="font-size:17px; font-weight:800; margin-bottom:4px;">${p.title}</div>
+          <div class="editable-mirror" contenteditable="true" data-adm-page-sub="${pIdx}" style="font-size:13px; color:#666; margin-bottom:8px;">${p.subtitle}</div>
+          ${optsHtml ? `<strong style="font-size:12px; color:var(--primary);">🔘 選項內容 (點擊粉紅框修改)：</strong>${optsHtml}` : ''}
         </div>`;
     });
   }
 
+  // 鏡像 2: 06 專屬方案鏡像
   function renderAdminP06Mirror() {
     var hlBox = document.getElementById('adminMirrorHighlights');
     hlBox.innerHTML = '';
@@ -1016,7 +1069,7 @@
     tb.innerHTML = html;
   }
 
-  // 07 案例管理 (含檔案上載按鈕)
+  // 07 案例管理 (支援相片/PDF 上載)
   function renderAdminCasesList() {
     var box = document.getElementById('adminCasesList');
     box.innerHTML = '';
@@ -1035,7 +1088,7 @@
           <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px; margin-top:8px;">
             <input type="number" data-adm-case-cost="${idx}" value="${c.totalCost}" placeholder="總費用">
             <div style="display:flex; gap:6px; align-items:center;">
-              <input type="text" id="admCaseFiles_${idx}" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="相片/PDF 網址 (以分號 ; 隔開，最多10個)" style="flex:1;">
+              <input type="text" id="admCaseFiles_${idx}" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="相片/PDF 網址 (分號隔開)" style="flex:1;">
               <label style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
                 📤 上載文件
                 <input type="file" multiple accept="image/*,.pdf" style="display:none;" onchange="handleFileUpload(this, ${idx})">
@@ -1046,7 +1099,7 @@
     });
   }
 
-  // 檔案上載轉換處理 (最多 10 個)
+  // 檔案上載處理
   function handleFileUpload(input, idx) {
     var files = Array.from(input.files);
     if (!files || files.length === 0) return;
@@ -1098,23 +1151,38 @@
     btn.innerText = "⏳ 正在同步至 Google Sheet...";
     btn.disabled = true;
 
+    // 收集頁面標題
     document.querySelectorAll('[data-adm-page-title]').forEach(el => {
       var idx = Number(el.dataset.admPageTitle);
-      db.pages[idx].title = el.innerText.trim();
+      if (db.pages[idx]) db.pages[idx].title = el.innerText.trim();
     });
     document.querySelectorAll('[data-adm-page-sub]').forEach(el => {
       var idx = Number(el.dataset.admPageSub);
-      db.pages[idx].subtitle = el.innerText.trim();
+      if (db.pages[idx]) db.pages[idx].subtitle = el.innerText.trim();
     });
 
-    document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { db.highlights[idx].text = el.innerText.trim(); });
+    // 收集選項
+    document.querySelectorAll('[data-adm-opt-title]').forEach(el => {
+      var idx = Number(el.dataset.admOptTitle);
+      if (db.options[idx]) {
+        db.options[idx].title = el.innerText.trim();
+        db.options[idx].icon = document.querySelector(`[data-adm-opt-icon="${idx}"]`).innerText.trim();
+        db.options[idx].desc = document.querySelector(`[data-adm-opt-desc="${idx}"]`).innerText.trim();
+      }
+    });
+
+    // 收集 06 亮點與表格
+    document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { if (db.highlights[idx]) db.highlights[idx].text = el.innerText.trim(); });
     document.querySelectorAll('[data-adm-pi-name]').forEach((el, idx) => {
-      db.planItems[idx].name = el.innerText.trim();
-      db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elite="${idx}"]`).innerText.trim();
-      db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wise="${idx}"]`).innerText.trim();
-      db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-flexi="${idx}"]`).innerText.trim();
+      if (db.planItems[idx]) {
+        db.planItems[idx].name = el.innerText.trim();
+        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elite="${idx}"]`).innerText.trim();
+        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wise="${idx}"]`).innerText.trim();
+        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-flexi="${idx}"]`).innerText.trim();
+      }
     });
 
+    // 收集 07 案例
     var newCases = [];
     document.querySelectorAll('[data-adm-case-name]').forEach((inp, idx) => {
       var rawFiles = document.querySelector(`[data-adm-case-files="${idx}"]`).value;
@@ -1127,6 +1195,7 @@
     });
     db.claimCases = newCases;
 
+    // 收集系統設定
     document.querySelectorAll('[data-adm-config]').forEach(inp => {
       db.config[inp.dataset.admConfig] = inp.value;
     });
@@ -1145,7 +1214,11 @@
       });
   }
 
-  function syncDatabase() {
+  // 核心：即開即切換，背景非同步下載最新資料
+  function initApp() {
+    initParams();
+    applyRoleContent(); // 使用本地 Fallback 立即渲染正確角色模式，無需白等
+
     fetch(GAS_API_URL)
       .then(res => res.json())
       .then(remote => {
@@ -1153,14 +1226,15 @@
           db = remote;
           document.getElementById('sync-status-badge').innerText = '● 雲端同步完成';
           document.getElementById('sync-status-badge').classList.add('status-ok');
-          applyRoleContent();
+          applyRoleContent(); // 雲端下載完畢後靜默刷新最新內容
         }
       })
-      .catch(() => { applyRoleContent(); });
+      .catch(() => {
+        document.getElementById('sync-status-badge').innerText = '○ 離線模式';
+      });
   }
 
-  initParams();
-  syncDatabase();
+  initApp();
 </script>
 </body>
 </html>
