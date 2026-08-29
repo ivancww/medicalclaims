@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v6.8.5 | AVA專屬</title>
+  <title>醫療保障實況對比 v6.8.6 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta name="Expires" content="0">
   <meta name="theme-color" content="#1a3a6e">
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
   
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700;900&display=swap');
@@ -78,6 +81,11 @@
     .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
     .stat-row.total { border-top: 1.5px dashed var(--border); padding-top: 10px; margin-top: 10px; font-weight: 900; font-size: 16px; }
     
+    .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
+    .bullet-list { margin: 12px 0; padding-left: 0; list-style: none; }
+    .bullet-list li { font-size: 14px; color: #334155; line-height: 1.8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .bullet-list li::before { content: "✓"; color: #059669; font-weight: 900; font-size: 16px; }
+
     .limit-banner { display: flex; gap: 8px; margin-bottom: 15px; }
     @media (max-width: 599px) { .limit-banner { flex-direction: column; } }
     .limit-badge { flex: 1; padding: 10px 8px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
@@ -92,6 +100,9 @@
     .wise-setting { background-color: #f0f7ff; border: 1px solid #cce5ff; } 
     .flexi-setting { background-color: #fff5f5; border: 1px solid #ffdce0; text-align: center; } 
     .plan-setting h3 { margin-top: 0; margin-bottom: 10px; font-size: 15px; text-align: center; }
+    .elite-setting h3 { color: var(--elite-color); }
+    .wise-setting h3 { color: var(--wise-color); }
+    .flexi-setting h3 { color: var(--flexi-color); }
     
     select, input[type="text"], input[type="number"], textarea {
       width: 100%; padding: 9px; font-size: 14px; border-radius: 8px; border: 2px dashed var(--pink-border);
@@ -108,13 +119,12 @@
     .col-wise { background: #f0f7ff; color: var(--wise-color); }
     .col-flexi { background: #fff5f5; color: var(--flexi-color); border-right: none; }
     
-    /* 07 頁面三大情境切換 Tab */
     .scenario-tab-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
     .sc-tab-btn {
-      border: 1.5px dashed var(--pink-border); border-radius: 10px; padding: 10px 6px; background: #fff; cursor: pointer; text-align: center; font-size: 13px; font-weight: 800; color: #555; transition: 0.2s;
+      border: 1.5px dashed var(--pink-border); border-radius: 10px; padding: 12px 6px; background: #fff; cursor: pointer; text-align: center; font-size: 13.5px; font-weight: 800; color: #555; transition: 0.2s;
     }
     .sc-tab-btn.selected {
-      border-color: var(--primary); border-style: solid; background: #f0f7ff; color: var(--primary); box-shadow: 0 0 0 1px var(--primary);
+      border: 2px solid var(--primary); background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(26,58,110,0.15);
     }
     
     .oop-row-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
@@ -125,7 +135,6 @@
     .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
     .oop-mini-val { font-size: 19px; font-weight: 900; margin-top: 4px; }
     
-    /* 5x5 檔案/圖片預覽網格 */
     .files-gallery-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
     .gallery-thumb {
       width: 100%; aspect-ratio: 1/1; border-radius: 6px; object-fit: cover; border: 1px solid var(--border);
@@ -136,14 +145,23 @@
     .plan-select-card:hover { border-color: var(--primary); }
     .plan-select-card.selected { border-color: var(--primary); background: #f0f7ff; box-shadow: 0 0 0 1.5px var(--primary); }
     .plan-select-card input[type="radio"] { position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; cursor: pointer; }
-    
-    /* 後台管理鏡像介面 */
+    .prem-mode-btn { padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: #fff; color: #475569; }
+    .prem-mode-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .promo-toggle-box { background: #fffcf5; border: 1.5px solid #fde68a; border-radius: 10px; padding: 14px; margin-top: 14px; cursor: pointer; text-align: center; font-size: 13.5px; font-weight: bold; color: #92400e; }
+    .promo-content-panel { display: none; background: #fffdf9; border: 1.5px solid #fde68a; border-radius: 12px; padding: 16px; margin-top: 10px; }
+    .rebate-stat-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 13.5px; line-height: 1.8; }
+    .rebate-row { display: flex; justify-content: space-between; align-items: center; }
+    .rebate-total { border-top: 1.5px dashed #cbd5e1; padding-top: 8px; margin-top: 8px; font-weight: 900; font-size: 15px; color: #c0392b; }
+    .cross-sell-alert { background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
+
+    /* 後台 1:1 鏡像編輯模式 */
     #adminModal {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 12px;
     }
     .admin-card {
-      background: #f8fafc; width: 100%; max-width: 860px; max-height: 94vh; border-radius: 16px;
+      background: #eef2f5; width: 100%; max-width: 890px; max-height: 94vh; border-radius: 16px;
       display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
     .admin-header { padding: 14px 20px; background: #1a3a6e; color: #ffffff; display: flex; justify-content: space-between; align-items: center; }
@@ -151,7 +169,15 @@
     .admin-nav-btn { padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; border: none; background: #fff; cursor: pointer; color: #475569; white-space: nowrap; }
     .admin-nav-btn.active { background: #1a3a6e; color: #fff; }
     .admin-body { padding: 18px; overflow-y: auto; flex: 1; }
-    .admin-mirror-card { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 12px; }
+    
+    /* 粉紅色虛線可編輯鏡像元素 */
+    .editable-mirror {
+      border: 2px dashed #f472b6 !important; background: #fff0f5 !important;
+      border-radius: 8px; padding: 4px 8px; outline: none; transition: 0.2s;
+    }
+    .editable-mirror:focus {
+      border-color: #db2777 !important; background: #ffffff !important; box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.2);
+    }
   </style>
 </head>
 <body>
@@ -159,7 +185,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.5</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.6</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -221,7 +247,7 @@
     <div class="nav-btn-group"><button type="button" class="btn-secondary" onclick="goToStage('m2')">← 返上一頁</button></div>
   </div>
 
-  <!-- ==================== 06 專屬方案 ==================== -->
+  <!-- ==================== 06 專屬方案 (100% 完整還原) ==================== -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">06 ｜ 專屬方案</span>
@@ -251,9 +277,13 @@
         <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
         <select id="elite-deductible" onchange="syncDeductibles('elite', this.value)">
           <option value="0">HK$ 0</option>
-          <option value="16000">HK$ 16,000</option>
-          <option value="25000" selected>HK$ 25,000</option>
+          <option value="16000" selected>HK$ 16,000</option>
+          <option value="25000">HK$ 25,000</option>
         </select>
+        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #f5b041; text-align: center;">
+          <strong style="color: #b9770e; font-size:12px;">✨ 尊貴特權</strong>
+          <p style="font-size: 11px; margin: 3px 0 0 0; color: #555;">無需指定醫院<br>自帶半私家房級別服務</p>
+        </div>
       </div>
       
       <div class="plan-setting wise-setting plan-col-wise">
@@ -265,6 +295,14 @@
           <option value="18000" selected>HK$ 18,000</option>
           <option value="30000">HK$ 30,000</option>
         </select>
+        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #cce5ff;">
+          <div id="wise-status-badge" style="background:#28a745; color:#fff; font-size:11px; font-weight:bold; padding:3px 6px; border-radius:4px; text-align:center;">✓ 符合條件（享半私家）</div>
+          <div style="font-size:11px; color:#444; margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+            <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond1" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 🏥 4間指定醫院 (浸會/聖保祿/法國/仁安)</label>
+            <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond2" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 👨‍⚕️ 經「睿選網絡醫生」掛單</label>
+            <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond3" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 📝 完成「費用預先批核」</label>
+          </div>
+        </div>
       </div>
       
       <div class="plan-setting flexi-setting plan-col-flexi">
@@ -313,19 +351,19 @@
         <input type="text" id="case-total-input" value="HK$ 174,397" oninput="recalcCustomCost(this.value)" style="font-size:16px; font-weight:800;">
       </div>
 
-      <!-- 紫圈：純自付金額呈現 (靈活計劃按上限85%索償，餘額為自付) -->
+      <!-- 紫圈：純自付金額呈現 (靈活計劃自動按上限85%索償，餘額為自付) -->
       <div class="oop-row-grid">
         <div class="oop-mini-card elite plan-col-elite">
           <div style="font-size:11px; font-weight:bold;">👑 尊顯 客人自付</div>
-          <div class="oop-mini-val" id="case-oop-elite">HK$ 0</div>
+          <div class="oop-mini-val" id="case-oop-elite">HK$ 16,000</div>
         </div>
         <div class="oop-mini-card wise plan-col-wise">
           <div style="font-size:11px; font-weight:bold;">🛡️ 睿選 客人自付</div>
-          <div class="oop-mini-val" id="case-oop-wise">HK$ 0</div>
+          <div class="oop-mini-val" id="case-oop-wise">HK$ 18,000</div>
         </div>
         <div class="oop-mini-card flexi plan-col-flexi">
           <div style="font-size:11px; font-weight:bold;">⚠️ 靈活 客人自付</div>
-          <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 0</div>
+          <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 41,261</div>
         </div>
       </div>
     </div>
@@ -336,7 +374,7 @@
     </div>
   </div>
 
-  <!-- ==================== 08 保費與價值 ==================== -->
+  <!-- ==================== 08 保費與價值 (100% 完整還原) ==================== -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">08 ｜ 保費與價值 ｜ 精算預算</span>
@@ -347,6 +385,7 @@
     </div>
     
     <h2 class="stage-title">為呢個保障，實際需要付出幾多？</h2>
+    <p class="stage-desc">結合官方精算費率，並扣除折扣與稅務優惠。請點選勾選你想確認的方案：</p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
       <div>
         <label style="font-size:12px; font-weight:bold;">受保人年齡</label>
@@ -359,6 +398,29 @@
           <option value="male">👨 男</option>
         </select>
       </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+      <div>
+        <label style="font-size:12px; font-weight:bold; color:var(--elite-color);">👑 尊顯自付額</label>
+        <select id="valEliteDed" onchange="updateValPremiums()">
+          <option value="0">HK$ 0</option>
+          <option value="16000" selected>HK$ 16,000</option>
+          <option value="25000">HK$ 25,000</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px; font-weight:bold; color:var(--wise-color);">🛡️ 睿選自付額</label>
+        <select id="valWiseDed" onchange="updateValPremiums()">
+          <option value="0">HK$ 0</option>
+          <option value="8800">HK$ 8,800</option>
+          <option value="18000" selected>HK$ 18,000</option>
+          <option value="30000">HK$ 30,000</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px; font-size:13px; font-weight:600;">
+      <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="chkDiscount" onchange="updateValPremiums()" style="width:auto; margin:0;"> 參加「AIA Vitality」享保費 9 折優惠</label>
+      <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="chkTax" onchange="updateValPremiums()" style="width:auto; margin:0;"> 享受 VHIS 稅務扣減 (按 17% 稅率計算)</label>
     </div>
     <div style="display:flex; flex-direction:column; gap:10px;">
       <div class="plan-select-card plan-col-elite" id="cardSelectElite" onclick="selectFinalPlan('elite')">
@@ -385,14 +447,68 @@
     </div>
   </div>
 
-  <!-- ==================== 09 保障確認 ==================== -->
+  <!-- ==================== 09 保障確認 (100% 完整還原) ==================== -->
   <div class="stage-card" id="stage-confirm">
-    <span class="stage-tag">09 ｜ 保障確認 ｜ 方案總結</span>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span class="stage-tag">09 ｜ 保障確認 ｜ 方案總結</span>
+      <span style="font-size:11px; font-weight:bold; color:#059669; background:#d1fae5; padding:2px 8px; border-radius:10px;">✅ 雲端精算表已同步</span>
+    </div>
     <h2 class="stage-title">如果以上方案符合你的需要</h2>
+    <p class="stage-desc">以下為你專屬量身定制的醫療防線確認摘要：</p>
     <div style="border:2px solid #1e3a8a; border-radius:14px; padding:18px; line-height:2.0; font-size:14.5px; margin-bottom:14px;">
-      <div>🛡️ <strong>建議方案：</strong> <strong style="color:#0056b3;" id="sumPlanName">🛡️ 高端睿選醫療計劃</strong></div>
-      <div>💰 <strong>主要保障：</strong> <span id="sumCoverage">每年 HK$1,200 萬全數賠償</span></div>
+      <div>🎯 <strong>你希望解決：</strong> <span id="sumGoal">醫療防線缺口</span></div>
+      <div>🏥 <strong>現有第一道防線：</strong> <span id="sumFirstLine">公司團體醫保</span></div>
+      <div>🛡️ <strong>建議方案：</strong> <strong style="color:#0056b3;" id="sumPlanName">🛡️ 高端睿選醫療計劃 (半私家房)</strong></div>
+      <div>💰 <strong>主要保障：</strong> <span id="sumCoverage">每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，指定網絡)</span></div>
       <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
+    </div>
+    <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
+      ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
+      <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
+    </div>
+    <div class="promo-toggle-box" onclick="togglePromoPanel()">
+      🎁 <strong>點擊展開：專屬現金券與回贈疊加試算 ▼</strong>
+    </div>
+    <div class="promo-content-panel" id="promoPanel">
+      <div style="font-weight:800; font-size:14px; color:#b9770e; margin-bottom:10px;">🎁 專屬現金券與回贈疊加試算</div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:bold;">HK$ 200 現金券 (張)：</label>
+          <input type="number" id="coupon200" value="0" min="0" oninput="calcRebateDetails()">
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:bold;">HK$ 500 現金券 (張)：</label>
+          <input type="number" id="coupon500" value="0" min="0" oninput="calcRebateDetails()">
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:bold;">第 2 年回贈 (月數)：</label>
+          <input type="number" id="rebateM2" value="0" min="0" max="12" oninput="calcRebateDetails()">
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:bold;">第 3 年回贈 (月數)：</label>
+          <input type="number" id="rebateM3" value="0" min="0" max="12" oninput="calcRebateDetails()">
+        </div>
+      </div>
+      <div class="rebate-stat-box">
+        <div class="rebate-row">
+          <span>首年實繳保費：</span>
+          <strong id="rowFirstYearPay">HK$ --</strong>
+        </div>
+        <div class="rebate-row" id="rowRebateY2" style="display:none;">
+          <span>第 2 年回贈金額：</span>
+          <strong style="color:#059669;" id="valRebateY2">HK$ 0</strong>
+        </div>
+        <div class="rebate-row" id="rowRebateY3" style="display:none;">
+          <span>第 3 年回贈金額：</span>
+          <strong style="color:#059669;" id="valRebateY3">HK$ 0</strong>
+        </div>
+        <div class="rebate-row rebate-total">
+          <span>總共累計節省：</span>
+          <span style="color:#dc2626; font-size:18px;" id="valTotalSavings">HK$ 0</span>
+        </div>
+      </div>
     </div>
     <div class="nav-btn-group">
       <button type="button" class="btn-secondary" onclick="goToStage('premium-val')">← 返回調整預算</button>
@@ -401,52 +517,51 @@
   </div>
 </div>
 
-<!-- ==================== 1:1 前台鏡像後台管理系統 ==================== -->
+<!-- ==================== 1:1 粉紅虛線可編輯鏡像後台 ==================== -->
 <div id="adminModal">
   <div class="admin-card">
     <div class="admin-header">
-      <span style="font-weight:800; font-size:15px;">🛠️ AVA 視覺化後台鏡像系統 (雙向同步)</span>
+      <span style="font-weight:800; font-size:15px;">🛠️ AVA 視覺化後台鏡像系統 (粉紅虛線可點擊修改)</span>
       <button type="button" onclick="closeAdminModal()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
     </div>
     <div class="admin-nav-tabs">
-      <button class="admin-nav-btn active" onclick="switchAdminTab('p123')">01-03 頁面文案</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案設定</button>
+      <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">01-03 頁面鏡像</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案鏡像</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與檔案</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統與額度設定</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
     </div>
     <div class="admin-body">
-      <!-- 1. 01-03 頁面文案鏡像 -->
-      <div id="admTab-p123" class="adm-section-panel">
-        <div id="adminPagesContainer"></div>
+      <!-- 1. 01-03 頁面 1:1 鏡像 -->
+      <div id="admTab-p0103" class="adm-section-panel">
+        <div id="adminP0103Mirror"></div>
       </div>
 
-      <!-- 2. 06 專屬方案鏡像修改 -->
+      <!-- 2. 06 專屬方案 1:1 鏡像 -->
       <div id="admTab-p06" class="adm-section-panel" style="display:none;">
-        <div class="admin-mirror-card">
-          <strong style="color:var(--primary); font-size:14px;">✨ 產品亮點清單</strong>
-          <div id="adminHighlightsContainer" style="margin-top:8px;"></div>
-        </div>
-        <div class="admin-mirror-card">
-          <strong style="color:var(--primary); font-size:14px;">📋 方案細項表格內容</strong>
-          <div id="adminPlanItemsContainer" style="margin-top:8px;"></div>
+        <div class="stage-card" style="display:block; margin:0; box-shadow:none;">
+          <div class="success-box">
+            <strong style="color:#065f46; font-size:13px;">✨ 產品亮點清單 (點擊修改)：</strong>
+            <ul class="bullet-list" id="adminMirrorHighlights" style="margin-top:8px;"></ul>
+          </div>
+          <div class="checklist-grid" id="adminMirrorChecklist" style="margin-top:14px;"></div>
         </div>
       </div>
 
-      <!-- 3. 07 索償案例與檔案管理 -->
+      <!-- 3. 07 索償案例管理 (含相片/PDF 上載) -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <strong style="color:var(--primary); font-size:14px;">📑 實況案例列表 (支援 10 個相片/PDF)</strong>
-          <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:12px; cursor:pointer;">+ 新增案例</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (支援最多 10 個相片/PDF 檔案)</strong>
+          <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增案例</button>
         </div>
-        <div id="adminCasesContainer"></div>
+        <div id="adminCasesList"></div>
       </div>
 
       <!-- 4. 系統設定 -->
       <div id="admTab-pConfig" class="adm-section-panel" style="display:none;">
-        <div class="admin-mirror-card" id="adminConfigContainer"></div>
+        <div class="stage-card" style="display:block; margin:0;" id="adminConfigList"></div>
       </div>
     </div>
-    <div style="padding:12px 18px; background:#f1f5f9; display:flex; gap:10px; border-top:1px solid #e2e8f0;">
+    <div style="padding:14px 20px; background:#f1f5f9; display:flex; gap:10px; border-top:1px solid #e2e8f0;">
       <button type="button" class="btn-secondary" onclick="closeAdminModal()" style="flex:1;">取消</button>
       <button type="button" class="btn-primary" id="btnSaveAdmin" onclick="saveAdminData()" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
     </div>
@@ -465,6 +580,9 @@
     companyPay: 0,
     currentCaseCat: '日間手術',
     selectedFinalPlan: 'wise',
+    selectedFinalPrice: '--',
+    selectedRawAnnualNum: 5528,
+    premMode: 'annual',
     planVis: { elite: true, wise: true, flexi: true }
   };
   
@@ -481,6 +599,7 @@
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
 
+  // 1. 精準參數解析 (最高優先級判定兒童/成人模式)
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
@@ -489,6 +608,7 @@
     appState.hasCompany = (hasCompStr === 'yes' || hasCompStr === 'true' || hasCompStr === '有');
     appState.companyLimit = parseSafeNum(p.get('companyLimit'));
     appState.companyRate = parseSafeNum(p.get('companyRate')) || 80;
+    if (p.get('alertMsg')) appState.alertMsg = p.get('alertMsg');
 
     var urlRole = (p.get('role') || '').toLowerCase();
     var urlFocus = (p.get('focus') || '').toLowerCase();
@@ -511,7 +631,19 @@
     document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
     document.getElementById('valAge').value = isChild ? "5" : "35";
 
-    // 03 缺口總結
+    if (isChild) {
+      document.getElementById('elite-deductible').value = "0";
+      document.getElementById('wise-deductible').value = "0";
+      document.getElementById('valEliteDed').value = "0";
+      document.getElementById('valWiseDed').value = "0";
+      document.getElementById('sumFirstLine').innerText = "零保障 / 公立基本醫療";
+      document.getElementById('m5-tag').innerText = "05 ｜ 缺口 ➔ 解決方案";
+    } else {
+      document.getElementById('sumFirstLine').innerText = appState.hasCompany ? "公司團體醫保" : "個人儲備承擔";
+      document.getElementById('m5-tag').innerText = "03 ｜ 缺口 ➔ 解決方案";
+    }
+
+    // 03 頁面 (原05) 缺口總結
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (appState.hasCompany && appState.companyPay > 0 && !isChild) {
       document.getElementById('m5-comp-row').style.display = 'flex';
@@ -531,6 +663,23 @@
       if (p2) { document.getElementById('m2-title').innerText = p2.title; document.getElementById('m2-desc').innerText = p2.subtitle; }
       var p5 = db.pages.find(p => p.pageId === `m5_${r}`);
       if (p5) { document.getElementById('m5-title').innerText = p5.title; }
+      
+      if (db.config) {
+        document.getElementById('banner-elite').innerText = `👑 尊顯：${db.config[isChild ? '兒童尊顯額度' : '成人尊顯額度'] || '每年 $1,200 萬'}`;
+        document.getElementById('banner-wise').innerText = `🛡️ 睿選：${db.config[isChild ? '兒童睿選額度' : '成人睿選額度'] || '每年 $1,200 萬'}`;
+        document.getElementById('banner-flexi').innerText = db.config[isChild ? '兒童靈活額度' : '成人靈活額度'] || '⚠️ 靈活：受細項設有索償上限 ❌';
+      }
+      if (db.highlights) {
+        var hlList = db.highlights.filter(h => h.role === r).sort((a,b)=>a.order-b.order);
+        var hlHtml = '';
+        hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
+        document.getElementById('prod-bullet-list').innerHTML = hlHtml;
+      }
+    }
+
+    if (appState.alertMsg) {
+      document.getElementById('crossSellBox').style.display = 'block';
+      document.getElementById('crossSellMsg').innerText = appState.alertMsg;
     }
 
     renderPlanChecklist();
@@ -541,31 +690,57 @@
   function renderPlanChecklist() {
     var tbody = document.getElementById('checklistGridContainer');
     if (!tbody) return;
+    var isChild = appState.role === 'child';
+    var isWiseSemi = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
+    
     var items = (db && db.planItems && db.planItems.length > 0) ? db.planItems : [
       { name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "⚠️ 受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "⚠️ 上限 $848", flexiSub: "(限3日內)" },
       { name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "⚠️ 每次 $600", wiseGenSub: "(全年15次)", flexiMain: "❌ 不適用", flexiSub: "" },
-      { name: "🎗️ 癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "", flexiMain: "⚠️ 上限 $96,000", flexiSub: "" }
+      { name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "❌ 不適用", wiseGenSub: "(已是普通房)", flexiMain: "❌ 不適用", flexiSub: "" },
+      { name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "", flexiMain: "⚠️ 上限 $96,000", flexiSub: "" },
+      { name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張)", flexiMain: "❌ 不設保障", flexiSub: "", isChildOnly: true }
     ];
     var html = `
       <div class="checklist-row header-row">
         <div class="col-item">保障項目</div>
         <div class="col-elite plan-col-elite">尊顯 (左)</div>
-        <div class="col-wise plan-col-wise">睿選 (中)</div>
+        <div class="col-wise plan-col-wise" id="colWiseHeader">${isWiseSemi ? '睿選 (中)' : '睿選 (降為普通房)'}</div>
         <div class="col-flexi plan-col-flexi">靈活 (右)</div>
       </div>`;
     items.forEach(function(item) {
+      if (item.isChildOnly && !isChild) return;
+      var wMain = isWiseSemi ? item.wiseSemiMain : item.wiseGenMain;
+      var wSub = isWiseSemi ? item.wiseSemiSub : item.wiseGenSub;
       html += `
         <div class="checklist-row">
           <div class="col-item">${item.name}</div>
-          <div class="col-elite plan-col-elite"><strong>${item.eliteMain}</strong></div>
-          <div class="col-wise plan-col-wise"><strong>${item.wiseSemiMain}</strong></div>
-          <div class="col-flexi plan-col-flexi"><strong style="${item.flexiMain.includes('❌') ? 'color:var(--danger);' : ''}">${item.flexiMain}</strong></div>
+          <div class="col-elite plan-col-elite">
+            <strong>${item.eliteMain}</strong>
+            ${item.eliteSub ? `<br><span style="font-size:10px; color:#666;">${item.eliteSub}</span>` : ''}
+          </div>
+          <div class="col-wise plan-col-wise">
+            <strong>${wMain}</strong>
+            ${wSub ? `<br><span style="font-size:10px; color:#666;">${wSub}</span>` : ''}
+          </div>
+          <div class="col-flexi plan-col-flexi">
+            <strong style="${item.flexiMain.includes('❌') ? 'color:var(--danger);' : ''}">${item.flexiMain}</strong>
+            ${item.flexiSub ? `<br><span style="font-size:10px;">${item.flexiSub}</span>` : ''}
+          </div>
         </div>`;
     });
     tbody.innerHTML = html;
+    applyAllPlanVisibilities();
   }
 
-  // ==================== 07 頁三大情境切換與檔案 5x5 檢視 ====================
+  function checkWiseCond() {
+    var allChecked = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
+    var badge = document.getElementById('wise-status-badge');
+    badge.style.background = allChecked ? '#28a745' : '#dc2626';
+    badge.innerText = allChecked ? '✓ 符合條件（享半私家）' : '⚠️ 條件未符（降為普通房級別）';
+    renderPlanChecklist();
+  }
+
+  // ==================== 07 頁三大情境切換與 5x5 檔案呈現 ====================
   function selectScenarioCategory(cat) {
     appState.currentCaseCat = cat;
     document.querySelectorAll('.sc-tab-btn').forEach(b => b.classList.remove('selected'));
@@ -594,7 +769,7 @@
     document.getElementById('case-title-display').innerText = c.caseName;
     document.getElementById('case-total-input').value = 'HK$ ' + Number(c.totalCost).toLocaleString();
 
-    // 處理 10 個相片/PDF 檔案
+    // 處理最多 10 個檔案
     var files = c.files || [];
     var btnToggle = document.getElementById('btnToggleFiles');
     var gallery = document.getElementById('caseFilesGrid');
@@ -623,19 +798,18 @@
     gallery.style.display = (gallery.style.display === 'grid') ? 'none' : 'grid';
   }
 
-  // 07 頁精確自付計算 (已移走公司及個人醫保)
+  // 07 頁精確自付計算 (移走公司及個人醫保，靈活上限85%)
   function recalcCustomCost(val) {
     var num = parseSafeNum(val) || 100000;
     document.getElementById('case-total-input').value = 'HK$ ' + num.toLocaleString();
 
-    var eliteDed = Number(document.getElementById('elite-deductible').value) || 25000;
+    var eliteDed = Number(document.getElementById('elite-deductible').value) || 16000;
     var wiseDed = Number(document.getElementById('wise-deductible').value) || 18000;
 
-    // 尊顯 & 睿選：以自付額為上限
     var eliteOOP = Math.min(num, eliteDed);
     var wiseOOP = Math.min(num, wiseDed);
 
-    // 靈活計劃：上限 85% 可索償，餘額為客人自付額 (15% SMM 或分項設限)
+    // 靈活計劃：上限 85% 可索償，餘額為客人自付額
     var flexiClaimable = num * 0.85;
     var flexiOOP = Math.round(num - flexiClaimable);
 
@@ -644,13 +818,149 @@
     document.getElementById('case-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString();
   }
 
-  // ==================== 後台鏡像管理邏輯 ====================
+  // ==================== 08 保費精算與 09 總結 ====================
+  function setPremMode(mode) {
+    appState.premMode = mode;
+    document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
+    document.getElementById('btnModeMonthly').classList.toggle('active', mode === 'monthly');
+    updateValPremiums();
+  }
+
+  function syncDeductibles(type, val) {
+    if (type === 'elite') document.getElementById('valEliteDed').value = val;
+    if (type === 'wise') document.getElementById('valWiseDed').value = val;
+    recalcCustomCost(document.getElementById('case-total-input').value);
+    updateValPremiums();
+  }
+
+  function selectFinalPlan(plan) {
+    appState.selectedFinalPlan = plan;
+    document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('input[name="finalPlan"]').forEach(r => r.checked = false);
+    
+    var card = document.getElementById('cardSelect' + plan.charAt(0).toUpperCase() + plan.slice(1));
+    if (card) {
+      card.classList.add('selected');
+      card.querySelector('input').checked = true;
+    }
+    if (plan === 'elite') {
+      document.getElementById('sumPlanName').innerText = '👑 高端尊顯醫療計劃 (半私家房)';
+      document.getElementById('sumCoverage').innerText = '每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，自帶半私家房)';
+      appState.selectedFinalPrice = document.getElementById('valPriceElite').innerText;
+    } else if (plan === 'wise') {
+      document.getElementById('sumPlanName').innerText = '🛡️ 高端睿選醫療計劃 (半私家房)';
+      document.getElementById('sumCoverage').innerText = '每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，指定網絡)';
+      appState.selectedFinalPrice = document.getElementById('valPriceWise').innerText;
+    } else {
+      document.getElementById('sumPlanName').innerText = '⚠️ 傳統靈活醫療計劃 (普通房)';
+      document.getElementById('sumCoverage').innerText = '每年 HK$42 萬上限 (設細項分項限制)';
+      appState.selectedFinalPrice = document.getElementById('valPriceFlexi').innerText;
+    }
+    document.getElementById('sumPrice').innerText = appState.selectedFinalPrice;
+    calcRebateDetails();
+  }
+
+  function updateValPremiums() {
+    if (!db || !db.premiumTables) return;
+    var age = Number(document.getElementById('valAge').value) || 35;
+    var gender = document.getElementById('valGender').value;
+    var eliteDed = document.getElementById('valEliteDed').value;
+    var wiseDed = document.getElementById('valWiseDed').value;
+    var isVitality = document.getElementById('chkDiscount').checked;
+    var isTax = document.getElementById('chkTax').checked;
+    var isMonthly = appState.premMode === 'monthly';
+
+    function calcP(raw) {
+      if (!raw || isNaN(raw)) return { str: '--', rawNum: 0 };
+      var p = Number(raw);
+      if (isVitality) p = p * 0.9;
+      if (isTax) p = p - Math.min(8000, p) * 0.17;
+      var annualVal = Math.round(p);
+      if (isMonthly) p = (p * 1.06) / 12;
+      return { str: 'HK$ ' + Math.round(p).toLocaleString() + (isMonthly ? ' /月' : ' /年'), rawNum: annualVal };
+    }
+
+    var pElite = (db.premiumTables[`尊顯${eliteDed}自付額`] && db.premiumTables[`尊顯${eliteDed}自付額`][age]);
+    var pWise = (db.premiumTables[`睿選${wiseDed}自付額`] && db.premiumTables[`睿選${wiseDed}自付額`][age]);
+    var flexiKey = gender === 'female' ? '女靈活計劃' : '男靈活計劃';
+    var pFlexi = (db.premiumTables[flexiKey] && db.premiumTables[flexiKey][age]);
+
+    var resE = calcP(pElite);
+    var resW = calcP(pWise);
+    var resF = calcP(pFlexi);
+
+    document.getElementById('valPriceElite').innerText = resE.str;
+    document.getElementById('valPriceWise').innerText = resW.str;
+    document.getElementById('valPriceFlexi').innerText = resF.str;
+
+    if (appState.selectedFinalPlan === 'elite') appState.selectedRawAnnualNum = resE.rawNum;
+    else if (appState.selectedFinalPlan === 'wise') appState.selectedRawAnnualNum = resW.rawNum;
+    else appState.selectedRawAnnualNum = resF.rawNum;
+
+    selectFinalPlan(appState.selectedFinalPlan);
+  }
+
+  function togglePromoPanel() {
+    var p = document.getElementById('promoPanel');
+    p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+    calcRebateDetails();
+  }
+
+  function calcRebateDetails() {
+    var c200 = Number(document.getElementById('coupon200').value) || 0;
+    var c500 = Number(document.getElementById('coupon500').value) || 0;
+    var m2 = Number(document.getElementById('rebateM2').value) || 0;
+    var m3 = Number(document.getElementById('rebateM3').value) || 0;
+    var annualBase = appState.selectedRawAnnualNum || 5528;
+    var monthlyBase = annualBase / 12;
+    var totalCoupons = (c200 * 200) + (c500 * 500);
+    var firstYearPay = Math.max(0, annualBase - totalCoupons);
+    var rebateY2 = Math.round(monthlyBase * m2);
+    var rebateY3 = Math.round(monthlyBase * m3);
+    var totalSavings = totalCoupons + rebateY2 + rebateY3;
+
+    document.getElementById('rowFirstYearPay').innerText = 'HK$ ' + firstYearPay.toLocaleString();
+    document.getElementById('rowRebateY2').style.display = m2 > 0 ? 'flex' : 'none';
+    document.getElementById('valRebateY2').innerText = 'HK$ ' + rebateY2.toLocaleString();
+    document.getElementById('rowRebateY3').style.display = m3 > 0 ? 'flex' : 'none';
+    document.getElementById('valRebateY3').innerText = 'HK$ ' + rebateY3.toLocaleString();
+    document.getElementById('valTotalSavings').innerText = 'HK$ ' + totalSavings.toLocaleString();
+  }
+
+  function togglePlanVis(plan) {
+    appState.planVis[plan] = !appState.planVis[plan];
+    var isShown = appState.planVis[plan];
+    var btn = document.getElementById('vis-btn-' + plan);
+    if (btn) btn.classList.toggle('off', !isShown);
+    applyAllPlanVisibilities();
+  }
+
+  function applyAllPlanVisibilities() {
+    ['elite', 'wise', 'flexi'].forEach(function(plan) {
+      var isShown = appState.planVis[plan];
+      document.querySelectorAll('.plan-col-' + plan).forEach(c => c.style.display = isShown ? '' : 'none');
+    });
+  }
+
+  function selectBtn(btn) {
+    btn.closest('.choice-list').querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function goToStage(stageId) {
+    document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
+    var target = document.getElementById('stage-' + stageId);
+    if (target) target.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // ==================== 1:1 粉紅虛線鏡像後台管理系統 ====================
   function openAdminModal() {
     if (!db) { alert("雲端數據加載中..."); return; }
-    renderAdminPagesMirror();
+    renderAdminP0103Mirror();
     renderAdminP06Mirror();
-    renderAdminCasesMirror();
-    renderAdminConfigMirror();
+    renderAdminCasesList();
+    renderAdminConfigList();
     document.getElementById('adminModal').style.display = 'flex';
   }
 
@@ -663,59 +973,65 @@
     document.getElementById('admTab-' + tabId).style.display = 'block';
   }
 
-  function renderAdminPagesMirror() {
-    var container = document.getElementById('adminPagesContainer');
-    container.innerHTML = '';
+  // 鏡像 1: 01-03 頁面卡片鏡像
+  function renderAdminP0103Mirror() {
+    var box = document.getElementById('adminP0103Mirror');
+    box.innerHTML = '';
     (db.pages || []).forEach((p, idx) => {
-      container.innerHTML += `
-        <div class="admin-mirror-card">
-          <strong style="color:var(--primary); font-size:13px;">【${p.role === 'adult' ? '成人' : '兒童'}】${p.tagName} (${p.pageId})</strong>
-          <input type="text" data-adm-page-title="${idx}" value="${p.title}" placeholder="標題">
-          <textarea data-adm-page-sub="${idx}" placeholder="副標題">${p.subtitle}</textarea>
+      box.innerHTML += `
+        <div class="stage-card" style="display:block; margin-bottom:12px; box-shadow:none; border:1px solid #cbd5e1;">
+          <span class="stage-tag">【${p.role === 'adult' ? '成人' : '兒童'}】${p.tagName}</span>
+          <div class="editable-mirror" contenteditable="true" data-adm-page-title="${idx}" style="font-size:18px; font-weight:800; margin-bottom:6px;">${p.title}</div>
+          <div class="editable-mirror" contenteditable="true" data-adm-page-sub="${idx}" style="font-size:13px; color:#666;">${p.subtitle}</div>
         </div>`;
     });
   }
 
+  // 鏡像 2: 06 專屬方案鏡像
   function renderAdminP06Mirror() {
-    var hlBox = document.getElementById('adminHighlightsContainer');
+    var hlBox = document.getElementById('adminMirrorHighlights');
     hlBox.innerHTML = '';
     (db.highlights || []).forEach((h, idx) => {
-      hlBox.innerHTML += `
-        <div style="display:flex; gap:6px; margin-bottom:6px;">
-          <input type="text" data-adm-hl="${idx}" value="${h.text}">
-        </div>`;
+      hlBox.innerHTML += `<li class="editable-mirror" contenteditable="true" data-adm-hl="${idx}" style="margin-bottom:4px;">${h.text}</li>`;
     });
-    var piBox = document.getElementById('adminPlanItemsContainer');
-    piBox.innerHTML = '';
+
+    var tb = document.getElementById('adminMirrorChecklist');
+    var html = `
+      <div class="checklist-row header-row">
+        <div class="col-item">保障項目</div>
+        <div class="col-elite">尊顯 (左)</div>
+        <div class="col-wise">睿選 (中)</div>
+        <div class="col-flexi">靈活 (右)</div>
+      </div>`;
     (db.planItems || []).forEach((pi, idx) => {
-      piBox.innerHTML += `
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:8px; border-radius:8px; margin-bottom:8px;">
-          <strong>${pi.name}</strong>
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:4px;">
-            <input type="text" data-adm-pi-elite="${idx}" value="${pi.eliteMain}" placeholder="尊顯內容">
-            <input type="text" data-adm-pi-wise="${idx}" value="${pi.wiseSemiMain}" placeholder="睿選內容">
-            <input type="text" data-adm-pi-flexi="${idx}" value="${pi.flexiMain}" placeholder="靈活內容">
-          </div>
+      html += `
+        <div class="checklist-row">
+          <div class="col-item editable-mirror" contenteditable="true" data-adm-pi-name="${idx}">${pi.name}</div>
+          <div class="col-elite editable-mirror" contenteditable="true" data-adm-pi-elite="${idx}">${pi.eliteMain}</div>
+          <div class="col-wise editable-mirror" contenteditable="true" data-adm-pi-wise="${idx}">${pi.wiseSemiMain}</div>
+          <div class="col-flexi editable-mirror" contenteditable="true" data-adm-pi-flexi="${idx}">${pi.flexiMain}</div>
         </div>`;
     });
+    tb.innerHTML = html;
   }
 
-  function renderAdminCasesMirror() {
-    var box = document.getElementById('adminCasesContainer');
+  // 07 案例管理
+  function renderAdminCasesList() {
+    var box = document.getElementById('adminCasesList');
     box.innerHTML = '';
     (db.claimCases || []).forEach((c, idx) => {
       box.innerHTML += `
-        <div class="admin-mirror-card">
+        <div class="stage-card" style="display:block; margin-bottom:12px; box-shadow:none; border:1px solid #cbd5e1;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <select data-adm-case-cat="${idx}" style="width:140px;">
+            <select data-adm-case-cat="${idx}" style="width:130px;">
               <option value="日間手術" ${c.category==='日間手術'?'selected':''}>日間手術</option>
               <option value="住院治療" ${c.category==='住院治療'?'selected':''}>住院治療</option>
               <option value="癌症治療" ${c.category==='癌症治療'?'selected':''}>癌症治療</option>
             </select>
-            <input type="text" data-adm-case-name="${idx}" value="${c.caseName}" placeholder="案例名稱" style="flex:1; margin-left:8px;">
-            <button type="button" onclick="deleteAdminCase(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:6px; margin-left:6px;">刪除</button>
+            <input type="text" data-adm-case-name="${idx}" value="${c.caseName}" placeholder="案例名稱" style="flex:1; margin:0 8px;">
+            <button type="button" onclick="deleteAdminCase(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:6px 10px; cursor:pointer;">刪除</button>
           </div>
-          <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px; margin-top:6px;">
+          <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px; margin-top:8px;">
             <input type="number" data-adm-case-cost="${idx}" value="${c.totalCost}" placeholder="總費用">
             <input type="text" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="相片/PDF 網址 (以分號 ; 隔開，最多10個)">
           </div>
@@ -725,18 +1041,18 @@
 
   function addAdminCase() {
     if (!db.claimCases) db.claimCases = [];
-    db.claimCases.push({ category: "日間手術", caseName: "新案例", totalCost: 20000, files: [] });
-    renderAdminCasesMirror();
+    db.claimCases.push({ category: "日間手術", caseName: "新實況案例", totalCost: 20000, files: [] });
+    renderAdminCasesList();
   }
 
   function deleteAdminCase(idx) {
     db.claimCases.splice(idx, 1);
-    renderAdminCasesMirror();
+    renderAdminCasesList();
   }
 
-  function renderAdminConfigMirror() {
-    var box = document.getElementById('adminConfigContainer');
-    box.innerHTML = '';
+  function renderAdminConfigList() {
+    var box = document.getElementById('adminConfigList');
+    box.innerHTML = '<strong style="color:var(--primary); font-size:14px;">⚙️ 系統設定 & 額度文字</strong><div style="margin-top:10px;">';
     for (const [k, v] of Object.entries(db.config || {})) {
       box.innerHTML += `
         <div style="margin-bottom:8px;">
@@ -744,29 +1060,32 @@
           <input type="text" data-adm-config="${k}" value="${v}">
         </div>`;
     }
+    box.innerHTML += '</div>';
   }
 
+  // 儲存鏡像回寫
   function saveAdminData() {
     var btn = document.getElementById('btnSaveAdmin');
     btn.innerText = "⏳ 正在同步至 Google Sheet...";
     btn.disabled = true;
 
-    // 收集頁面文案
-    document.querySelectorAll('[data-adm-page-title]').forEach(inp => {
-      var idx = Number(inp.dataset.admPageTitle);
-      db.pages[idx].title = inp.value;
+    // 收集鏡像 01-03 頁面
+    document.querySelectorAll('[data-adm-page-title]').forEach(el => {
+      var idx = Number(el.dataset.admPageTitle);
+      db.pages[idx].title = el.innerText.trim();
     });
-    document.querySelectorAll('[data-adm-page-sub]').forEach(inp => {
-      var idx = Number(inp.dataset.admPageSub);
-      db.pages[idx].subtitle = inp.value;
+    document.querySelectorAll('[data-adm-page-sub]').forEach(el => {
+      var idx = Number(el.dataset.admPageSub);
+      db.pages[idx].subtitle = el.innerText.trim();
     });
 
-    // 收集 06 細項
-    document.querySelectorAll('[data-adm-hl]').forEach((inp, idx) => { db.highlights[idx].text = inp.value; });
-    document.querySelectorAll('[data-adm-pi-elite]').forEach((inp, idx) => {
-      db.planItems[idx].eliteMain = inp.value;
-      db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wise="${idx}"]`).value;
-      db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-flexi="${idx}"]`).value;
+    // 收集鏡像 06 亮點與表格
+    document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { db.highlights[idx].text = el.innerText.trim(); });
+    document.querySelectorAll('[data-adm-pi-name]').forEach((el, idx) => {
+      db.planItems[idx].name = el.innerText.trim();
+      db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elite="${idx}"]`).innerText.trim();
+      db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wise="${idx}"]`).innerText.trim();
+      db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-flexi="${idx}"]`).innerText.trim();
     });
 
     // 收集 07 案例
@@ -799,49 +1118,6 @@
         btn.innerText = "💾 儲存並同步至 Google Sheet";
         btn.disabled = false;
       });
-  }
-
-  // ==================== 頁面導航 ====================
-  function goToStage(stageId) {
-    document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
-    var target = document.getElementById('stage-' + stageId);
-    if (target) target.classList.add('active');
-    window.scrollTo(0, 0);
-  }
-
-  function selectBtn(btn) {
-    btn.closest('.choice-list').querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  }
-
-  function syncDeductibles(type, val) {
-    recalcCustomCost(document.getElementById('case-total-input').value);
-  }
-
-  function togglePlanVis(plan) {
-    appState.planVis[plan] = !appState.planVis[plan];
-    var isShown = appState.planVis[plan];
-    var btn = document.getElementById('vis-btn-' + plan);
-    if (btn) btn.classList.toggle('off', !isShown);
-    document.querySelectorAll('.plan-col-' + plan).forEach(c => c.style.display = isShown ? '' : 'none');
-  }
-
-  function setPremMode(mode) {
-    document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
-    document.getElementById('btnModeMonthly').classList.toggle('active', mode === 'monthly');
-  }
-
-  function selectFinalPlan(plan) {
-    appState.selectedFinalPlan = plan;
-    document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
-    var card = document.getElementById('cardSelect' + plan.charAt(0).toUpperCase() + plan.slice(1));
-    if (card) { card.classList.add('selected'); card.querySelector('input').checked = true; }
-  }
-
-  function updateValPremiums() {
-    document.getElementById('valPriceElite').innerText = "HK$ 6,850 /年";
-    document.getElementById('valPriceWise').innerText = "HK$ 5,528 /年";
-    document.getElementById('valPriceFlexi').innerText = "HK$ 3,890 /年";
   }
 
   function syncDatabase() {
