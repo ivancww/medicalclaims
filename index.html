@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.6.2 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.7.1 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -47,7 +47,6 @@
   }
   .status-ok { background: #d4edda !important; color: #155724 !important; }
   
-  /* 顯示計劃切換 Bar */
   .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
   .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed var(--pink-border); background: #f8f9fa; color: #555; transition: 0.2s; }
   .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
@@ -78,17 +77,12 @@
   .choice-btn .c-desc { font-size: 13px; color: #7f8c8d; }
   
   .nav-btn-group { display: flex; gap: 10px; margin-top: 22px; }
-  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; text-align: center; text-decoration: none; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; text-align: center; }
   .btn-secondary { background: #f1f5f9; border: 1px solid var(--border); color: #333; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
   .btn-success { background: #059669; color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 16px; font-weight: 800; cursor: pointer; flex: 2; text-align: center; }
   
   .info-quote-box { background: #fffdf5; border-left: 4px solid #f39c12; border-radius: 8px; padding: 14px; margin: 14px 0; font-size: 14px; line-height: 1.6; color: #78350f; }
   .danger-alert-box { background: var(--danger-light); border-left: 4px solid var(--danger); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
-  .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
-  
-  .bullet-list { margin: 12px 0; padding-left: 0; list-style: none; }
-  .bullet-list li { font-size: 14px; color: #334155; line-height: 1.8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-  .bullet-list li::before { content: "✓"; color: #059669; font-weight: 900; font-size: 16px; }
   
   .stat-grid-box { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin: 15px 0; }
   .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
@@ -112,7 +106,7 @@
   .wise-setting h3 { color: var(--wise-color); }
   .flexi-setting h3 { color: var(--flexi-color); }
   
-  select, input[type="text"], input[type="number"], textarea {
+  select, input[type="text"], input[type="number"] {
     width: 100%; padding: 9px; font-size: 14px; border-radius: 8px; border: 2px dashed var(--pink-border);
     background: #fff; font-weight: 700; color: #333; outline: none; margin-top: 4px; box-sizing: border-box;
   }
@@ -127,16 +121,14 @@
   .col-wise { background: #f0f7ff; color: var(--wise-color); }
   .col-flexi { background: #fff5f5; color: var(--flexi-color); border-right: none; }
   
-  .scenario-calc-box { background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin-top: 15px; }
   .oop-row-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
   @media (max-width: 600px) { .oop-row-grid { grid-template-columns: 1fr; } }
   .oop-mini-card { padding: 10px 8px; border-radius: 8px; text-align: center; }
   .oop-mini-card.elite { background: #fffaf0; border: 1px solid #fdebd0; color: var(--elite-color); }
   .oop-mini-card.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: var(--wise-color); }
   .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
-  .oop-mini-val { font-size: 18px; font-weight: 900; margin-top: 4px; }
+  .oop-mini-val { font-size: 17px; font-weight: 900; margin-top: 4px; }
   
-  /* 07 情境案例選單卡片 */
   .scenario-tab-btn {
     border: 1.5px dashed var(--pink-border); border-radius: 10px; padding: 12px 14px; background: #fff; cursor: pointer; text-align: left; transition: 0.2s;
   }
@@ -144,7 +136,6 @@
     border-color: var(--primary); border-style: solid; background: #f0f7ff; box-shadow: 0 0 0 1px var(--primary);
   }
 
-  /* 08 保費單選卡片 */
   .plan-select-card {
     border: 2px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; transition: 0.2s; position: relative;
   }
@@ -165,19 +156,9 @@
   .promo-box {
     background: #fffcf5; border: 1.5px solid #fde68a; border-radius: 10px; padding: 14px; margin-top: 14px; font-size: 13px; line-height: 1.6;
   }
-  
-  /* 案例黑底置中大字彈窗 Modal */
-  .modal-overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.92); z-index: 999999; justify-content: center; align-items: center; padding: 16px;
-  }
-  .modal-box {
-    background: #111827; color: #f9fafb; border-radius: 14px; width: 100%; max-width: 680px; max-height: 90vh;
-    overflow-y: auto; padding: 24px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid #374151;
-  }
-  .modal-close-btn {
-    position: absolute; top: 12px; right: 14px; background: rgba(255,255,255,0.15); border: none; font-size: 18px;
-    font-weight: 900; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #fff;
+
+  .cross-sell-alert {
+    background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700;
   }
 
   /* 管理員後台 Modal */
@@ -209,80 +190,52 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" title="點擊開啟後台管理">v6.6.2</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminPanel()">v6.7.1</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
-      <button type="button" id="btnOpenAdmin" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
-      <div id="sync-status-badge">🔄 連接雲端費率庫...</div>
+      <button type="button" onclick="openAdminPanel()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
+      <div id="sync-status-badge">🔄 連接雲端庫...</div>
     </div>
   </div>
 
- <!-- ==================== 階段 1：前置 5 部曲 ==================== -->
- <!-- STEP 1：關注／重視 -->
+ <!-- ==================== 01 - 05 前置步驟 ==================== -->
  <div class="stage-card active" id="stage-m1">
-   <span class="stage-tag" id="m1-tag">01｜關注／重視</span>
+   <span class="stage-tag" id="m1-tag">01 ｜ 關注／重視</span>
    <h2 class="stage-title" id="m1-title">當需要醫療時，你最重視的是甚麼？</h2>
    <p class="stage-desc" id="m1-desc">確認你真正的價值取向，建立本次檢視的方向：</p>
    <div class="choice-list" id="m1-choice-list">
-     <button type="button" class="choice-btn" data-m1="choiceA" onclick="selectM1(this, 'A')">
-       <span class="c-title" id="m1-optA-title">🏥 可以即時選擇合適嘅醫療</span>
-       <span class="c-desc" id="m1-optA-desc">享有治療自主權，不希望因費用而先作取捨。</span>
-     </button>
-     <button type="button" class="choice-btn" data-m1="choiceB" onclick="selectM1(this, 'B')">
-       <span class="c-title" id="m1-optB-title">🛡️ 唔希望醫療費影響家庭財務</span>
-       <span class="c-desc" id="m1-optB-desc">重視醫療發生後的家庭開支與儲蓄承托。</span>
-     </button>
-     <button type="button" class="choice-btn" data-m1="choiceBoth" onclick="selectM1(this, 'Both')">
-       <span class="c-title" id="m1-optBoth-title">⚖️ 兩樣都重視</span>
-       <span class="c-desc" id="m1-optBoth-desc">既想保留醫療選擇，也想保留家庭財務安全。</span>
-     </button>
+     <button type="button" class="choice-btn" data-m1="choiceA" onclick="selectBtn(this)"><span class="c-title" id="m1-optA-title">🏥 可以即時選擇合適嘅醫療</span><span class="c-desc" id="m1-optA-desc">享有治療自主權，不希望因費用而先作取捨。</span></button>
+     <button type="button" class="choice-btn" data-m1="choiceB" onclick="selectBtn(this)"><span class="c-title" id="m1-optB-title">🛡️ 唔希望醫療費影響家庭財務</span><span class="c-desc" id="m1-optB-desc">重視醫療發生後的家庭開支與儲蓄承托。</span></button>
+     <button type="button" class="choice-btn" data-m1="choiceBoth" onclick="selectBtn(this)"><span class="c-title" id="m1-optBoth-title">⚖️ 兩樣都重視</span><span class="c-desc" id="m1-optBoth-desc">既想保留醫療選擇，也想保留家庭財務安全。</span></button>
    </div>
-   <div class="nav-btn-group">
-     <button type="button" class="btn-primary" onclick="goToStage('m2')">下一步 →</button>
-   </div>
+   <div class="nav-btn-group"><button type="button" class="btn-primary" onclick="goToStage('m2')">下一步 →</button></div>
  </div>
 
- <!-- STEP 2：想像一下情境 -->
  <div class="stage-card" id="stage-m2">
-   <span class="stage-tag" id="m2-tag">02｜想像一下情境</span>
+   <span class="stage-tag" id="m2-tag">02 ｜ 想像一下情境</span>
    <h2 class="stage-title" id="m2-title">如果有一日，需要即時接受治療……</h2>
    <p class="stage-desc" id="m2-desc">用一個非常簡單嘅生活情境，你希望自己可以：</p>
    <div class="choice-list" id="m2-choice-list">
-     <button type="button" class="choice-btn" data-m2="A" onclick="selectM2(this, 'A')">
-       <span class="c-title" id="m2-optA-title">A ｜ 按醫療需要作選擇</span>
-       <span class="c-desc" id="m2-optA-desc">以醫生專業建議與最好療效為首要考量。</span>
-     </button>
-     <button type="button" class="choice-btn" data-m2="B" onclick="selectM2(this, 'B')">
-       <span class="c-title" id="m2-optB-title">B ｜ 先考慮費用，再決定醫療選擇</span>
-       <span class="c-desc" id="m2-optB-desc">需先計算自付差額與荷包負擔，再決定在哪裡治療。</span>
-     </button>
+     <button type="button" class="choice-btn" data-m2="A" onclick="selectBtn(this)"><span class="c-title" id="m2-optA-title">A ｜ 按醫療需要作選擇</span><span class="c-desc" id="m2-optA-desc">以醫生專業建議與最好療效為首要考量。</span></button>
+     <button type="button" class="choice-btn" data-m2="B" onclick="selectBtn(this)"><span class="c-title" id="m2-optB-title">B ｜ 先考慮費用，再決定醫療選擇</span><span class="c-desc" id="m2-optB-desc">需先計算自付差額與荷包負擔，再決定在哪裡治療。</span></button>
    </div>
-   <div class="info-quote-box" id="m2-quote-box" style="margin-top: 15px;">
-     💭 <strong>如果係你，你會比較希望係 A 定 B？</strong>
-   </div>
+   <div class="info-quote-box" id="m2-quote-box" style="margin-top: 15px;">💭 <strong>如果係你，你會比較希望係 A 定 B？</strong></div>
    <div class="nav-btn-group">
      <button type="button" class="btn-secondary" onclick="goToStage('m1')">← 返回</button>
-     <button type="button" class="btn-primary" onclick="proceedFromM2()">下一步：檢視現有防線 →</button>
+     <button type="button" class="btn-primary" onclick="goToStage('m3')">下一步：檢視現有防線 →</button>
    </div>
  </div>
 
- <!-- STEP 3：現在有的保障 -->
  <div class="stage-card" id="stage-m3">
-   <span class="stage-tag" id="m3-tag">03｜現在有的保障</span>
+   <span class="stage-tag" id="m3-tag">03 ｜ 現在有的保障</span>
    <h2 class="stage-title" id="m3-title">回顧你的第一道防線</h2>
-   
    <div class="stat-grid-box">
-     <div class="stat-row">
-       <span>假設預計醫療費用：</span>
-       <strong id="m3-cost-text">HK$ 200,000</strong>
-     </div>
-     <div class="stat-row" id="m3-comp-row">
-       <span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span>
-       <strong style="color:#059669;" id="m3-comp-text">HK$ 80,000</strong>
-     </div>
+     <div class="stat-row"><span>假設預計醫療費用：</span><strong id="m3-cost-text">HK$ 200,000</strong></div>
+     <div class="stat-row" id="m3-comp-row"><span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span><strong style="color:#059669;" id="m3-comp-text">HK$ 80,000</strong></div>
+     <div class="stat-row" id="m3-pers-row" style="display:none;"><span>第二層（現有個人醫保自付額）：</span><strong style="color:#0056b3;" id="m3-pers-text">HK$ 20,000</strong></div>
    </div>
-   <div class="info-quote-box" id="m3-quote-box" style="font-size:15px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
+   <div class="info-quote-box" id="m3-quote-box" style="font-size:14.5px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
      🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
    </div>
    <div class="nav-btn-group">
@@ -291,73 +244,51 @@
    </div>
  </div>
 
- <!-- STEP 4：如果第一道防線改變 -->
  <div class="stage-card" id="stage-m4">
-   <span class="stage-tag" id="m4-tag">04｜如果第一道防線改變</span>
+   <span class="stage-tag" id="m4-tag">04 ｜ 如果第一道防線改變</span>
    <h2 class="stage-title" id="m4-title">如果將來轉工、離職、退休，第一道防線改變，你會點？</h2>
-   
    <div class="choice-list" id="m4-choice-list">
-     <button type="button" class="choice-btn" data-m4="yes" onclick="selectM4('yes')">
-       <span class="c-title" id="m4-optA-title">🛡️ 有個人醫保（第二層防線）</span>
-       <span class="c-desc" id="m4-optA-desc">已有個人專屬保單，可獨立銜接保障。</span>
-     </button>
-     <button type="button" class="choice-btn" data-m4="no" onclick="selectM4('no')">
-       <span class="c-title" id="m4-optB-title">⚠️ 沒有個人醫保</span>
-       <span class="c-desc" id="m4-optB-desc">離開現有職位後，醫療保障將即時變成零。</span>
-     </button>
+     <button type="button" class="choice-btn" data-m4="yes" onclick="selectM4('yes')"><span class="c-title" id="m4-optA-title">🛡️ 有個人醫保（第二層防線）</span><span class="c-desc" id="m4-optA-desc">已有個人專屬保單，可獨立銜接保障。</span></button>
+     <button type="button" class="choice-btn" data-m4="no" onclick="selectM4('no')"><span class="c-title" id="m4-optB-title">⚠️ 沒有個人醫保</span><span class="c-desc" id="m4-optB-desc">離開現有職位後，醫療保障將即時變成零。</span></button>
    </div>
    <div id="m4-no-alert" class="danger-alert-box" style="display:none;">
      📢 <strong>核心本質：</strong> 公司醫保可以幫你解決<strong>今日嘅醫療需要</strong>；但佢未必可以解決你<strong>離開公司之後嘅醫療需要</strong>。
    </div>
    <div class="nav-btn-group">
      <button type="button" class="btn-secondary" onclick="goToStage('m3')">← 返回</button>
-     <button type="button" class="btn-primary" id="btn-m4-next" onclick="goToStage('m5')">下一步：檢視最終缺口 →</button>
+     <button type="button" class="btn-primary" onclick="goToStage('m5')">下一步：檢視最終缺口 →</button>
    </div>
  </div>
 
- <!-- STEP 5：缺口 ➔ 解決方案決策 -->
  <div class="stage-card" id="stage-m5">
-   <span class="stage-tag" id="m5-tag">05｜缺口 ➔ 解決方案</span>
+   <span class="stage-tag" id="m5-tag">05 ｜ 缺口 ➔ 解決方案</span>
    <h2 class="stage-title" id="m5-title">醫療自付差額總結</h2>
    <div class="stat-grid-box">
-     <div class="stat-row">
-       <span>預計醫療開支：</span>
-       <span id="m5-cost-val">HK$ 200,000</span>
-     </div>
-     <div class="stat-row" id="m5-comp-row">
-       <span>第一層公司醫保（預計賠付）：</span>
-       <span style="color:#059669;" id="m5-comp-val">- HK$ 80,000</span>
-     </div>
-     <div class="stat-row" id="m5-pers-row">
-       <span>第二層個人醫保：</span>
-       <span style="color:#059669;" id="m5-pers-val">- HK$ 0</span>
-     </div>
-     <div class="stat-row total">
-       <span style="color:var(--danger);">自身需承擔自付缺口：</span>
-       <span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 120,000</span>
-     </div>
+     <div class="stat-row"><span>預計醫療開支：</span><span id="m5-cost-val">HK$ 200,000</span></div>
+     <div class="stat-row" id="m5-comp-row"><span>第一層公司醫保（預計賠付）：</span><span style="color:#059669;" id="m5-comp-val">- HK$ 80,000</span></div>
+     <div class="stat-row total"><span style="color:var(--danger);">自身需承擔自付缺口：</span><span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 120,000</span></div>
    </div>
-   <div class="info-quote-box" id="m5-quote-box" style="font-size:16px; font-weight:800; color:var(--primary); text-align:center;">
+   <div class="info-quote-box" id="m5-quote-box" style="font-size:15px; font-weight:800; color:var(--primary); text-align:center;">
      ❓「呢個缺口由你自己應付，你認為可接受嗎？」
    </div>
    <div class="choice-list" style="margin-top: 15px;">
-     <button type="button" class="choice-btn" onclick="acceptGapAlert()" style="border-color:#059669; background:#f4fbf7;">
-       <span class="c-title" style="color:#059669;">✅ 可以，完全接受</span>
-       <span class="c-desc">我願意以個人儲備承擔可能出現的差額，暫不用額外安排。</span>
-     </button>
-     
-     <button type="button" class="choice-btn" onclick="goToStage('prod-intro')" style="border-color:var(--primary); background:var(--primary-light);">
-       <span class="c-title" style="color:var(--primary);">❌ 不可以，希望能解決此缺口</span>
-       <span class="c-desc">希望享有全數賠償及高階醫療選擇，進入專屬第二層防線方案。</span>
-     </button>
+     <button type="button" class="choice-btn" onclick="alert('感謝檢視！建議定期檢視醫療通脹。');" style="border-color:#059669; background:#f4fbf7;"><span class="c-title" style="color:#059669;">✅ 可以，完全接受</span><span class="c-desc">我願意以個人儲備承擔差額。</span></button>
+     <button type="button" class="choice-btn" onclick="goToStage('prod-intro')" style="border-color:var(--primary); background:var(--primary-light);"><span class="c-title" style="color:var(--primary);">❌ 不可以，希望能解決此缺口</span><span class="c-desc">希望享有全數賠償及高階醫療選擇，進入專屬方案。</span></button>
    </div>
-   <div class="nav-btn-group">
-     <button type="button" class="btn-secondary" onclick="goToStage(appState.hasCompany && appState.role==='adult' ? 'm4' : 'm2')">← 返上一頁</button>
-   </div>
+   <div class="nav-btn-group"><button type="button" class="btn-secondary" onclick="goToStage(appState.hasCompany && appState.role==='adult' ? 'm4' : 'm2')">← 返上一頁</button></div>
  </div>
 
- <!-- ==================== 06 專屬方案 (第一張圖) ==================== -->
+ <!-- ==================== 06 專屬方案 ==================== -->
  <div class="stage-card" id="stage-prod-intro">
+   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+     <span class="stage-tag">06 ｜ 專屬方案</span>
+     <div class="plan-visibility-bar" style="margin:0;">
+       <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVis('elite')">👑 尊顯</button>
+       <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVis('wise')">🛡️ 睿選</button>
+       <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVis('flexi')">⚠️ 靈活</button>
+     </div>
+   </div>
+   
    <div class="limit-banner">
      <div class="limit-badge elite plan-col-elite" id="banner-elite">👑 尊顯：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
      <div class="limit-badge wise plan-col-wise" id="banner-wise">🛡️ 睿選：每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️</div>
@@ -389,46 +320,45 @@
          <option value="30000">HK$ 30,000</option>
        </select>
        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #cce5ff;">
-         <div style="background:#28a745; color:#fff; font-size:11px; font-weight:bold; padding:3px 6px; border-radius:4px; text-align:center;">✓ 符合條件（享半私家）</div>
-         <ul style="font-size:11px; color:#444; padding-left:16px; margin:6px 0 0 0; line-height:1.4;">
-           <li>🏥 4間指定醫院（浸會/聖保祿/法國/仁安）</li>
-           <li>👨‍⚕️ 經「睿選網絡醫生」掛單</li>
-           <li>📝 完成「費用預先批核」</li>
-         </ul>
+         <div id="wise-status-badge" style="background:#28a745; color:#fff; font-size:11px; font-weight:bold; padding:3px 6px; border-radius:4px; text-align:center;">✓ 符合條件（享半私家）</div>
+         <div style="font-size:11px; color:#444; margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+           <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond1" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 🏥 4間指定醫院 (浸會/聖保祿/法國/仁安)</label>
+           <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond2" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 👨‍⚕️ 經「睿選網絡醫生」掛單</label>
+           <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond3" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 📝 完成「費用預先批核」</label>
+         </div>
        </div>
      </div>
      
      <div class="plan-setting flexi-setting plan-col-flexi">
        <h3>⚠️ 靈活計劃</h3>
        <p style="font-size: 12px; color: #c62828; font-weight: bold; margin: 2px 0;">普通房級別</p>
-       <p style="font-size: 11.5px; color: #666; margin: 4px 0;">受限於手術表分項上限<br><strong>SMM 15% 共同保險</strong><br>(索償上限 85% / 超額自理)</p>
+       <p style="font-size: 11px; color: #666; margin: 4px 0;">受限於手術表分項上限<br><strong>SMM 15% 共同保險</strong></p>
      </div>
    </div>
 
-   <!-- 細項保障表格 (第一張圖) -->
    <div class="checklist-grid">
      <div class="checklist-row header-row">
        <div class="col-item">保障項目</div>
        <div class="col-elite plan-col-elite">尊顯 (左)</div>
-       <div class="col-wise plan-col-wise">睿選 (中)</div>
+       <div class="col-wise plan-col-wise" id="colWiseHeader">睿選 (中)</div>
        <div class="col-flexi plan-col-flexi">靈活 (右)</div>
      </div>
      <div class="checklist-row">
        <div class="col-item">🩺 出院後覆診</div>
        <div class="col-elite plan-col-elite"><strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span></div>
-       <div class="col-wise plan-col-wise"><strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span></div>
+       <div class="col-wise plan-col-wise" id="colWiseCheck1"><strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span></div>
        <div class="col-flexi plan-col-flexi" style="color:var(--danger);">⚠️ 上限 $848<br><span style="font-size:10px;">(限3日內)</span></div>
      </div>
      <div class="checklist-row">
        <div class="col-item">🌿 出院後中醫</div>
        <div class="col-elite plan-col-elite"><strong>✅ 每次 $650</strong><br><span style="font-size:10px; color:#666;">(全年15次)</span></div>
-       <div class="col-wise plan-col-wise"><strong>✅ 每次 $1,000</strong><br><span style="font-size:10px; color:#666;">(全年20次)</span></div>
+       <div class="col-wise plan-col-wise" id="colWiseCheck2"><strong>✅ 每次 $1,000</strong><br><span style="font-size:10px; color:#666;">(全年20次)</span></div>
        <div class="col-flexi plan-col-flexi" style="color:var(--danger); font-weight:bold;">❌ 不適用</div>
      </div>
      <div class="checklist-row">
        <div class="col-item">🎁 次級病房每日現金津貼</div>
        <div class="col-elite plan-col-elite"><strong>每日 $1,200</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span></div>
-       <div class="col-wise plan-col-wise"><strong>每日 $2,400</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span></div>
+       <div class="col-wise plan-col-wise" id="colWiseCheck3"><strong>每日 $2,400</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span></div>
        <div class="col-flexi plan-col-flexi" style="color:var(--danger); font-weight:bold;">❌ 不適用</div>
      </div>
      <div class="checklist-row">
@@ -436,6 +366,12 @@
        <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">🛡️ 全數賠償</div>
        <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">🛡️ 全數賠償</div>
        <div class="col-flexi plan-col-flexi" style="color:var(--danger);">⚠️ 上限 $96,000</div>
+     </div>
+     <div class="checklist-row" id="rowCompanionBed" style="display:none;">
+       <div class="col-item">🧸 住院家長陪床費</div>
+       <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">全數索償 (每日包1張陪床)</div>
+       <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">全數索償 (每日包1張陪床)</div>
+       <div class="col-flexi plan-col-flexi" style="color:var(--danger);">❌ 不設保障</div>
      </div>
    </div>
 
@@ -445,63 +381,59 @@
    </div>
  </div>
 
- <!-- ==================== 07 情境案例 (第二張圖) ==================== -->
+ <!-- ==================== 07 情境案例 ==================== -->
  <div class="stage-card" id="stage-scenarios">
-   <span class="stage-tag">情境案例 ｜ 實況推演</span>
+   <span class="stage-tag">07 ｜ 情境案例 ｜ 實況推演</span>
    <h2 class="stage-title">常見醫療開支壓力測試</h2>
    
    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
      <div class="scenario-tab-btn" id="scTab-day" onclick="selectCaseCategory('day')">
-       <div style="font-size:14px; font-weight:800; color:var(--text-main);">☀️ 日間手術（例如：腸胃鏡連瘜肉切除）</div>
-       <div style="font-size:12px; color:#666; margin-top:3px;">常見日間微創檢查，檢視門診免住院賠償。</div>
+       <div style="font-size:14px; font-weight:800;">☀️ 日間手術（例如：腸胃鏡連瘜肉切除）</div>
+       <div style="font-size:12px; color:#666; margin-top:2px;">常見日間微創檢查，檢視門診免住院賠償。</div>
      </div>
      <div class="scenario-tab-btn selected" id="scTab-inpatient" onclick="selectCaseCategory('inpatient')">
-       <div style="font-size:14px; font-weight:800; color:var(--text-main);">🏥 住院手術（例如：子宮肌瘤引致尿滯留）</div>
-       <div style="font-size:12px; color:#666; margin-top:3px;">大型私院手術，檢視高額支架與手術自付差額。</div>
+       <div style="font-size:14px; font-weight:800;">🏥 住院手術（例如：子宮肌瘤引致尿滯留）</div>
+       <div style="font-size:12px; color:#666; margin-top:2px;">大型私院手術，檢視高額支架與手術自付差額。</div>
      </div>
      <div class="scenario-tab-btn" id="scTab-critical" onclick="selectCaseCategory('critical')">
-       <div style="font-size:14px; font-weight:800; color:var(--text-main);">🎗️ 重大疾病手術及用藥（例如：早期乳癌切除連標靶治療）</div>
-       <div style="font-size:12px; color:#666; margin-top:3px;">包含單次腫瘤切除及後續昂貴標靶、化療非手術長遠開支。</div>
+       <div style="font-size:14px; font-weight:800;">🎗️ 重大疾病手術及用藥（例如：早期乳癌切除連標靶治療）</div>
+       <div style="font-size:12px; color:#666; margin-top:2px;">包含單次腫瘤切除及後續昂貴標靶、化療非手術長遠開支。</div>
      </div>
    </div>
 
-   <!-- 案例動態選單與試算盒 -->
-   <div style="background:#f0f7ff; border:1px solid #cce5ff; border-radius:12px; padding:16px; margin-bottom:16px;">
+   <div style="background:#f0f7ff; border:1px solid #cce5ff; border-radius:12px; padding:14px; margin-bottom:14px;">
      <div style="font-size:12px; font-weight:bold; color:#0056b3; margin-bottom:6px;">🎯 該分類有多個案例，請選擇欲查看之案例：</div>
-     <select id="case-select-dropdown" onchange="applySelectedCase(this.value)" style="border-color:#93c5fd; background:#fff;">
-       <option value="case1" selected>📍 案例 1：子宮肌瘤引致尿滯留 (開支: $175,341 | 自付: $16,000)</option>
-       <option value="case2">📍 案例 2：小朋友發燒/肺炎住院8天 (開支: $81,446 | 自付: $13,360)</option>
-     </select>
+     <select id="case-select-dropdown" onchange="renderSelectedCase(this.value)" style="background:#fff;"></select>
    </div>
 
    <div style="background:#fff; border:1.5px solid var(--border); border-radius:12px; padding:16px;">
-     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-       <h3 style="margin:0; font-size:17px; font-weight:800; color:var(--text-main);" id="case-title-display">子宮肌瘤引致尿滯留</h3>
-       <button type="button" class="vis-btn" onclick="openClaimsModal()" style="background:#fef3c7; border-color:#fcd34d; color:#92400e; font-size:11.5px;">📑 查看真實索償收據 (雲端)</button>
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+       <h3 style="margin:0; font-size:17px; font-weight:800;" id="case-title-display">早期乳癌切除連標靶治療</h3>
+       <span style="font-size:11px; background:#fef3c7; color:#92400e; padding:3px 8px; border-radius:6px; font-weight:bold;">📑 實況案例 (雲端)</span>
      </div>
      
-     <div style="margin-bottom:14px;">
+     <div style="margin-bottom:12px;">
        <label style="font-size:12px; font-weight:bold; color:#666;">✏️ 手術/住院基本開支 (可手動輸入壓力測試)：</label>
-       <input type="text" id="case-cost-input" value="HK$ 175,341" onchange="recalcCaseCustom(this.value)" style="font-size:16px; font-weight:800;">
+       <input type="text" id="case-total-input" value="HK$ 520,000" onchange="recalcCustomCost(this.value)" style="font-size:16px; font-weight:800;">
      </div>
 
-     <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7; margin-bottom:14px;">
-       <div id="case-comp-row">第一層公司醫保預計賠（基本手術 80% (受限於公司上限 $100,000)）：<strong style="color:#059669;" id="case-comp-val">HK$ 80,000</strong></div>
-       <div>第二層個人醫保實際賠付：<strong style="color:#059669;" id="case-pers-val">HK$ 95,341 (自付額已被公司醫保全額抵消 ✅)</strong></div>
+     <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7; margin:12px 0;">
+       <div id="case-comp-line">第一層公司醫保預計賠（基本手術 80% (受限於公司上限 $100,000)）：<strong style="color:#059669;" id="case-comp-text">HK$ 100,000 (已達上限)</strong></div>
+       <div>第二層個人醫保實際賠付：<strong style="color:#059669;" id="case-pers-text">HK$ 420,000 (全數賠償)</strong></div>
      </div>
 
      <div class="oop-row-grid">
-       <div class="oop-mini-card elite">
+       <div class="oop-mini-card elite plan-col-elite">
          <div style="font-size:11px; font-weight:bold;">👑 尊顯 客人自付</div>
          <div class="oop-mini-val" id="case-oop-elite">HK$ 0 (全賠)</div>
        </div>
-       <div class="oop-mini-card wise">
+       <div class="oop-mini-card wise plan-col-wise">
          <div style="font-size:11px; font-weight:bold;">🛡️ 睿選 客人自付</div>
          <div class="oop-mini-val" id="case-oop-wise">HK$ 0 (全賠)</div>
        </div>
-       <div class="oop-mini-card flexi">
+       <div class="oop-mini-card flexi plan-col-flexi">
          <div style="font-size:11px; font-weight:bold;">⚠️ 靈活 客人自付</div>
-         <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 31,591</div>
+         <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 185,000 (嚴重超額)</div>
        </div>
      </div>
    </div>
@@ -512,10 +444,10 @@
    </div>
  </div>
 
- <!-- ==================== 08 保費與價值 (第三張圖) ==================== -->
+ <!-- ==================== 08 保費與價值 ==================== -->
  <div class="stage-card" id="stage-premium-val">
    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-     <span class="stage-tag">保費與價值 ｜ 精算預算</span>
+     <span class="stage-tag">08 ｜ 保費與價值 ｜ 精算預算</span>
      <div style="display:flex; gap:6px;">
        <button type="button" class="prem-mode-btn active" id="btnModeAnnual" onclick="setPremMode('annual')">年繳</button>
        <button type="button" class="prem-mode-btn" id="btnModeMonthly" onclick="setPremMode('monthly')">月繳 (+6%)</button>
@@ -560,32 +492,27 @@
    </div>
 
    <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px; font-size:13px; font-weight:600;">
-     <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-       <input type="checkbox" id="chkDiscount" onchange="updateValPremiums()" style="width:auto; margin:0;"> 參加「AIA Vitality」享保費 9 折優惠
-     </label>
-     <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-       <input type="checkbox" id="chkTax" onchange="updateValPremiums()" style="width:auto; margin:0;"> 享受 VHIS 稅務扣減 (按 17% 稅率計算)
-     </label>
+     <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="chkDiscount" onchange="updateValPremiums()" style="width:auto; margin:0;"> 參加「AIA Vitality」享保費 9 折優惠</label>
+     <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" id="chkTax" onchange="updateValPremiums()" style="width:auto; margin:0;"> 享受 VHIS 稅務扣減 (按 17% 稅率計算)</label>
    </div>
 
-   <!-- 3 大可選卡片 -->
    <div style="display:flex; flex-direction:column; gap:10px;">
      <div class="plan-select-card" id="cardSelectElite" onclick="selectFinalPlan('elite')">
        <input type="radio" name="finalPlan" value="elite">
        <div style="font-size:13px; font-weight:bold; color:var(--elite-color);">👑 尊顯計劃</div>
-       <div style="font-size:20px; font-weight:900; color:var(--elite-color); margin-top:4px;" id="valPriceElite">HK$ 8,352</div>
+       <div style="font-size:20px; font-weight:900; color:var(--elite-color); margin-top:4px;" id="valPriceElite">HK$ --</div>
      </div>
      
      <div class="plan-select-card selected" id="cardSelectWise" onclick="selectFinalPlan('wise')">
        <input type="radio" name="finalPlan" value="wise" checked>
        <div style="font-size:13px; font-weight:bold; color:var(--wise-color);">🛡️ 睿選計劃 (推薦)</div>
-       <div style="font-size:20px; font-weight:900; color:var(--wise-color); margin-top:4px;" id="valPriceWise">HK$ 5,528</div>
+       <div style="font-size:20px; font-weight:900; color:var(--wise-color); margin-top:4px;" id="valPriceWise">HK$ --</div>
      </div>
      
      <div class="plan-select-card" id="cardSelectFlexi" onclick="selectFinalPlan('flexi')">
        <input type="radio" name="finalPlan" value="flexi">
        <div style="font-size:13px; font-weight:bold; color:var(--flexi-color);">⚠️ 靈活計劃</div>
-       <div style="font-size:20px; font-weight:900; color:var(--flexi-color); margin-top:4px;" id="valPriceFlexi">HK$ 7,090</div>
+       <div style="font-size:20px; font-weight:900; color:var(--flexi-color); margin-top:4px;" id="valPriceFlexi">HK$ --</div>
      </div>
    </div>
 
@@ -595,10 +522,10 @@
    </div>
  </div>
 
- <!-- ==================== 09 保障確認 (第四張圖) ==================== -->
+ <!-- ==================== 09 保障確認 ==================== -->
  <div class="stage-card" id="stage-confirm">
    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-     <span class="stage-tag">保障確認 ｜ 方案總結</span>
+     <span class="stage-tag">09 ｜ 保障確認 ｜ 方案總結</span>
      <span style="font-size:11px; font-weight:bold; color:#059669; background:#d1fae5; padding:2px 8px; border-radius:10px;">✅ 雲端精算表已同步</span>
    </div>
 
@@ -610,7 +537,13 @@
      <div>🏥 <strong>現有第一道防線：</strong> <span id="sumFirstLine">公司團體醫保</span></div>
      <div>🛡️ <strong>建議方案：</strong> <strong style="color:#0056b3;" id="sumPlanName">🛡️ 高端睿選醫療計劃 (半私家房)</strong></div>
      <div>💰 <strong>主要保障：</strong> <span id="sumCoverage">每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，指定網絡)</span></div>
-     <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ 5,528 / 年</strong></div>
+     <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
+   </div>
+
+   <!-- Health Protection 帶來的二次切入銷售提醒框 -->
+   <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
+     ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
+     <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
    </div>
 
    <div class="promo-box" style="text-align:center; cursor:pointer;" onclick="alert('最新推廣優惠已套用！')">
@@ -623,29 +556,17 @@
    </div>
  </div>
 
- <!-- 案例彈窗 Modal -->
- <div class="modal-overlay" id="claimsModal">
-   <div class="modal-box">
-     <button class="modal-close-btn" onclick="closeClaimsModal()">✕</button>
-     <h3 style="color:#fff; margin-top:0; font-size:18px;">📋 真實醫療索償數據庫</h3>
-     <div class="case-detail-text" id="modalCaseText">
-       點擊以下個案，檢視不同醫保計劃的實際自付差額：
-     </div>
-     <div id="modalCasesList" style="display:flex; flex-direction:column; gap:10px;"></div>
-   </div>
- </div>
-
  <!-- 後台管理彈窗 (Admin Panel) -->
  <div id="adminModal">
    <div class="admin-card">
      <div class="admin-header">
        <span style="font-weight:800; font-size:16px;">🛠️ 醫療 App 後台管理 (Google Sheet 雙向同步)</span>
-       <button type="button" id="btnCloseAdmin" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
+       <button type="button" onclick="closeAdminPanel()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
      </div>
      <div class="admin-body" id="adminBodyContent"></div>
      <div class="admin-footer">
-       <button type="button" class="btn btn-secondary" id="btnCancelAdmin" style="flex:1;">取消</button>
-       <button type="button" class="btn btn-primary" id="btnSaveAdmin" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
+       <button type="button" class="btn btn-secondary" onclick="closeAdminPanel()" style="flex:1;">取消</button>
+       <button type="button" class="btn btn-primary" id="btnSaveAdmin" onclick="saveAdminPanel()" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
      </div>
    </div>
  </div>
@@ -653,7 +574,6 @@
 </div>
 
 <script>
-  // 最新統一 GAS API
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
 
   var appState = {
@@ -664,15 +584,17 @@
     companyRate: 80,
     companyPay: 80000,
     hasPersonal: false,
+    personalDed: 20000,
     finalGap: 120000,
-    premMode: 'annual', // 'annual' or 'monthly'
+    alertMsg: '',
+    premMode: 'annual',
     selectedFinalPlan: 'wise',
-    selectedFinalPrice: 5528
+    selectedFinalPrice: '--',
+    currentCaseCat: 'inpatient'
   };
 
   var db = null;
 
-  // 1. 自動從 URL 讀取連動參數（一氣呵成）
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = Number(p.get('cost')) || 200000;
@@ -680,6 +602,8 @@
     if (p.get('companyLimit')) appState.companyLimit = Number(p.get('companyLimit')) || 100000;
     if (p.get('companyRate')) appState.companyRate = Number(p.get('companyRate')) || 80;
     if (p.get('hasPersonal')) appState.hasPersonal = p.get('hasPersonal') === 'yes';
+    if (p.get('deductible')) appState.personalDed = Number(p.get('deductible')) || 20000;
+    if (p.get('alertMsg')) appState.alertMsg = p.get('alertMsg');
     
     var urlRole = p.get('role');
     var urlFocus = p.get('focus');
@@ -697,12 +621,10 @@
     appState.finalGap = Math.max(0, appState.cost - appState.companyPay);
   }
 
-  // 2. 模式對齊與文字渲染
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
     
-    // 預設年齡及自付額
     document.getElementById('valAge').value = isChild ? "5" : "35";
     if (isChild) {
       document.getElementById('elite-deductible').value = "0";
@@ -710,8 +632,10 @@
       document.getElementById('valEliteDed').value = "0";
       document.getElementById('valWiseDed').value = "0";
       document.getElementById('sumFirstLine').innerText = "零保障 / 公立基本醫療";
+      document.getElementById('rowCompanionBed').style.display = 'flex';
     } else {
       document.getElementById('sumFirstLine').innerText = appState.hasCompany ? "公司團體醫保" : "個人儲備承擔";
+      document.getElementById('rowCompanionBed').style.display = 'none';
     }
 
     if (db && db.pages) {
@@ -742,8 +666,6 @@
         document.getElementById('m5-title').innerText = p5.title;
         document.getElementById('m5-quote-box').innerHTML = `❓「${p5.quoteAlert}」`;
       }
-
-      // 額度 Banner
       if (db.config) {
         document.getElementById('banner-elite').innerText = `👑 尊顯：${db.config[isChild ? '兒童尊顯額度' : '成人尊顯額度'] || '每年 $1,200 萬'}`;
         document.getElementById('banner-wise').innerText = `🛡️ 睿選：${db.config[isChild ? '兒童睿選額度' : '成人睿選額度'] || '每年 $1,200 萬'}`;
@@ -751,7 +673,6 @@
       }
     }
 
-    // 03 & 05 數據更新
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (isChild) {
       document.getElementById('m3-comp-row').style.display = 'none';
@@ -762,46 +683,113 @@
       document.getElementById('m5-comp-row').style.display = 'flex';
       document.getElementById('m5-comp-val').innerText = '- HK$ ' + Math.round(appState.companyPay).toLocaleString();
     }
+    
+    if (appState.hasPersonal) {
+      document.getElementById('m3-pers-row').style.display = 'flex';
+      document.getElementById('m3-pers-text').innerText = 'HK$ ' + appState.personalDed.toLocaleString();
+    }
+
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
     document.getElementById('m5-gap-val').innerText = 'HK$ ' + Math.round(appState.finalGap).toLocaleString();
 
+    if (appState.alertMsg) {
+      document.getElementById('crossSellBox').style.display = 'block';
+      document.getElementById('crossSellMsg').innerText = appState.alertMsg;
+    }
+
+    selectCaseCategory('critical');
     updateValPremiums();
   }
 
-  // 3. 步驟控制
-  function goToStage(stageId) {
-    document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
-    var target = document.getElementById('stage-' + stageId);
-    if (target) {
-      target.classList.add('active');
-      window.scrollTo(0, 0);
+  function checkWiseCond() {
+    var c1 = document.getElementById('wCond1').checked;
+    var c2 = document.getElementById('wCond2').checked;
+    var c3 = document.getElementById('wCond3').checked;
+    var allChecked = c1 && c2 && c3;
+
+    var badge = document.getElementById('wise-status-badge');
+    var wH = document.getElementById('colWiseHeader');
+    var wc1 = document.getElementById('colWiseCheck1');
+    var wc2 = document.getElementById('colWiseCheck2');
+    var wc3 = document.getElementById('colWiseCheck3');
+
+    if (allChecked) {
+      badge.style.background = '#28a745';
+      badge.innerText = '✓ 符合條件（享半私家）';
+      wH.innerText = '睿選 (中)';
+      wc1.innerHTML = '<strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span>';
+      wc2.innerHTML = '<strong>✅ 每次 $1,000</strong><br><span style="font-size:10px; color:#666;">(全年20次)</span>';
+      wc3.innerHTML = '<strong>每日 $2,400</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span>';
+    } else {
+      badge.style.background = '#dc2626';
+      badge.innerText = '⚠️ 條件未符（降為普通房級別）';
+      wH.innerText = '睿選 (降為普通房)';
+      wc1.innerHTML = '⚠️ 受限於普通房分項';
+      wc2.innerHTML = '⚠️ 每次 $600';
+      wc3.innerHTML = '❌ 不適用 (已是普通房)';
     }
   }
 
-  function selectM1(btn, val) {
-    document.querySelectorAll('#m1-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+  var CASES = {
+    day: [
+      { name: '腸胃鏡連瘜肉切除', total: 17714, comp: 17714, eliteOOP: 0, wiseOOP: 0, flexiOOP: 0 }
+    ],
+    inpatient: [
+      { name: '子宮肌瘤引致尿滯留', total: 175341, comp: 80000, eliteOOP: 0, wiseOOP: 0, flexiOOP: 31591 },
+      { name: '小朋友肺炎住院8天', total: 81446, comp: 0, eliteOOP: 0, wiseOOP: 0, flexiOOP: 13360 }
+    ],
+    critical: [
+      { name: '早期乳癌切除連標靶治療', total: 520000, comp: 100000, eliteOOP: 0, wiseOOP: 0, flexiOOP: 185000 }
+    ]
+  };
+
+  function selectCaseCategory(cat) {
+    appState.currentCaseCat = cat;
+    document.querySelectorAll('.scenario-tab-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('scTab-' + cat).classList.add('selected');
+
+    var drop = document.getElementById('case-select-dropdown');
+    drop.innerHTML = '';
+    CASES[cat].forEach((c, idx) => {
+      drop.innerHTML += `<option value="${idx}">📍 案例：${c.name} (開支: $${c.total.toLocaleString()} | 靈活自付: $${c.flexiOOP.toLocaleString()})</option>`;
+    });
+
+    renderSelectedCase(0);
   }
 
-  function selectM2(btn, val) {
-    document.querySelectorAll('#m2-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+  function renderSelectedCase(idx) {
+    var c = CASES[appState.currentCaseCat][Number(idx)] || CASES[appState.currentCaseCat][0];
+    document.getElementById('case-title-display').innerText = c.name;
+    document.getElementById('case-total-input').value = 'HK$ ' + c.total.toLocaleString();
+    
+    var comp = appState.role === 'child' ? 0 : c.comp;
+    var persPay = Math.max(0, c.total - comp);
+    
+    document.getElementById('case-comp-text').innerText = 'HK$ ' + comp.toLocaleString() + (comp > 0 ? ' (已達公司上限)' : ' (無公司醫保)');
+    document.getElementById('case-pers-text').innerText = 'HK$ ' + persPay.toLocaleString() + ' (全數賠償)';
+    
+    document.getElementById('case-oop-elite').innerText = c.eliteOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + c.eliteOOP.toLocaleString();
+    document.getElementById('case-oop-wise').innerText = c.wiseOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + c.wiseOOP.toLocaleString();
+    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + c.flexiOOP.toLocaleString() + (c.flexiOOP > 30000 ? ' (嚴重超額)' : '');
   }
 
-  function proceedFromM2() {
-    goToStage('m3');
+  function recalcCustomCost(val) {
+    var num = Number(val.replace(/[^0-9]/g, '')) || 200000;
+    document.getElementById('case-total-input').value = 'HK$ ' + num.toLocaleString();
+    var comp = appState.role === 'child' ? 0 : Math.min(num, 100000) * 0.8;
+    var pers = Math.max(0, num - comp);
+    document.getElementById('case-comp-text').innerText = 'HK$ ' + Math.round(comp).toLocaleString();
+    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(pers).toLocaleString() + ' (全數賠償)';
+    document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
+    document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
+    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(num * 0.35).toLocaleString() + ' (嚴重超額)';
   }
 
-  function selectM4(val) {
-    document.querySelectorAll('#m4-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
-    var btn = document.querySelector(`[data-m4="${val}"]`);
-    if (btn) btn.classList.add('selected');
-    var alertBox = document.getElementById('m4-no-alert');
-    if (alertBox) alertBox.style.display = (val === 'no') ? 'block' : 'none';
-  }
-
-  function acceptGapAlert() {
-    alert('感謝你的檢視！請留意若將來醫療通脹或自費藥物增加，建議定期覆檢防線。');
+  function setPremMode(mode) {
+    appState.premMode = mode;
+    document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
+    document.getElementById('btnModeMonthly').classList.toggle('active', mode === 'monthly');
+    updateValPremiums();
   }
 
   function syncDeductibles(type, val) {
@@ -810,101 +798,17 @@
     updateValPremiums();
   }
 
-  function togglePlanVisibility(plan) {
-    var btn = document.getElementById('vis-btn-' + plan);
-    var cols = document.querySelectorAll('.plan-col-' + plan);
-    btn.classList.toggle('off');
-    cols.forEach(c => c.style.display = btn.classList.contains('off') ? 'none' : '');
-  }
-
-  // 4. 07 情境案例切換
-  function selectCaseCategory(cat) {
-    document.querySelectorAll('.scenario-tab-btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('scTab-' + cat).classList.add('selected');
-    
-    var drop = document.getElementById('case-select-dropdown');
-    if (cat === 'day') {
-      drop.innerHTML = `<option value="day1" selected>📍 日間腸胃鏡切除瘜肉 (開支: $17,714 | 自付: $0)</option>`;
-      applySelectedCase('day1');
-    } else if (cat === 'inpatient') {
-      drop.innerHTML = `
-        <option value="case1" selected>📍 案例 1：子宮肌瘤引致尿滯留 (開支: $175,341 | 自付: $16,000)</option>
-        <option value="case2">📍 案例 2：小朋友發燒/肺炎住院8天 (開支: $81,446 | 自付: $13,360)</option>`;
-      applySelectedCase('case1');
-    } else if (cat === 'critical') {
-      drop.innerHTML = `<option value="crit1" selected>📍 案例：早期乳癌切除連標靶 (開支: $520,000 | 靈活自付爆煲)</option>`;
-      applySelectedCase('crit1');
-    }
-  }
-
-  function applySelectedCase(val) {
-    if (val === 'day1') {
-      document.getElementById('case-title-display').innerText = '腸胃鏡連瘜肉切除';
-      document.getElementById('case-cost-input').value = 'HK$ 17,714';
-      document.getElementById('case-comp-val').innerText = 'HK$ 17,714 (100% 賠付)';
-      document.getElementById('case-pers-val').innerText = 'HK$ 0 (無須啟動第二層)';
-      document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-flexi').innerText = 'HK$ 0 (全賠)';
-    } else if (val === 'case1') {
-      document.getElementById('case-title-display').innerText = '子宮肌瘤引致尿滯留';
-      document.getElementById('case-cost-input').value = 'HK$ 175,341';
-      document.getElementById('case-comp-val').innerText = 'HK$ 80,000';
-      document.getElementById('case-pers-val').innerText = 'HK$ 95,341 (自付額已抵消 ✅)';
-      document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-flexi').innerText = 'HK$ 31,591';
-    } else if (val === 'case2') {
-      document.getElementById('case-title-display').innerText = '小朋友肺炎住院8天';
-      document.getElementById('case-cost-input').value = 'HK$ 81,446';
-      document.getElementById('case-comp-val').innerText = 'HK$ 0 (無公司醫保)';
-      document.getElementById('case-pers-val').innerText = 'HK$ 81,446 (全數賠償)';
-      document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-flexi').innerText = 'HK$ 13,360';
-    } else if (val === 'crit1') {
-      document.getElementById('case-title-display').innerText = '早期乳癌切除連標靶治療';
-      document.getElementById('case-cost-input').value = 'HK$ 520,000';
-      document.getElementById('case-comp-val').innerText = 'HK$ 100,000 (已達上限)';
-      document.getElementById('case-pers-val').innerText = 'HK$ 420,000 (全數賠償)';
-      document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-      document.getElementById('case-oop-flexi').innerText = 'HK$ 185,000 (嚴重超額)';
-    }
-  }
-
-  function recalcCaseCustom(val) {
-    var num = Number(val.replace(/[^0-9]/g, '')) || 200000;
-    document.getElementById('case-cost-input').value = 'HK$ ' + num.toLocaleString();
-    var comp = appState.role === 'child' ? 0 : Math.min(num, 100000) * 0.8;
-    var pers = Math.max(0, num - comp);
-    document.getElementById('case-comp-val').innerText = 'HK$ ' + Math.round(comp).toLocaleString();
-    document.getElementById('case-pers-val').innerText = 'HK$ ' + Math.round(pers).toLocaleString();
-    document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
-    document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(num * 0.25).toLocaleString();
-  }
-
-  // 5. 08 保費精算與回贈
-  function setPremMode(mode) {
-    appState.premMode = mode;
-    document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
-    document.getElementById('btnModeMonthly').classList.toggle('active', mode === 'monthly');
-    updateValPremiums();
-  }
-
   function selectFinalPlan(plan) {
     appState.selectedFinalPlan = plan;
     document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('input[name="finalPlan"]').forEach(r => r.checked = false);
     
-    var targetCard = document.getElementById('cardSelect' + plan.charAt(0).toUpperCase() + plan.slice(1));
-    if (targetCard) {
-      targetCard.classList.add('selected');
-      targetCard.querySelector('input').checked = true;
+    var card = document.getElementById('cardSelect' + plan.charAt(0).toUpperCase() + plan.slice(1));
+    if (card) {
+      card.classList.add('selected');
+      card.querySelector('input').checked = true;
     }
-    
-    // 更新 09 總結摘要
+
     if (plan === 'elite') {
       document.getElementById('sumPlanName').innerText = '👑 高端尊顯醫療計劃 (半私家房)';
       document.getElementById('sumCoverage').innerText = '每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，自帶半私家房)';
@@ -931,8 +835,8 @@
     var isTax = document.getElementById('chkTax').checked;
     var isMonthly = appState.premMode === 'monthly';
 
-    function calcFinalPrice(raw) {
-      if (raw === '--' || isNaN(raw)) return '--';
+    function calcP(raw) {
+      if (!raw || isNaN(raw)) return '--';
       var p = Number(raw);
       if (isVitality) p = p * 0.9;
       if (isTax) p = p - Math.min(8000, p) * 0.17;
@@ -940,58 +844,42 @@
       return 'HK$ ' + Math.round(p).toLocaleString() + (isMonthly ? ' /月' : ' /年');
     }
 
-    // 尊顯
-    var eliteSheet = `尊顯${eliteDed}自付額`;
-    var pEliteRaw = (db.premiumTables[eliteSheet] && db.premiumTables[eliteSheet][age]) ? db.premiumTables[eliteSheet][age] : '--';
-    document.getElementById('valPriceElite').innerText = calcFinalPrice(pEliteRaw);
+    var pElite = (db.premiumTables[`尊顯${eliteDed}自付額`] && db.premiumTables[`尊顯${eliteDed}自付額`][age]);
+    var pWise = (db.premiumTables[`睿選${wiseDed}自付額`] && db.premiumTables[`睿選${wiseDed}自付額`][age]);
+    var flexiKey = gender === 'female' ? '女靈活計劃' : '男靈活計劃';
+    var pFlexi = (db.premiumTables[flexiKey] && db.premiumTables[flexiKey][age]);
 
-    // 睿選
-    var wiseSheet = `睿選${wiseDed}自付額`;
-    var pWiseRaw = (db.premiumTables[wiseSheet] && db.premiumTables[wiseSheet][age]) ? db.premiumTables[wiseSheet][age] : '--';
-    document.getElementById('valPriceWise').innerText = calcFinalPrice(pWiseRaw);
-
-    // 靈活
-    var flexiSheet = (gender === 'female') ? '女靈活計劃' : '男靈活計劃';
-    var pFlexiRaw = (db.premiumTables[flexiSheet] && db.premiumTables[flexiSheet][age]) ? db.premiumTables[flexiSheet][age] : '--';
-    document.getElementById('valPriceFlexi').innerText = calcFinalPrice(pFlexiRaw);
+    document.getElementById('valPriceElite').innerText = calcP(pElite);
+    document.getElementById('valPriceWise').innerText = calcP(pWise);
+    document.getElementById('valPriceFlexi').innerText = calcP(pFlexi);
 
     selectFinalPlan(appState.selectedFinalPlan);
   }
 
-  // 6. 案例彈窗
-  function openClaimsModal() {
-    var modal = document.getElementById('claimsModal');
-    var list = document.getElementById('modalCasesList');
-    list.innerHTML = '';
-    
-    if (db && db.claimCases && db.claimCases.length > 0) {
-      db.claimCases.forEach(c => {
-        var isHigh = c.category === 'high';
-        list.innerHTML += `
-          <div style="background:rgba(255,255,255,0.08); border:1px solid #374151; border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <span style="font-size:11px; padding:2px 6px; border-radius:4px; font-weight:800; background:${isHigh ? '#1e3a8a' : '#7f1d1d'}; color:#fff;">
-                ${isHigh ? '高端全數索償' : '傳統設限醫保'}
-              </span>
-              <span style="font-size:14px; font-weight:700; color:#f3f4f6; margin-left:8px;">${c.caseName}</span>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:12px; color:#9ca3af;">總開支 HK$ ${c.totalCost.toLocaleString()}</div>
-              <div style="font-size:14px; font-weight:800; color:${c.outOfPocket > 0 ? '#ef4444' : '#10b981'};">
-                自付差額: HK$ ${c.outOfPocket.toLocaleString()}
-              </div>
-            </div>
-          </div>`;
-      });
-    }
-    modal.style.display = 'flex';
+  function togglePlanVis(plan) {
+    var btn = document.getElementById('vis-btn-' + plan);
+    var cols = document.querySelectorAll('.plan-col-' + plan);
+    btn.classList.toggle('off');
+    cols.forEach(c => c.style.display = btn.classList.contains('off') ? 'none' : '');
   }
 
-  function closeClaimsModal() {
-    document.getElementById('claimsModal').style.display = 'none';
+  function selectBtn(btn) {
+    btn.closest('.choice-list').querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
   }
 
-  // 7. 後台管理 Drawer
+  function selectM4(val) {
+    document.querySelectorAll('#m4-choice-list .choice-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`[data-m4="${val}"]`).classList.add('selected');
+    document.getElementById('m4-no-alert').style.display = (val === 'no') ? 'block' : 'none';
+  }
+
+  function goToStage(stageId) {
+    document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
+    document.getElementById('stage-' + stageId).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
   function openAdminPanel() {
     var modal = document.getElementById('adminModal');
     var body = document.getElementById('adminBodyContent');
@@ -1000,11 +888,7 @@
     var secConfig = document.createElement('div');
     secConfig.innerHTML = `<div class="admin-section-title">⚙️ 系統設定 & 標籤額度</div>`;
     for (const [k, v] of Object.entries(db.config || {})) {
-      secConfig.innerHTML += `
-        <div class="admin-item">
-          <label>${k}</label>
-          <input type="text" data-admin-config="${k}" value="${v}">
-        </div>`;
+      secConfig.innerHTML += `<div class="admin-item"><label>${k}</label><input type="text" data-admin-config="${k}" value="${v}"></div>`;
     }
     body.appendChild(secConfig);
 
@@ -1016,7 +900,6 @@
           <label>【${p.role === 'adult' ? '成人' : '兒童'} - 第 ${p.stepOrder} 步】${p.tagName}</label>
           <input type="text" placeholder="主標題" data-admin-page-title="${idx}" value="${p.title}">
           <textarea placeholder="副標題" data-admin-page-sub="${idx}">${p.subtitle}</textarea>
-          <input type="text" placeholder="關鍵思考/警示語" data-admin-page-alert="${idx}" value="${p.quoteAlert || ''}">
         </div>`;
     });
     body.appendChild(secPages);
@@ -1024,22 +907,25 @@
     modal.style.display = 'flex';
   }
 
+  function closeAdminPanel() {
+    document.getElementById('adminModal').style.display = 'none';
+  }
+
   function saveAdminPanel() {
-    if (!confirm("確定儲存並同步至 Google Sheet？")) return;
-    var btnSave = document.getElementById('btnSaveAdmin');
-    btnSave.innerText = "⏳ 正在同步至 Google Sheet...";
-    btnSave.disabled = true;
+    var btn = document.getElementById('btnSaveAdmin');
+    btn.innerText = "⏳ 正在同步至 Google Sheet...";
+    btn.disabled = true;
 
     document.querySelectorAll('[data-admin-config]').forEach(inp => {
       db.config[inp.dataset.adminConfig] = inp.value;
     });
 
-    var curVer = String(db.config["資料版本"] || "6.6.2").split('.');
+    var curVer = String(db.config["資料版本"] || "6.7.1").split('.');
     if (curVer.length === 3) {
       curVer[2] = Number(curVer[2]) + 1;
       db.config["資料版本"] = curVer.join('.');
     } else {
-      db.config["資料版本"] = "6.6.3";
+      db.config["資料版本"] = "6.7.2";
     }
 
     document.querySelectorAll('[data-admin-page-title]').forEach(inp => {
@@ -1050,10 +936,6 @@
       var idx = Number(inp.dataset.adminPageSub);
       db.pages[idx].subtitle = inp.value;
     });
-    document.querySelectorAll('[data-admin-page-alert]').forEach(inp => {
-      var idx = Number(inp.dataset.adminPageAlert);
-      db.pages[idx].quoteAlert = inp.value;
-    });
 
     fetch(GAS_API_URL, {
       method: "POST",
@@ -1062,30 +944,23 @@
     .then(res => res.json())
     .then(res => {
       alert("✅ 成功同步至 Google Sheet！最新版本號：" + db.config["資料版本"]);
-      localStorage.setItem('AVA_MED_V67_CACHE', JSON.stringify(db));
+      localStorage.setItem('AVA_MED_V671_CACHE', JSON.stringify(db));
       document.getElementById('appVersion').innerText = 'v' + db.config["資料版本"];
-      document.getElementById('adminModal').style.display = 'none';
+      closeAdminPanel();
       applyRoleContent();
     })
     .catch(err => {
       alert("❌ 同步失敗：" + err);
     })
     .finally(() => {
-      btnSave.innerText = "💾 儲存並同步至 Google Sheet";
-      btnSave.disabled = false;
+      btn.innerText = "💾 儲存並同步至 Google Sheet";
+      btn.disabled = false;
     });
   }
 
-  document.getElementById('btnOpenAdmin').addEventListener('click', openAdminPanel);
-  document.getElementById('appVersion').addEventListener('click', openAdminPanel);
-  document.getElementById('btnCloseAdmin').addEventListener('click', () => document.getElementById('adminModal').style.display = 'none');
-  document.getElementById('btnCancelAdmin').addEventListener('click', () => document.getElementById('adminModal').style.display = 'none');
-  document.getElementById('btnSaveAdmin').addEventListener('click', saveAdminPanel);
-
-  // 8. 雲端資料同步
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V67_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V671_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -1098,7 +973,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V67_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V671_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
