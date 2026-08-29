@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.7.2 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.7.3 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -162,33 +162,17 @@
     background: #fffcf5; border: 1.5px solid #fde68a; border-radius: 10px; padding: 14px; margin-top: 14px; cursor: pointer; text-align: center; font-size: 13.5px; font-weight: bold; color: #92400e;
   }
   .promo-content-panel {
-    display: none; background: #fffdf9; border: 1px dashed #fde68a; border-radius: 10px; padding: 14px; margin-top: 8px; font-size: 13px; line-height: 1.6;
+    display: none; background: #fffdf9; border: 1.5px solid #fde68a; border-radius: 12px; padding: 16px; margin-top: 10px;
   }
+  
+  .rebate-stat-box {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 12px; font-size: 13.5px; line-height: 1.8;
+  }
+  .rebate-row { display: flex; justify-content: space-between; align-items: center; }
+  .rebate-total { border-top: 1.5px dashed #cbd5e1; padding-top: 8px; margin-top: 8px; font-weight: 900; font-size: 15px; color: #c0392b; }
 
   .cross-sell-alert {
     background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700;
-  }
-
-  #adminModal {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15, 23, 42, 0.7); z-index: 9999999; justify-content: center; align-items: center; padding: 16px;
-  }
-  .admin-card {
-    background: #ffffff; width: 100%; max-width: 600px; max-height: 90vh; border-radius: 16px;
-    display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  }
-  .admin-header {
-    padding: 16px 20px; background: #0f172a; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
-  }
-  .admin-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-  .admin-section-title {
-    font-size: 14px; font-weight: 800; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 4px; margin-top: 8px;
-  }
-  .admin-item {
-    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
-  }
-  .admin-footer {
-    padding: 14px 20px; background: #f1f5f9; display: flex; gap: 10px; border-top: 1px solid #e2e8f0;
   }
  </style>
 </head>
@@ -197,11 +181,10 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminPanel()">v6.7.2</span>
+      <span class="v-badge" id="appVersion">v6.7.3</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
-      <button type="button" onclick="openAdminPanel()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
       <div id="sync-status-badge">🔄 連接雲端庫...</div>
     </div>
   </div>
@@ -238,9 +221,9 @@
    <span class="stage-tag" id="m3-tag">03 ｜ 現在有的保障</span>
    <h2 class="stage-title" id="m3-title">回顧你的第一道防線</h2>
    <div class="stat-grid-box">
-     <div class="stat-row"><span>假設預計醫療費用：</span><strong id="m3-cost-text">HK$ 200,000</strong></div>
-     <div class="stat-row" id="m3-comp-row"><span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span><strong style="color:#059669;" id="m3-comp-text">HK$ 80,000</strong></div>
-     <div class="stat-row" id="m3-pers-row" style="display:none;"><span id="m3-pers-label">第二層（個人醫保）：</span><strong style="color:#0056b3;" id="m3-pers-text">HK$ 0</strong></div>
+     <div class="stat-row"><span>假設預計醫療費用：</span><strong id="m3-cost-text">HK$ 500,000</strong></div>
+     <div class="stat-row" id="m3-comp-row"><span>第一層（公司醫保預計賠償 <span id="m3-rate-badge" style="font-size:12px; color:#666;">80%</span>）：</span><strong style="color:#059669;" id="m3-comp-text">HK$ 200,000</strong></div>
+     <div class="stat-row" id="m3-pers-row" style="display:none;"><span id="m3-pers-label">第二層（個人醫保預計賠償）：</span><strong style="color:#0056b3;" id="m3-pers-text">HK$ 200,000</strong></div>
    </div>
    <div class="info-quote-box" id="m3-quote-box" style="font-size:14.5px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
      🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
@@ -271,10 +254,10 @@
    <span class="stage-tag" id="m5-tag">05 ｜ 缺口 ➔ 解決方案</span>
    <h2 class="stage-title" id="m5-title">醫療自付差額總結</h2>
    <div class="stat-grid-box">
-     <div class="stat-row"><span>預計醫療開支：</span><span id="m5-cost-val">HK$ 200,000</span></div>
-     <div class="stat-row" id="m5-comp-row"><span>第一層公司醫保（預計賠付）：</span><span style="color:#059669;" id="m5-comp-val">- HK$ 80,000</span></div>
-     <div class="stat-row" id="m5-pers-row" style="display:none;"><span>第二層個人醫保（預計賠付）：</span><span style="color:#059669;" id="m5-pers-val">- HK$ 0</span></div>
-     <div class="stat-row total"><span style="color:var(--danger);">自身需承擔自付缺口：</span><span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 120,000</span></div>
+     <div class="stat-row"><span>預計醫療開支：</span><span id="m5-cost-val">HK$ 500,000</span></div>
+     <div class="stat-row" id="m5-comp-row"><span>第一層公司醫保（預計賠付）：</span><span style="color:#059669;" id="m5-comp-val">- HK$ 200,000</span></div>
+     <div class="stat-row" id="m5-pers-row" style="display:none;"><span>第二層個人醫保（預計賠付）：</span><span style="color:#059669;" id="m5-pers-val">- HK$ 200,000</span></div>
+     <div class="stat-row total"><span style="color:var(--danger);">自身需承擔自付缺口：</span><span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ 100,000</span></div>
    </div>
    <div class="info-quote-box" id="m5-quote-box" style="font-size:15px; font-weight:800; color:var(--primary); text-align:center;">
      ❓「呢個缺口由你自己應付，你認為可接受嗎？」
@@ -297,7 +280,7 @@
      </div>
    </div>
 
-   <!-- 產品亮點綠色框 (已修復) -->
+   <!-- 產品亮點綠色框 -->
    <div class="success-box">
      <ul class="bullet-list" id="prod-bullet-list">
        <li>終身 $6,000 萬高額醫療保障，實報實銷</li>
@@ -353,43 +336,8 @@
      </div>
    </div>
 
-   <div class="checklist-grid">
-     <div class="checklist-row header-row">
-       <div class="col-item">保障項目</div>
-       <div class="col-elite plan-col-elite">尊顯 (左)</div>
-       <div class="col-wise plan-col-wise" id="colWiseHeader">睿選 (中)</div>
-       <div class="col-flexi plan-col-flexi">靈活 (右)</div>
-     </div>
-     <div class="checklist-row">
-       <div class="col-item">🩺 出院後覆診</div>
-       <div class="col-elite plan-col-elite"><strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span></div>
-       <div class="col-wise plan-col-wise" id="colWiseCheck1"><strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span></div>
-       <div class="col-flexi plan-col-flexi" style="color:var(--danger);">⚠️ 上限 $848<br><span style="font-size:10px;">(限3日內)</span></div>
-     </div>
-     <div class="checklist-row">
-       <div class="col-item">🌿 出院後中醫</div>
-       <div class="col-elite plan-col-elite"><strong>✅ 每次 $650</strong><br><span style="font-size:10px; color:#666;">(全年15次)</span></div>
-       <div class="col-wise plan-col-wise" id="colWiseCheck2"><strong>✅ 每次 $1,000</strong><br><span style="font-size:10px; color:#666;">(全年20次)</span></div>
-       <div class="col-flexi plan-col-flexi" style="color:var(--danger); font-weight:bold;">❌ 不適用</div>
-     </div>
-     <div class="checklist-row">
-       <div class="col-item">🎁 次級病房每日現金津貼</div>
-       <div class="col-elite plan-col-elite"><strong>每日 $1,200</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span></div>
-       <div class="col-wise plan-col-wise" id="colWiseCheck3"><strong>每日 $2,400</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span></div>
-       <div class="col-flexi plan-col-flexi" style="color:var(--danger); font-weight:bold;">❌ 不適用</div>
-     </div>
-     <div class="checklist-row">
-       <div class="col-item">🎗️ 非手術癌症長遠開支</div>
-       <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">🛡️ 全數賠償</div>
-       <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">🛡️ 全數賠償</div>
-       <div class="col-flexi plan-col-flexi" style="color:var(--danger);">⚠️ 上限 $96,000</div>
-     </div>
-     <div class="checklist-row" id="rowCompanionBed" style="display:none;">
-       <div class="col-item">🧸 住院家長陪床費</div>
-       <div class="col-elite plan-col-elite" style="color:#059669; font-weight:bold;">全數索償 (每日包1張陪床)</div>
-       <div class="col-wise plan-col-wise" style="color:#059669; font-weight:bold;">全數索償 (每日包1張陪床)</div>
-       <div class="col-flexi plan-col-flexi" style="color:var(--danger);">❌ 不設保障</div>
-     </div>
+   <div class="checklist-grid" id="checklistGridContainer">
+     <!-- 透過 renderPlanChecklist() 自動生成 -->
    </div>
 
    <div class="nav-btn-group">
@@ -563,45 +511,58 @@
      <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
    </div>
 
-   <!-- 可展開/收合之專屬優惠計算器 (非 Alert) -->
+   <!-- 參考危疾 App 設計之現金券與回贈疊加試算 (圖六) -->
    <div class="promo-toggle-box" onclick="togglePromoPanel()">
-     🎁 <strong>點擊展開：專屬保費優惠與回贈試算 ▼</strong>
+     🎁 <strong>點擊展開：專屬現金券與回贈疊加試算 ▼</strong>
    </div>
    <div class="promo-content-panel" id="promoPanel">
-     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:8px;">
+     <div style="font-weight:800; font-size:14px; color:#b9770e; margin-bottom:10px;">🎁 專屬現金券與回贈疊加試算</div>
+     
+     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
        <div>
-         <label style="font-size:11.5px; font-weight:bold;">手動輸入首年推廣折扣 (%)：</label>
-         <input type="number" id="promoDiscountRate" value="10" min="0" max="100" oninput="calcPromoNet()">
+         <label style="font-size:11.5px; font-weight:bold;">HK$ 200 現金券 (張)：</label>
+         <input type="number" id="coupon200" value="0" min="0" oninput="calcRebateDetails()">
        </div>
        <div>
-         <label style="font-size:11.5px; font-weight:bold;">首年保費回贈金額 (HK$)：</label>
-         <input type="number" id="promoRebateVal" value="0" min="0" oninput="calcPromoNet()">
+         <label style="font-size:11.5px; font-weight:bold;">HK$ 500 現金券 (張)：</label>
+         <input type="number" id="coupon500" value="0" min="0" oninput="calcRebateDetails()">
        </div>
      </div>
-     <div style="background:#fff; border:1px solid #fde68a; padding:10px; border-radius:8px; text-align:center;">
-       <span style="font-size:12px; color:#666;">折實後首年實際投入：</span>
-       <strong style="color:#059669; font-size:18px; display:block; margin-top:2px;" id="promoNetPrice">HK$ --</strong>
+
+     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px;">
+       <div>
+         <label style="font-size:11.5px; font-weight:bold;">第 2 年回贈 (月數)：</label>
+         <input type="number" id="rebateM2" value="0" min="0" max="12" oninput="calcRebateDetails()">
+       </div>
+       <div>
+         <label style="font-size:11.5px; font-weight:bold;">第 3 年回贈 (月數)：</label>
+         <input type="number" id="rebateM3" value="0" min="0" max="12" oninput="calcRebateDetails()">
+       </div>
+     </div>
+
+     <div class="rebate-stat-box">
+       <div class="rebate-row">
+         <span>首年實繳保費：</span>
+         <strong id="rowFirstYearPay">HK$ --</strong>
+       </div>
+       <div class="rebate-row" id="rowRebateY2" style="display:none;">
+         <span>第 2 年回贈金額：</span>
+         <strong style="color:#059669;" id="valRebateY2">HK$ 0</strong>
+       </div>
+       <div class="rebate-row" id="rowRebateY3" style="display:none;">
+         <span>第 3 年回贈金額：</span>
+         <strong style="color:#059669;" id="valRebateY3">HK$ 0</strong>
+       </div>
+       <div class="rebate-row rebate-total">
+         <span>總共累計節省：</span>
+         <span style="color:#dc2626; font-size:18px;" id="valTotalSavings">HK$ 0</span>
+       </div>
      </div>
    </div>
 
    <div class="nav-btn-group">
      <button type="button" class="btn-secondary" onclick="goToStage('premium-val')">← 返回調整預算</button>
      <button type="button" class="btn-success" onclick="alert('✅ 資料已確認，即將進入專屬申請流程！')">✅ 符合，進入辦理手續 →</button>
-   </div>
- </div>
-
- <!-- 後台管理彈窗 (Admin Panel) -->
- <div id="adminModal">
-   <div class="admin-card">
-     <div class="admin-header">
-       <span style="font-weight:800; font-size:16px;">🛠️ 醫療 App 後台管理 (Google Sheet 雙向同步)</span>
-       <button type="button" onclick="closeAdminPanel()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
-     </div>
-     <div class="admin-body" id="adminBodyContent"></div>
-     <div class="admin-footer">
-       <button type="button" class="btn btn-secondary" onclick="closeAdminPanel()" style="flex:1;">取消</button>
-       <button type="button" class="btn btn-primary" id="btnSaveAdmin" onclick="saveAdminPanel()" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
-     </div>
    </div>
  </div>
 
@@ -612,38 +573,39 @@
 
   var appState = {
     role: 'adult',
-    cost: 200000,
+    cost: 500000,
     hasCompany: true,
-    companyLimit: 100000,
+    companyLimit: 250000,
     companyRate: 80,
-    companyPay: 80000,
+    companyPay: 200000,
     hasPersonal: false,
-    persType: 'full',
+    persType: 'trad',
     personalDed: 20000,
-    persLimit: 80000,
+    persLimit: 250000,
     persRate: 80,
-    personalPay: 0,
-    finalGap: 120000,
+    personalPay: 200000,
+    finalGap: 100000,
     alertMsg: '',
     premMode: 'annual',
     selectedFinalPlan: 'wise',
     selectedFinalPrice: '--',
-    selectedRawAnnualNum: 0,
+    selectedRawAnnualNum: 5528,
     currentCaseCat: 'critical'
   };
 
   var db = null;
 
+  // 1. 完全動態解析 Health Protection 傳過來的參數
   function initParams() {
     var p = new URLSearchParams(window.location.search);
-    if (p.get('cost')) appState.cost = Number(p.get('cost')) || 200000;
+    if (p.get('cost')) appState.cost = Number(p.get('cost')) || 500000;
     if (p.get('hasCompany')) appState.hasCompany = p.get('hasCompany') === 'yes';
-    if (p.get('companyLimit')) appState.companyLimit = Number(p.get('companyLimit')) || 100000;
+    if (p.get('companyLimit')) appState.companyLimit = Number(p.get('companyLimit')) || 250000;
     if (p.get('companyRate')) appState.companyRate = Number(p.get('companyRate')) || 80;
     if (p.get('hasPersonal')) appState.hasPersonal = p.get('hasPersonal') === 'yes';
     if (p.get('persType')) appState.persType = p.get('persType');
     if (p.get('deductible')) appState.personalDed = Number(p.get('deductible')) || 20000;
-    if (p.get('persLimit')) appState.persLimit = Number(p.get('persLimit')) || 80000;
+    if (p.get('persLimit')) appState.persLimit = Number(p.get('persLimit')) || 250000;
     if (p.get('persRate')) appState.persRate = Number(p.get('persRate')) || 80;
     if (p.get('alertMsg')) appState.alertMsg = p.get('alertMsg');
     
@@ -688,10 +650,8 @@
       document.getElementById('valEliteDed').value = "0";
       document.getElementById('valWiseDed').value = "0";
       document.getElementById('sumFirstLine').innerText = "零保障 / 公立基本醫療";
-      document.getElementById('rowCompanionBed').style.display = 'flex';
     } else {
       document.getElementById('sumFirstLine').innerText = appState.hasCompany ? "公司團體醫保" : "個人儲備承擔";
-      document.getElementById('rowCompanionBed').style.display = 'none';
     }
 
     if (db && db.pages) {
@@ -735,7 +695,7 @@
       }
     }
 
-    // 03 & 05 數據更新
+    // 03 & 05 數據更新 (精確對齊 Health Protection)
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (isChild) {
       document.getElementById('m3-comp-row').style.display = 'none';
@@ -752,7 +712,7 @@
       document.getElementById('m3-pers-row').style.display = 'flex';
       document.getElementById('m5-pers-row').style.display = 'flex';
       if (appState.persType === 'trad') {
-        document.getElementById('m3-pers-label').innerText = '第二層（傳統醫保預計賠償）：';
+        document.getElementById('m3-pers-label').innerText = '第二層（個人醫保預計賠償）：';
         document.getElementById('m3-pers-text').innerText = 'HK$ ' + Math.round(appState.personalPay).toLocaleString();
         document.getElementById('m5-pers-val').innerText = '- HK$ ' + Math.round(appState.personalPay).toLocaleString();
       } else {
@@ -768,14 +728,65 @@
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
     document.getElementById('m5-gap-val').innerText = 'HK$ ' + Math.round(appState.finalGap).toLocaleString();
 
-    // 09 頁二次切入銷售提醒
     if (appState.alertMsg) {
       document.getElementById('crossSellBox').style.display = 'block';
       document.getElementById('crossSellMsg').innerText = appState.alertMsg;
     }
 
+    renderPlanChecklist();
     selectCaseCategory('critical');
     updateValPremiums();
+  }
+
+  // 渲染 06 專屬方案細項表格
+  function renderPlanChecklist() {
+    var tbody = document.getElementById('checklistGridContainer');
+    if (!tbody) return;
+    
+    var isChild = appState.role === 'child';
+    var isWiseSemi = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
+    
+    var items = (db && db.planItems && db.planItems.length > 0) ? db.planItems : [
+      { name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "⚠️ 受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "⚠️ 上限 $848", flexiSub: "(限3日內)" },
+      { name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "⚠️ 每次 $600", wiseGenSub: "(全年15次)", flexiMain: "❌ 不適用", flexiSub: "" },
+      { name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "❌ 不適用", wiseGenSub: "(已是普通房)", flexiMain: "❌ 不適用", flexiSub: "" },
+      { name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "", flexiMain: "⚠️ 上限 $96,000", flexiSub: "" },
+      { name: "🧸 住院家長陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "", isChildOnly: true }
+    ];
+
+    var html = `
+      <div class="checklist-row header-row">
+        <div class="col-item">保障項目</div>
+        <div class="col-elite plan-col-elite">尊顯 (左)</div>
+        <div class="col-wise plan-col-wise" id="colWiseHeader">${isWiseSemi ? '睿選 (中)' : '睿選 (降為普通房)'}</div>
+        <div class="col-flexi plan-col-flexi">靈活 (右)</div>
+      </div>`;
+
+    items.forEach(function(item) {
+      if (item.isChildOnly && !isChild) return;
+
+      var wMain = isWiseSemi ? item.wiseSemiMain : item.wiseGenMain;
+      var wSub = isWiseSemi ? item.wiseSemiSub : item.wiseGenSub;
+
+      html += `
+        <div class="checklist-row">
+          <div class="col-item">${item.name}</div>
+          <div class="col-elite plan-col-elite">
+            <strong>${item.eliteMain}</strong>
+            ${item.eliteSub ? `<br><span style="font-size:10px; color:#666;">${item.eliteSub}</span>` : ''}
+          </div>
+          <div class="col-wise plan-col-wise">
+            <strong>${wMain}</strong>
+            ${wSub ? `<br><span style="font-size:10px; color:#666;">${wSub}</span>` : ''}
+          </div>
+          <div class="col-flexi plan-col-flexi">
+            <strong style="${item.flexiMain.includes('❌') ? 'color:var(--danger);' : ''}">${item.flexiMain}</strong>
+            ${item.flexiSub ? `<br><span style="font-size:10px;">${item.flexiSub}</span>` : ''}
+          </div>
+        </div>`;
+    });
+
+    tbody.innerHTML = html;
   }
 
   function checkWiseCond() {
@@ -785,26 +796,14 @@
     var allChecked = c1 && c2 && c3;
 
     var badge = document.getElementById('wise-status-badge');
-    var wH = document.getElementById('colWiseHeader');
-    var wc1 = document.getElementById('colWiseCheck1');
-    var wc2 = document.getElementById('colWiseCheck2');
-    var wc3 = document.getElementById('colWiseCheck3');
-
     if (allChecked) {
       badge.style.background = '#28a745';
       badge.innerText = '✓ 符合條件（享半私家）';
-      wH.innerText = '睿選 (中)';
-      wc1.innerHTML = '<strong>✅ 全數賠償</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span>';
-      wc2.innerHTML = '<strong>✅ 每次 $1,000</strong><br><span style="font-size:10px; color:#666;">(全年20次)</span>';
-      wc3.innerHTML = '<strong>每日 $2,400</strong><br><span style="font-size:10px; color:#666;">(自願降級普通房)</span>';
     } else {
       badge.style.background = '#dc2626';
       badge.innerText = '⚠️ 條件未符（降為普通房級別）';
-      wH.innerText = '睿選 (降為普通房)';
-      wc1.innerHTML = '<strong>⚠️ 受限於普通房分項</strong><br><span style="font-size:10px; color:#666;">(90-365日)</span>';
-      wc2.innerHTML = '<strong>⚠️ 每次 $600</strong><br><span style="font-size:10px; color:#666;">(全年15次)</span>';
-      wc3.innerHTML = '<strong>❌ 不適用</strong><br><span style="font-size:10px; color:#666;">(已是普通房)</span>';
     }
+    renderPlanChecklist();
   }
 
   var CASES = {
@@ -875,6 +874,7 @@
     updateValPremiums();
   }
 
+  // 08 頁方案勾選即時連動 09 頁
   function selectFinalPlan(plan) {
     appState.selectedFinalPlan = plan;
     document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
@@ -900,7 +900,7 @@
       appState.selectedFinalPrice = document.getElementById('valPriceFlexi').innerText;
     }
     document.getElementById('sumPrice').innerText = appState.selectedFinalPrice;
-    calcPromoNet();
+    calcRebateDetails();
   }
 
   function updateValPremiums() {
@@ -949,15 +949,45 @@
   function togglePromoPanel() {
     var p = document.getElementById('promoPanel');
     p.style.display = (p.style.display === 'block') ? 'none' : 'block';
-    calcPromoNet();
+    calcRebateDetails();
   }
 
-  function calcPromoNet() {
-    var discRate = Number(document.getElementById('promoDiscountRate').value) || 0;
-    var rebate = Number(document.getElementById('promoRebateVal').value) || 0;
-    var base = appState.selectedRawAnnualNum || 5528;
-    var net = base * (1 - discRate / 100) - rebate;
-    document.getElementById('promoNetPrice').innerText = 'HK$ ' + Math.max(0, Math.round(net)).toLocaleString() + ' (首年投入)';
+  // 09 頁回贈計算邏輯（圖六模型）
+  function calcRebateDetails() {
+    var c200 = Number(document.getElementById('coupon200').value) || 0;
+    var c500 = Number(document.getElementById('coupon500').value) || 0;
+    var m2 = Number(document.getElementById('rebateM2').value) || 0;
+    var m3 = Number(document.getElementById('rebateM3').value) || 0;
+
+    var annualBase = appState.selectedRawAnnualNum || 5528;
+    var monthlyBase = annualBase / 12;
+
+    var totalCoupons = (c200 * 200) + (c500 * 500);
+    var firstYearPay = Math.max(0, annualBase - totalCoupons);
+
+    var rebateY2 = Math.round(monthlyBase * m2);
+    var rebateY3 = Math.round(monthlyBase * m3);
+    var totalSavings = totalCoupons + rebateY2 + rebateY3;
+
+    document.getElementById('rowFirstYearPay').innerText = 'HK$ ' + firstYearPay.toLocaleString();
+
+    var rowY2 = document.getElementById('rowRebateY2');
+    if (m2 > 0) {
+      rowY2.style.display = 'flex';
+      document.getElementById('valRebateY2').innerText = 'HK$ ' + rebateY2.toLocaleString();
+    } else {
+      rowY2.style.display = 'none';
+    }
+
+    var rowY3 = document.getElementById('rowRebateY3');
+    if (m3 > 0) {
+      rowY3.style.display = 'flex';
+      document.getElementById('valRebateY3').innerText = 'HK$ ' + rebateY3.toLocaleString();
+    } else {
+      rowY3.style.display = 'none';
+    }
+
+    document.getElementById('valTotalSavings').innerText = 'HK$ ' + totalSavings.toLocaleString();
   }
 
   function togglePlanVis(plan) {
@@ -984,87 +1014,9 @@
     window.scrollTo(0, 0);
   }
 
-  function openAdminPanel() {
-    var modal = document.getElementById('adminModal');
-    var body = document.getElementById('adminBodyContent');
-    body.innerHTML = '';
-
-    var secConfig = document.createElement('div');
-    secConfig.innerHTML = `<div class="admin-section-title">⚙️ 系統設定 & 標籤額度</div>`;
-    for (const [k, v] of Object.entries(db.config || {})) {
-      secConfig.innerHTML += `<div class="admin-item"><label>${k}</label><input type="text" data-admin-config="${k}" value="${v}"></div>`;
-    }
-    body.appendChild(secConfig);
-
-    var secPages = document.createElement('div');
-    secPages.innerHTML = `<div class="admin-section-title">📄 題目與副標題文案</div>`;
-    (db.pages || []).forEach((p, idx) => {
-      secPages.innerHTML += `
-        <div class="admin-item">
-          <label>【${p.role === 'adult' ? '成人' : '兒童'} - 第 ${p.stepOrder} 步】${p.tagName}</label>
-          <input type="text" placeholder="主標題" data-admin-page-title="${idx}" value="${p.title}">
-          <textarea placeholder="副標題" data-admin-page-sub="${idx}">${p.subtitle}</textarea>
-        </div>`;
-    });
-    body.appendChild(secPages);
-
-    modal.style.display = 'flex';
-  }
-
-  function closeAdminPanel() {
-    document.getElementById('adminModal').style.display = 'none';
-  }
-
-  function saveAdminPanel() {
-    var btn = document.getElementById('btnSaveAdmin');
-    btn.innerText = "⏳ 正在同步至 Google Sheet...";
-    btn.disabled = true;
-
-    document.querySelectorAll('[data-admin-config]').forEach(inp => {
-      db.config[inp.dataset.adminConfig] = inp.value;
-    });
-
-    var curVer = String(db.config["資料版本"] || "6.7.2").split('.');
-    if (curVer.length === 3) {
-      curVer[2] = Number(curVer[2]) + 1;
-      db.config["資料版本"] = curVer.join('.');
-    } else {
-      db.config["資料版本"] = "6.7.3";
-    }
-
-    document.querySelectorAll('[data-admin-page-title]').forEach(inp => {
-      var idx = Number(inp.dataset.adminPageTitle);
-      db.pages[idx].title = inp.value;
-    });
-    document.querySelectorAll('[data-admin-page-sub]').forEach(inp => {
-      var idx = Number(inp.dataset.adminPageSub);
-      db.pages[idx].subtitle = inp.value;
-    });
-
-    fetch(GAS_API_URL, {
-      method: "POST",
-      body: JSON.stringify(db)
-    })
-    .then(res => res.json())
-    .then(res => {
-      alert("✅ 成功同步至 Google Sheet！最新版本號：" + db.config["資料版本"]);
-      localStorage.setItem('AVA_MED_V672_CACHE', JSON.stringify(db));
-      document.getElementById('appVersion').innerText = 'v' + db.config["資料版本"];
-      closeAdminPanel();
-      applyRoleContent();
-    })
-    .catch(err => {
-      alert("❌ 同步失敗：" + err);
-    })
-    .finally(() => {
-      btn.innerText = "💾 儲存並同步至 Google Sheet";
-      btn.disabled = false;
-    });
-  }
-
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V672_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V673_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -1077,7 +1029,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V672_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V673_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
