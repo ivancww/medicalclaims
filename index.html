@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.7.3 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.7.4 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -181,7 +181,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v6.7.3</span>
+      <span class="v-badge" id="appVersion">v6.7.4</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -280,7 +280,6 @@
      </div>
    </div>
 
-   <!-- 產品亮點綠色框 -->
    <div class="success-box">
      <ul class="bullet-list" id="prod-bullet-list">
        <li>終身 $6,000 萬高額醫療保障，實報實銷</li>
@@ -336,9 +335,7 @@
      </div>
    </div>
 
-   <div class="checklist-grid" id="checklistGridContainer">
-     <!-- 透過 renderPlanChecklist() 自動生成 -->
-   </div>
+   <div class="checklist-grid" id="checklistGridContainer"></div>
 
    <div class="nav-btn-group">
      <button type="button" class="btn-secondary" onclick="goToStage('m5')">← 返回缺口檢視</button>
@@ -383,8 +380,8 @@
      </div>
 
      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7; margin:12px 0;">
-       <div id="case-comp-line">第一層公司醫保預計賠（基本手術 80% (受限於公司上限 $100,000)）：<strong style="color:#059669;" id="case-comp-text">HK$ 100,000 (已達上限)</strong></div>
-       <div>第二層個人醫保實際賠付：<strong style="color:#059669;" id="case-pers-text">HK$ 420,000 (全數賠償)</strong></div>
+       <div id="case-comp-line">第一層公司醫保預計賠：<strong style="color:#059669;" id="case-comp-text">HK$ 0</strong></div>
+       <div>第二層個人醫保實際賠付：<strong style="color:#059669;" id="case-pers-text">HK$ 0 (全數賠償)</strong></div>
      </div>
 
      <div class="oop-row-grid">
@@ -462,19 +459,19 @@
    </div>
 
    <div style="display:flex; flex-direction:column; gap:10px;">
-     <div class="plan-select-card" id="cardSelectElite" onclick="selectFinalPlan('elite')">
+     <div class="plan-select-card plan-col-elite" id="cardSelectElite" onclick="selectFinalPlan('elite')">
        <input type="radio" name="finalPlan" value="elite">
        <div style="font-size:13px; font-weight:bold; color:var(--elite-color);">👑 尊顯計劃</div>
        <div style="font-size:20px; font-weight:900; color:var(--elite-color); margin-top:4px;" id="valPriceElite">HK$ --</div>
      </div>
      
-     <div class="plan-select-card selected" id="cardSelectWise" onclick="selectFinalPlan('wise')">
+     <div class="plan-select-card plan-col-wise selected" id="cardSelectWise" onclick="selectFinalPlan('wise')">
        <input type="radio" name="finalPlan" value="wise" checked>
        <div style="font-size:13px; font-weight:bold; color:var(--wise-color);">🛡️ 睿選計劃 (推薦)</div>
        <div style="font-size:20px; font-weight:900; color:var(--wise-color); margin-top:4px;" id="valPriceWise">HK$ --</div>
      </div>
      
-     <div class="plan-select-card" id="cardSelectFlexi" onclick="selectFinalPlan('flexi')">
+     <div class="plan-select-card plan-col-flexi" id="cardSelectFlexi" onclick="selectFinalPlan('flexi')">
        <input type="radio" name="finalPlan" value="flexi">
        <div style="font-size:13px; font-weight:bold; color:var(--flexi-color);">⚠️ 靈活計劃</div>
        <div style="font-size:20px; font-weight:900; color:var(--flexi-color); margin-top:4px;" id="valPriceFlexi">HK$ --</div>
@@ -511,7 +508,7 @@
      <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
    </div>
 
-   <!-- 參考危疾 App 設計之現金券與回贈疊加試算 (圖六) -->
+   <!-- 現金券與回贈疊加試算 -->
    <div class="promo-toggle-box" onclick="togglePromoPanel()">
      🎁 <strong>點擊展開：專屬現金券與回贈疊加試算 ▼</strong>
    </div>
@@ -575,32 +572,32 @@
     role: 'adult',
     cost: 500000,
     hasCompany: true,
-    companyLimit: 250000,
+    companyLimit: 400000,
     companyRate: 80,
-    companyPay: 200000,
+    companyPay: 320000,
     hasPersonal: false,
-    persType: 'trad',
+    persType: 'full',
     personalDed: 20000,
     persLimit: 250000,
     persRate: 80,
-    personalPay: 200000,
-    finalGap: 100000,
+    personalPay: 0,
+    finalGap: 180000,
     alertMsg: '',
     premMode: 'annual',
     selectedFinalPlan: 'wise',
     selectedFinalPrice: '--',
     selectedRawAnnualNum: 5528,
-    currentCaseCat: 'critical'
+    currentCaseCat: 'critical',
+    planVis: { elite: true, wise: true, flexi: true }
   };
 
   var db = null;
 
-  // 1. 完全動態解析 Health Protection 傳過來的參數
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = Number(p.get('cost')) || 500000;
     if (p.get('hasCompany')) appState.hasCompany = p.get('hasCompany') === 'yes';
-    if (p.get('companyLimit')) appState.companyLimit = Number(p.get('companyLimit')) || 250000;
+    if (p.get('companyLimit')) appState.companyLimit = Number(p.get('companyLimit')) || 400000;
     if (p.get('companyRate')) appState.companyRate = Number(p.get('companyRate')) || 80;
     if (p.get('hasPersonal')) appState.hasPersonal = p.get('hasPersonal') === 'yes';
     if (p.get('persType')) appState.persType = p.get('persType');
@@ -617,7 +614,6 @@
       appState.role = 'adult';
     }
 
-    // 計算第一層與第二層賠償
     var cost = appState.cost;
     var compPay = 0;
     if (appState.hasCompany && appState.role === 'adult') {
@@ -695,7 +691,7 @@
       }
     }
 
-    // 03 & 05 數據更新 (精確對齊 Health Protection)
+    // 03 & 05 數據更新
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (isChild) {
       document.getElementById('m3-comp-row').style.display = 'none';
@@ -707,7 +703,6 @@
       document.getElementById('m5-comp-val').innerText = '- HK$ ' + Math.round(appState.companyPay).toLocaleString();
     }
     
-    // 個人醫保動態顯示
     if (appState.hasPersonal) {
       document.getElementById('m3-pers-row').style.display = 'flex';
       document.getElementById('m5-pers-row').style.display = 'flex';
@@ -738,7 +733,6 @@
     updateValPremiums();
   }
 
-  // 渲染 06 專屬方案細項表格
   function renderPlanChecklist() {
     var tbody = document.getElementById('checklistGridContainer');
     if (!tbody) return;
@@ -787,6 +781,7 @@
     });
 
     tbody.innerHTML = html;
+    applyAllPlanVisibilities();
   }
 
   function checkWiseCond() {
@@ -808,14 +803,14 @@
 
   var CASES = {
     day: [
-      { name: '腸胃鏡連瘜肉切除', total: 17714, comp: 17714, eliteOOP: 0, wiseOOP: 0, flexiOOP: 0 }
+      { name: '腸胃鏡連瘜肉切除', total: 17714 }
     ],
     inpatient: [
-      { name: '子宮肌瘤引致尿滯留', total: 175341, comp: 80000, eliteOOP: 0, wiseOOP: 0, flexiOOP: 31591 },
-      { name: '小朋友肺炎住院8天', total: 81446, comp: 0, eliteOOP: 0, wiseOOP: 0, flexiOOP: 13360 }
+      { name: '子宮肌瘤引致尿滯留', total: 175341 },
+      { name: '小朋友肺炎住院8天', total: 81446 }
     ],
     critical: [
-      { name: '早期乳癌切除連標靶治療', total: 520000, comp: 100000, eliteOOP: 0, wiseOOP: 0, flexiOOP: 185000 }
+      { name: '早期乳癌切除連標靶治療', total: 520000 }
     ]
   };
 
@@ -827,38 +822,66 @@
     var drop = document.getElementById('case-select-dropdown');
     drop.innerHTML = '';
     CASES[cat].forEach((c, idx) => {
-      drop.innerHTML += `<option value="${idx}">📍 案例：${c.name} (開支: $${c.total.toLocaleString()} | 靈活自付: $${c.flexiOOP.toLocaleString()})</option>`;
+      drop.innerHTML += `<option value="${idx}">📍 案例：${c.name} (開支: $${c.total.toLocaleString()})</option>`;
     });
 
     renderSelectedCase(0);
   }
 
+  // 07 案例動態連動第一層公司醫保
   function renderSelectedCase(idx) {
     var c = CASES[appState.currentCaseCat][Number(idx)] || CASES[appState.currentCaseCat][0];
     document.getElementById('case-title-display').innerText = c.name;
     document.getElementById('case-total-input').value = 'HK$ ' + c.total.toLocaleString();
     
-    var comp = appState.role === 'child' ? 0 : c.comp;
-    var persPay = Math.max(0, c.total - comp);
+    var cost = c.total;
+    var comp = 0;
+    if (appState.hasCompany && appState.role === 'adult') {
+      comp = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
+    }
+    var persPay = Math.max(0, cost - comp);
     
-    document.getElementById('case-comp-text').innerText = 'HK$ ' + comp.toLocaleString() + (comp > 0 ? ' (已達公司上限)' : ' (無公司醫保)');
-    document.getElementById('case-pers-text').innerText = 'HK$ ' + persPay.toLocaleString() + ' (全數賠償)';
+    var compText = 'HK$ ' + Math.round(comp).toLocaleString();
+    if (comp > 0) {
+      if (cost * (appState.companyRate / 100) >= appState.companyLimit) {
+        compText += ' (已達公司上限)';
+      }
+    } else {
+      compText += ' (無公司醫保)';
+    }
+    document.getElementById('case-comp-text').innerText = compText;
+    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + ' (全數賠償)';
     
-    document.getElementById('case-oop-elite').innerText = c.eliteOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + c.eliteOOP.toLocaleString();
-    document.getElementById('case-oop-wise').innerText = c.wiseOOP === 0 ? 'HK$ 0 (全賠)' : 'HK$ ' + c.wiseOOP.toLocaleString();
-    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + c.flexiOOP.toLocaleString() + (c.flexiOOP > 30000 ? ' (嚴重超額)' : '');
+    // 靈活計劃自付額動態計算
+    var flexiOOP = cost > 100000 ? Math.round((cost - comp) * 0.45) : 0;
+    document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
+    document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
+    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString() + (flexiOOP > 30000 ? ' (嚴重超額)' : '');
   }
 
   function recalcCustomCost(val) {
     var num = Number(val.replace(/[^0-9]/g, '')) || 200000;
     document.getElementById('case-total-input').value = 'HK$ ' + num.toLocaleString();
-    var comp = appState.role === 'child' ? 0 : Math.min(num, 100000) * 0.8;
+    
+    var comp = 0;
+    if (appState.hasCompany && appState.role === 'adult') {
+      comp = Math.min(num, appState.companyLimit) * (appState.companyRate / 100);
+    }
     var pers = Math.max(0, num - comp);
-    document.getElementById('case-comp-text').innerText = 'HK$ ' + Math.round(comp).toLocaleString();
+    
+    var compText = 'HK$ ' + Math.round(comp).toLocaleString();
+    if (comp > 0) {
+      if (num * (appState.companyRate / 100) >= appState.companyLimit) {
+        compText += ' (已達公司上限)';
+      }
+    }
+    document.getElementById('case-comp-text').innerText = compText;
     document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(pers).toLocaleString() + ' (全數賠償)';
+    
+    var flexiOOP = num > 100000 ? Math.round((num - comp) * 0.45) : 0;
     document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
     document.getElementById('case-oop-wise').innerText = 'HK$ 0 (全賠)';
-    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(num * 0.35).toLocaleString() + ' (嚴重超額)';
+    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString() + (flexiOOP > 30000 ? ' (嚴重超額)' : '');
   }
 
   function setPremMode(mode) {
@@ -874,7 +897,6 @@
     updateValPremiums();
   }
 
-  // 08 頁方案勾選即時連動 09 頁
   function selectFinalPlan(plan) {
     appState.selectedFinalPlan = plan;
     document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
@@ -952,7 +974,6 @@
     calcRebateDetails();
   }
 
-  // 09 頁回贈計算邏輯（圖六模型）
   function calcRebateDetails() {
     var c200 = Number(document.getElementById('coupon200').value) || 0;
     var c500 = Number(document.getElementById('coupon500').value) || 0;
@@ -990,11 +1011,29 @@
     document.getElementById('valTotalSavings').innerText = 'HK$ ' + totalSavings.toLocaleString();
   }
 
+  // 全面同步 06, 07, 08 計劃顯示狀態
   function togglePlanVis(plan) {
+    appState.planVis[plan] = !appState.planVis[plan];
+    var isShown = appState.planVis[plan];
     var btn = document.getElementById('vis-btn-' + plan);
-    var cols = document.querySelectorAll('.plan-col-' + plan);
-    btn.classList.toggle('off');
-    cols.forEach(c => c.style.display = btn.classList.contains('off') ? 'none' : '');
+    if (btn) btn.classList.toggle('off', !isShown);
+
+    applyAllPlanVisibilities();
+  }
+
+  function applyAllPlanVisibilities() {
+    ['elite', 'wise', 'flexi'].forEach(function(plan) {
+      var isShown = appState.planVis[plan];
+      var cols = document.querySelectorAll('.plan-col-' + plan);
+      cols.forEach(c => c.style.display = isShown ? '' : 'none');
+    });
+
+    // 如果當前選中的方案被隱藏，自動切換至其他顯示的方案
+    if (!appState.planVis[appState.selectedFinalPlan]) {
+      if (appState.planVis.elite) selectFinalPlan('elite');
+      else if (appState.planVis.wise) selectFinalPlan('wise');
+      else if (appState.planVis.flexi) selectFinalPlan('flexi');
+    }
   }
 
   function selectBtn(btn) {
@@ -1016,7 +1055,7 @@
 
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V673_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V674_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -1029,7 +1068,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V673_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V674_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
