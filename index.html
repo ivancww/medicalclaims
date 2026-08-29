@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v6.8.6 | AVA專屬</title>
+  <title>醫療保障實況對比 v6.8.7 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -170,7 +170,6 @@
     .admin-nav-btn.active { background: #1a3a6e; color: #fff; }
     .admin-body { padding: 18px; overflow-y: auto; flex: 1; }
     
-    /* 粉紅色虛線可編輯鏡像元素 */
     .editable-mirror {
       border: 2px dashed #f472b6 !important; background: #fff0f5 !important;
       border-radius: 8px; padding: 4px 8px; outline: none; transition: 0.2s;
@@ -185,7 +184,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.6</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.7</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -247,7 +246,7 @@
     <div class="nav-btn-group"><button type="button" class="btn-secondary" onclick="goToStage('m2')">← 返上一頁</button></div>
   </div>
 
-  <!-- ==================== 06 專屬方案 (100% 完整還原) ==================== -->
+  <!-- ==================== 06 專屬方案 ==================== -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">06 ｜ 專屬方案</span>
@@ -318,7 +317,7 @@
     </div>
   </div>
 
-  <!-- ==================== 07 情境案例 (三大分類 + 5x5檔案 + 精確自付) ==================== -->
+  <!-- ==================== 07 情境案例 (自由輸入 + 靈活上限25萬) ==================== -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">07 ｜ 情境案例 ｜ 實況推演</span>
     <h2 class="stage-title">常見醫療開支壓力測試</h2>
@@ -336,7 +335,7 @@
         <select id="case-select-dropdown" onchange="renderSelectedCase(this.value)" style="flex:1; background:#fff;"></select>
         <button type="button" id="btnToggleFiles" onclick="toggleFilesView()" style="display:none; padding:6px 12px; font-size:12px; font-weight:bold; border-radius:8px; border:1.5px solid var(--primary); background:#fff; color:var(--primary); cursor:pointer; white-space:nowrap;">📎 案例文件 (<span id="filesCount">0</span>)</button>
       </div>
-      <!-- 5x5 圖片/PDF 網格預覽 (預設收起) -->
+      <!-- 5x5 圖片/PDF 網格預覽 -->
       <div id="caseFilesGrid" class="files-gallery-grid" style="display:none;"></div>
     </div>
 
@@ -348,10 +347,10 @@
       
       <div style="margin-bottom:12px;">
         <label style="font-size:12px; font-weight:bold; color:#666;">✏️ 手術/治療基本開支 (可手動輸入壓力測試)：</label>
-        <input type="text" id="case-total-input" value="HK$ 174,397" oninput="recalcCustomCost(this.value)" style="font-size:16px; font-weight:800;">
+        <input type="text" id="case-total-input" value="HK$ 174,397" oninput="handleManualCostInput(this.value)" style="font-size:17px; font-weight:800; color:#1a3a6e;">
       </div>
 
-      <!-- 紫圈：純自付金額呈現 (靈活計劃自動按上限85%索償，餘額為自付) -->
+      <!-- 紫圈：純自付金額呈現 (靈活計劃按 25 萬上限及 85% 索償率計算) -->
       <div class="oop-row-grid">
         <div class="oop-mini-card elite plan-col-elite">
           <div style="font-size:11px; font-weight:bold;">👑 尊顯 客人自付</div>
@@ -363,7 +362,7 @@
         </div>
         <div class="oop-mini-card flexi plan-col-flexi">
           <div style="font-size:11px; font-weight:bold;">⚠️ 靈活 客人自付</div>
-          <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 41,261</div>
+          <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 26,160</div>
         </div>
       </div>
     </div>
@@ -374,7 +373,7 @@
     </div>
   </div>
 
-  <!-- ==================== 08 保費與價值 (100% 完整還原) ==================== -->
+  <!-- ==================== 08 保費與價值 ==================== -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">08 ｜ 保費與價值 ｜ 精算預算</span>
@@ -447,7 +446,7 @@
     </div>
   </div>
 
-  <!-- ==================== 09 保障確認 (100% 完整還原) ==================== -->
+  <!-- ==================== 09 保障確認 ==================== -->
   <div class="stage-card" id="stage-confirm">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">09 ｜ 保障確認 ｜ 方案總結</span>
@@ -517,7 +516,7 @@
   </div>
 </div>
 
-<!-- ==================== 1:1 粉紅虛線可編輯鏡像後台 ==================== -->
+<!-- ==================== 1:1 粉紅虛線鏡像後台管理 (含上載檔案按鈕) ==================== -->
 <div id="adminModal">
   <div class="admin-card">
     <div class="admin-header">
@@ -527,7 +526,7 @@
     <div class="admin-nav-tabs">
       <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">01-03 頁面鏡像</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案鏡像</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與檔案</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與檔案上載</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
     </div>
     <div class="admin-body">
@@ -547,10 +546,10 @@
         </div>
       </div>
 
-      <!-- 3. 07 索償案例管理 (含相片/PDF 上載) -->
+      <!-- 3. 07 索償案例管理 (含檔案上載按鈕與即時預覽) -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (支援最多 10 個相片/PDF 檔案)</strong>
+          <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (支援相片/PDF 上載，最多 10 個)</strong>
           <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增案例</button>
         </div>
         <div id="adminCasesList"></div>
@@ -590,7 +589,7 @@
 
   var DEFAULT_CASES = [
     { category: "日間手術", caseName: "(網絡) 腸胃鏡檢查", totalCost: 17714, files: [] },
-    { category: "住院治療", caseName: "子宮肌瘤微創切除", totalCost: 174397, files: [] },
+    { category: "住院治療", caseName: "子宮肌瘤引起滯留", totalCost: 174397, files: [] },
     { category: "癌症治療", caseName: "急性視網膜脫落 / 標靶治療", totalCost: 275073, files: [] }
   ];
 
@@ -599,7 +598,6 @@
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
 
-  // 1. 精準參數解析 (最高優先級判定兒童/成人模式)
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
@@ -643,7 +641,6 @@
       document.getElementById('m5-tag').innerText = "03 ｜ 缺口 ➔ 解決方案";
     }
 
-    // 03 頁面 (原05) 缺口總結
     document.getElementById('m5-cost-val').innerText = 'HK$ ' + appState.cost.toLocaleString();
     if (appState.hasCompany && appState.companyPay > 0 && !isChild) {
       document.getElementById('m5-comp-row').style.display = 'flex';
@@ -769,7 +766,6 @@
     document.getElementById('case-title-display').innerText = c.caseName;
     document.getElementById('case-total-input').value = 'HK$ ' + Number(c.totalCost).toLocaleString();
 
-    // 處理最多 10 個檔案
     var files = c.files || [];
     var btnToggle = document.getElementById('btnToggleFiles');
     var gallery = document.getElementById('caseFilesGrid');
@@ -778,7 +774,7 @@
       document.getElementById('filesCount').innerText = files.length;
       gallery.innerHTML = '';
       files.slice(0, 10).forEach(url => {
-        var isPdf = url.toLowerCase().endsWith('.pdf');
+        var isPdf = url.toLowerCase().includes('.pdf');
         if (isPdf) {
           gallery.innerHTML += `<a href="${url}" target="_blank" class="gallery-thumb" style="color:#dc2626;">📄 PDF</a>`;
         } else {
@@ -798,10 +794,16 @@
     gallery.style.display = (gallery.style.display === 'grid') ? 'none' : 'grid';
   }
 
-  // 07 頁精確自付計算 (移走公司及個人醫保，靈活上限85%)
+  // 自由輸入事件
+  function handleManualCostInput(val) {
+    var num = parseSafeNum(val);
+    recalcCustomCost(num);
+  }
+
+  // 07 頁精確自付計算 (靈活計劃以上限 25 萬計算)
   function recalcCustomCost(val) {
-    var num = parseSafeNum(val) || 100000;
-    document.getElementById('case-total-input').value = 'HK$ ' + num.toLocaleString();
+    var num = parseSafeNum(val);
+    if (isNaN(num)) num = 0;
 
     var eliteDed = Number(document.getElementById('elite-deductible').value) || 16000;
     var wiseDed = Number(document.getElementById('wise-deductible').value) || 18000;
@@ -809,13 +811,14 @@
     var eliteOOP = Math.min(num, eliteDed);
     var wiseOOP = Math.min(num, wiseDed);
 
-    // 靈活計劃：上限 85% 可索償，餘額為客人自付額
-    var flexiClaimable = num * 0.85;
+    // 靈活計劃：上限 25 萬，85% 索償率，餘額為客人自付額
+    var flexiBase = Math.min(num, 250000);
+    var flexiClaimable = flexiBase * 0.85;
     var flexiOOP = Math.round(num - flexiClaimable);
 
-    document.getElementById('case-oop-elite').innerText = 'HK$ ' + eliteOOP.toLocaleString();
-    document.getElementById('case-oop-wise').innerText = 'HK$ ' + wiseOOP.toLocaleString();
-    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + flexiOOP.toLocaleString();
+    document.getElementById('case-oop-elite').innerText = 'HK$ ' + Math.round(eliteOOP).toLocaleString();
+    document.getElementById('case-oop-wise').innerText = 'HK$ ' + Math.round(wiseOOP).toLocaleString();
+    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(flexiOOP).toLocaleString();
   }
 
   // ==================== 08 保費精算與 09 總結 ====================
@@ -973,7 +976,6 @@
     document.getElementById('admTab-' + tabId).style.display = 'block';
   }
 
-  // 鏡像 1: 01-03 頁面卡片鏡像
   function renderAdminP0103Mirror() {
     var box = document.getElementById('adminP0103Mirror');
     box.innerHTML = '';
@@ -987,7 +989,6 @@
     });
   }
 
-  // 鏡像 2: 06 專屬方案鏡像
   function renderAdminP06Mirror() {
     var hlBox = document.getElementById('adminMirrorHighlights');
     hlBox.innerHTML = '';
@@ -1015,7 +1016,7 @@
     tb.innerHTML = html;
   }
 
-  // 07 案例管理
+  // 07 案例管理 (含檔案上載按鈕)
   function renderAdminCasesList() {
     var box = document.getElementById('adminCasesList');
     box.innerHTML = '';
@@ -1033,9 +1034,38 @@
           </div>
           <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px; margin-top:8px;">
             <input type="number" data-adm-case-cost="${idx}" value="${c.totalCost}" placeholder="總費用">
-            <input type="text" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="相片/PDF 網址 (以分號 ; 隔開，最多10個)">
+            <div style="display:flex; gap:6px; align-items:center;">
+              <input type="text" id="admCaseFiles_${idx}" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="相片/PDF 網址 (以分號 ; 隔開，最多10個)" style="flex:1;">
+              <label style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
+                📤 上載文件
+                <input type="file" multiple accept="image/*,.pdf" style="display:none;" onchange="handleFileUpload(this, ${idx})">
+              </label>
+            </div>
           </div>
         </div>`;
+    });
+  }
+
+  // 檔案上載轉換處理 (最多 10 個)
+  function handleFileUpload(input, idx) {
+    var files = Array.from(input.files);
+    if (!files || files.length === 0) return;
+    
+    var textInput = document.getElementById(`admCaseFiles_${idx}`);
+    var currentFiles = textInput.value ? textInput.value.split(';').map(s=>s.trim()).filter(Boolean) : [];
+    
+    if (currentFiles.length + files.length > 10) {
+      alert("⚠️ 每個案例最多只可上載 10 個檔案！");
+      files = files.slice(0, 10 - currentFiles.length);
+    }
+    
+    files.forEach(file => {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        currentFiles.push(e.target.result);
+        textInput.value = currentFiles.join(';');
+      };
+      reader.readAsDataURL(file);
     });
   }
 
@@ -1063,13 +1093,11 @@
     box.innerHTML += '</div>';
   }
 
-  // 儲存鏡像回寫
   function saveAdminData() {
     var btn = document.getElementById('btnSaveAdmin');
     btn.innerText = "⏳ 正在同步至 Google Sheet...";
     btn.disabled = true;
 
-    // 收集鏡像 01-03 頁面
     document.querySelectorAll('[data-adm-page-title]').forEach(el => {
       var idx = Number(el.dataset.admPageTitle);
       db.pages[idx].title = el.innerText.trim();
@@ -1079,7 +1107,6 @@
       db.pages[idx].subtitle = el.innerText.trim();
     });
 
-    // 收集鏡像 06 亮點與表格
     document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { db.highlights[idx].text = el.innerText.trim(); });
     document.querySelectorAll('[data-adm-pi-name]').forEach((el, idx) => {
       db.planItems[idx].name = el.innerText.trim();
@@ -1088,7 +1115,6 @@
       db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-flexi="${idx}"]`).innerText.trim();
     });
 
-    // 收集 07 案例
     var newCases = [];
     document.querySelectorAll('[data-adm-case-name]').forEach((inp, idx) => {
       var rawFiles = document.querySelector(`[data-adm-case-files="${idx}"]`).value;
@@ -1101,7 +1127,6 @@
     });
     db.claimCases = newCases;
 
-    // 收集系統設定
     document.querySelectorAll('[data-adm-config]').forEach(inp => {
       db.config[inp.dataset.admConfig] = inp.value;
     });
