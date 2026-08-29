@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v6.8.8 | AVA專屬</title>
+  <title>醫療保障實況對比 v6.8.9 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -186,7 +186,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.8</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v6.8.9</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -518,7 +518,7 @@
     <div class="admin-nav-tabs">
       <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">01-03 題目與選項</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案鏡像</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與檔案上載</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與 Firebase 上載</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
     </div>
     <div class="admin-body">
@@ -538,10 +538,10 @@
         </div>
       </div>
 
-      <!-- 3. 07 索償案例管理 (含檔案上載按鈕) -->
+      <!-- 3. 07 索償案例管理 (Firebase 直線上載) -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (支援相片/PDF 上載，最多 10 個)</strong>
+          <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (Firebase Storage 多檔上載)</strong>
           <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增案例</button>
         </div>
         <div id="adminCasesList"></div>
@@ -562,6 +562,21 @@
 <script>
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
   
+  // ======================== Firebase Storage 配置 ========================
+  const firebaseConfig = {
+    apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
+    authDomain: "medical-and-ci.firebaseapp.com",
+    projectId: "medical-and-ci",
+    storageBucket: "medical-and-ci.firebasestorage.app",
+    messagingSenderId: "857984223277",
+    appId: "1:857984223277:web:bd64aa72fc7e374c3450a4",
+    measurementId: "G-VC775G3QRW"
+  };
+  
+  if (!firebase.apps.length) {
+    try { firebase.initializeApp(firebaseConfig); } catch(e) { console.error("Firebase init error", e); }
+  }
+
   var appState = {
     role: 'adult',
     cost: 500000,
@@ -577,7 +592,6 @@
     planVis: { elite: true, wise: true, flexi: true }
   };
   
-  // 本地預設數據（秒開即用，無需等待雲端）
   var DEFAULT_FALLBACK_DB = {
     pages: [
       { pageId: "m1_adult", role: "adult", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：" },
@@ -613,7 +627,6 @@
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
 
-  // 1. 初始化參數（首要判定 role）
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
@@ -640,7 +653,6 @@
     appState.companyPay = compPay;
   }
 
-  // 2. 渲染對應角色模式內容（支援選項動態生成）
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
@@ -658,7 +670,6 @@
       document.getElementById('m5-tag').innerText = "03 ｜ 缺口 ➔ 解決方案";
     }
 
-    // 01 & 02 頁面選項動態渲染
     var r = appState.role;
     var p1Id = `m1_${r}`;
     var p2Id = `m2_${r}`;
@@ -673,7 +684,6 @@
     }
 
     if (db.options) {
-      // 01 選項
       var opts1 = db.options.filter(o => o.pageId === p1Id).sort((a,b)=>a.order-b.order);
       var html1 = '';
       opts1.forEach(o => {
@@ -685,7 +695,6 @@
       });
       if (html1) document.getElementById('m1-choice-list').innerHTML = html1;
 
-      // 02 選項
       var opts2 = db.options.filter(o => o.pageId === p2Id).sort((a,b)=>a.order-b.order);
       var html2 = '';
       opts2.forEach(o => {
@@ -830,7 +839,6 @@
     recalcCustomCost(num);
   }
 
-  // 07 頁精確自付計算 (靈活計劃上限 25 萬計算)
   function recalcCustomCost(val) {
     var num = parseSafeNum(val);
     if (isNaN(num)) num = 0;
@@ -841,7 +849,6 @@
     var eliteOOP = Math.min(num, eliteDed);
     var wiseOOP = Math.min(num, wiseDed);
 
-    // 靈活計劃：上限 25 萬，85% 索償率，餘額為自付額
     var flexiBase = Math.min(num, 250000);
     var flexiClaimable = flexiBase * 0.85;
     var flexiOOP = Math.round(num - flexiClaimable);
@@ -1010,16 +1017,14 @@
     document.getElementById('admTab-' + tabId).style.display = 'block';
   }
 
-  // 鏡像 1: 01-03 題目與選項鏡像
   function renderAdminP0103Mirror() {
     var box = document.getElementById('adminP0103Mirror');
     box.innerHTML = '';
     
-    // 渲染各頁標題
     (db.pages || []).forEach((p, pIdx) => {
       var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b)=>a.order-b.order);
       var optsHtml = '';
-      opts.forEach((o, oIdx) => {
+      opts.forEach((o) => {
         var globalOptIdx = db.options.indexOf(o);
         optsHtml += `
           <div style="background:#fff; border:1px dashed var(--pink-border); border-radius:8px; padding:8px; margin-top:6px;">
@@ -1041,7 +1046,6 @@
     });
   }
 
-  // 鏡像 2: 06 專屬方案鏡像
   function renderAdminP06Mirror() {
     var hlBox = document.getElementById('adminMirrorHighlights');
     hlBox.innerHTML = '';
@@ -1069,7 +1073,7 @@
     tb.innerHTML = html;
   }
 
-  // 07 案例管理 (支援相片/PDF 上載)
+  // 07 案例管理 (直連 Firebase Storage 上載)
   function renderAdminCasesList() {
     var box = document.getElementById('adminCasesList');
     box.innerHTML = '';
@@ -1088,10 +1092,10 @@
           <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px; margin-top:8px;">
             <input type="number" data-adm-case-cost="${idx}" value="${c.totalCost}" placeholder="總費用">
             <div style="display:flex; gap:6px; align-items:center;">
-              <input type="text" id="admCaseFiles_${idx}" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="相片/PDF 網址 (分號隔開)" style="flex:1;">
-              <label style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
+              <input type="text" id="admCaseFiles_${idx}" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="Firebase 網址清單" style="flex:1;">
+              <label id="uploadLabel_${idx}" style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
                 📤 上載文件
-                <input type="file" multiple accept="image/*,.pdf" style="display:none;" onchange="handleFileUpload(this, ${idx})">
+                <input type="file" multiple accept="image/*,.pdf" style="display:none;" onchange="uploadFilesToFirebase(this, ${idx})">
               </label>
             </div>
           </div>
@@ -1099,27 +1103,44 @@
     });
   }
 
-  // 檔案上載處理
-  function handleFileUpload(input, idx) {
+  // Firebase 直線上傳多個檔案（最多 10 個）
+  function uploadFilesToFirebase(input, idx) {
     var files = Array.from(input.files);
     if (!files || files.length === 0) return;
-    
+
     var textInput = document.getElementById(`admCaseFiles_${idx}`);
     var currentFiles = textInput.value ? textInput.value.split(';').map(s=>s.trim()).filter(Boolean) : [];
-    
+
     if (currentFiles.length + files.length > 10) {
       alert("⚠️ 每個案例最多只可上載 10 個檔案！");
       files = files.slice(0, 10 - currentFiles.length);
     }
-    
-    files.forEach(file => {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        currentFiles.push(e.target.result);
+
+    var uploadBtn = document.getElementById(`uploadLabel_${idx}`);
+    uploadBtn.innerText = "⏳ 上載中...";
+
+    try {
+      var storageRef = firebase.storage().ref();
+      var uploadPromises = files.map(file => {
+        var cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+        var fileRef = storageRef.child(`claims/${Date.now()}_${cleanName}`);
+        return fileRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
+      });
+
+      Promise.all(uploadPromises).then(urls => {
+        currentFiles = currentFiles.concat(urls);
         textInput.value = currentFiles.join(';');
-      };
-      reader.readAsDataURL(file);
-    });
+        uploadBtn.innerText = "📤 上載文件";
+        alert("✅ 成功上載 " + urls.length + " 個檔案至 Firebase Storage！");
+      }).catch(err => {
+        uploadBtn.innerText = "📤 上載文件";
+        console.error("Firebase Storage Upload Error: ", err);
+        alert("❌ 上載失敗，請檢查 Firebase Storage 權限或 Rules 設定：" + err.message);
+      });
+    } catch(e) {
+      uploadBtn.innerText = "📤 上載文件";
+      alert("Firebase 尚未正確初始化：" + e.message);
+    }
   }
 
   function addAdminCase() {
@@ -1214,10 +1235,10 @@
       });
   }
 
-  // 核心：即開即切換，背景非同步下載最新資料
+  // 即開即渲染，背景非同步更新雲端資料
   function initApp() {
     initParams();
-    applyRoleContent(); // 使用本地 Fallback 立即渲染正確角色模式，無需白等
+    applyRoleContent();
 
     fetch(GAS_API_URL)
       .then(res => res.json())
@@ -1226,7 +1247,7 @@
           db = remote;
           document.getElementById('sync-status-badge').innerText = '● 雲端同步完成';
           document.getElementById('sync-status-badge').classList.add('status-ok');
-          applyRoleContent(); // 雲端下載完畢後靜默刷新最新內容
+          applyRoleContent();
         }
       })
       .catch(() => {
