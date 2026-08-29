@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.5.0 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.6.1 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -124,18 +124,6 @@
   .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
   .oop-mini-val { font-size: 18px; font-weight: 900; margin-top: 4px; }
   
-  /* 保費可勾選卡片 */
-  .plan-select-card {
-    border: 2px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; transition: 0.2s; position: relative;
-  }
-  .plan-select-card:hover { border-color: var(--primary); }
-  .plan-select-card.selected {
-    border-color: var(--primary); background: #f0f7ff; box-shadow: 0 0 0 1.5px var(--primary);
-  }
-  .plan-select-card input[type="radio"] {
-    position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; cursor: pointer;
-  }
-  
   /* 案例黑底置中大字彈窗 Modal */
   .modal-overlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -152,6 +140,29 @@
   .case-detail-text {
     font-size: 16.5px; font-weight: 700; line-height: 1.8; color: #f3f4f6; margin-bottom: 16px; background: rgba(255,255,255,0.06); padding: 16px; border-radius: 8px; border-left: 4px solid #3b82f6;
   }
+
+  /* 管理員後台 Modal */
+  #adminModal {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.7); z-index: 9999999; justify-content: center; align-items: center; padding: 16px;
+  }
+  .admin-card {
+    background: #ffffff; width: 100%; max-width: 600px; max-height: 90vh; border-radius: 16px;
+    display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+  .admin-header {
+    padding: 16px 20px; background: #0f172a; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
+  }
+  .admin-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+  .admin-section-title {
+    font-size: 14px; font-weight: 800; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 4px; margin-top: 8px;
+  }
+  .admin-item {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .admin-footer {
+    padding: 14px 20px; background: #f1f5f9; display: flex; gap: 10px; border-top: 1px solid #e2e8f0;
+  }
  </style>
 </head>
 <body>
@@ -159,10 +170,13 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge">v6.5.0</span>
+      <span class="v-badge" id="appVersion" title="點擊開啟後台管理">v6.6.1</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
-    <div id="sync-status-badge">🔄 連接雲端費率庫...</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button type="button" id="btnOpenAdmin" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
+      <div id="sync-status-badge">🔄 連接雲端費率庫...</div>
+    </div>
   </div>
 
  <!-- ==================== 階段 1：前置 5 部曲 ==================== -->
@@ -489,6 +503,21 @@
    </div>
  </div>
 
+ <!-- 後台管理彈窗 (Admin Panel) -->
+ <div id="adminModal">
+   <div class="admin-card">
+     <div class="admin-header">
+       <span style="font-weight:800; font-size:16px;">🛠️ 醫療 App 後台管理 (Google Sheet 同步)</span>
+       <button type="button" id="btnCloseAdmin" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
+     </div>
+     <div class="admin-body" id="adminBodyContent"></div>
+     <div class="admin-footer">
+       <button type="button" class="btn btn-secondary" id="btnCancelAdmin" style="flex:1;">取消</button>
+       <button type="button" class="btn btn-primary" id="btnSaveAdmin" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
+     </div>
+   </div>
+ </div>
+
 </div>
 
 <script>
@@ -758,10 +787,101 @@
     document.getElementById('claimsModal').style.display = 'none';
   }
 
-  // 9. 雲端資料同步
+  // 9. 後台管理 Drawer (免密碼直接開啟)
+  function openAdminPanel() {
+    var modal = document.getElementById('adminModal');
+    var body = document.getElementById('adminBodyContent');
+    body.innerHTML = '';
+
+    var secConfig = document.createElement('div');
+    secConfig.innerHTML = `<div class="admin-section-title">⚙️ 系統設定 & 標籤額度</div>`;
+    for (const [k, v] of Object.entries(db.config || {})) {
+      secConfig.innerHTML += `
+        <div class="admin-item">
+          <label>${k}</label>
+          <input type="text" data-admin-config="${k}" value="${v}">
+        </div>`;
+    }
+    body.appendChild(secConfig);
+
+    var secPages = document.createElement('div');
+    secPages.innerHTML = `<div class="admin-section-title">📄 題目與副標題文案</div>`;
+    (db.pages || []).forEach((p, idx) => {
+      secPages.innerHTML += `
+        <div class="admin-item">
+          <label>【${p.role === 'adult' ? '成人' : '兒童'} - 第 ${p.stepOrder} 步】${p.tagName}</label>
+          <input type="text" placeholder="主標題" data-admin-page-title="${idx}" value="${p.title}">
+          <textarea placeholder="副標題" data-admin-page-sub="${idx}">${p.subtitle}</textarea>
+          <input type="text" placeholder="關鍵思考/警示語" data-admin-page-alert="${idx}" value="${p.quoteAlert || ''}">
+        </div>`;
+    });
+    body.appendChild(secPages);
+
+    modal.style.display = 'flex';
+  }
+
+  function saveAdminPanel() {
+    if (!confirm("確定儲存並同步至 Google Sheet？")) return;
+    var btnSave = document.getElementById('btnSaveAdmin');
+    btnSave.innerText = "⏳ 正在同步至 Google Sheet...";
+    btnSave.disabled = true;
+
+    document.querySelectorAll('[data-admin-config]').forEach(inp => {
+      db.config[inp.dataset.adminConfig] = inp.value;
+    });
+
+    var curVer = String(db.config["資料版本"] || "6.6.1").split('.');
+    if (curVer.length === 3) {
+      curVer[2] = Number(curVer[2]) + 1;
+      db.config["資料版本"] = curVer.join('.');
+    } else {
+      db.config["資料版本"] = "6.6.2";
+    }
+
+    document.querySelectorAll('[data-admin-page-title]').forEach(inp => {
+      var idx = Number(inp.dataset.adminPageTitle);
+      db.pages[idx].title = inp.value;
+    });
+    document.querySelectorAll('[data-admin-page-sub]').forEach(inp => {
+      var idx = Number(inp.dataset.adminPageSub);
+      db.pages[idx].subtitle = inp.value;
+    });
+    document.querySelectorAll('[data-admin-page-alert]').forEach(inp => {
+      var idx = Number(inp.dataset.adminPageAlert);
+      db.pages[idx].quoteAlert = inp.value;
+    });
+
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify(db)
+    })
+    .then(res => res.json())
+    .then(res => {
+      alert("✅ 成功同步至 Google Sheet！最新版本號：" + db.config["資料版本"]);
+      localStorage.setItem('AVA_MED_V66_CACHE', JSON.stringify(db));
+      document.getElementById('appVersion').innerText = 'v' + db.config["資料版本"];
+      document.getElementById('adminModal').style.display = 'none';
+      applyRoleContent();
+    })
+    .catch(err => {
+      alert("❌ 同步失敗：" + err);
+    })
+    .finally(() => {
+      btnSave.innerText = "💾 儲存並同步至 Google Sheet";
+      btnSave.disabled = false;
+    });
+  }
+
+  document.getElementById('btnOpenAdmin').addEventListener('click', openAdminPanel);
+  document.getElementById('appVersion').addEventListener('click', openAdminPanel);
+  document.getElementById('btnCloseAdmin').addEventListener('click', () => document.getElementById('adminModal').style.display = 'none');
+  document.getElementById('btnCancelAdmin').addEventListener('click', () => document.getElementById('adminModal').style.display = 'none');
+  document.getElementById('btnSaveAdmin').addEventListener('click', saveAdminPanel);
+
+  // 10. 雲端資料同步
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V65_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V66_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -774,7 +894,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V65_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V66_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
