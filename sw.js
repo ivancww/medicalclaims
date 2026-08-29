@@ -1,5 +1,5 @@
 // ⚠️ 每次修改 index.html 後，必須更改此版本號，以觸發自動更新機制
-const CACHE_NAME = 'ava-medical-cache-v6.7.4';
+const CACHE_NAME = 'ava-medical-cache-v6.7.5';
 
 // 必須緩存的檔案列表
 const urlsToCache = [
