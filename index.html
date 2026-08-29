@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
- <title>醫療保障實況對比 v6.7.5 | AVA專屬</title>
+ <title>醫療保障實況對比 v6.7.6 | AVA專屬</title>
  
  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
  <meta http-equiv="Pragma" content="no-cache">
@@ -181,7 +181,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v6.7.5</span>
+      <span class="v-badge" id="appVersion">v6.7.6</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -502,13 +502,11 @@
      <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
    </div>
 
-   <!-- 09 頁二次切入銷售提醒 -->
    <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
      ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
      <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
    </div>
 
-   <!-- 現金券與回贈疊加試算 -->
    <div class="promo-toggle-box" onclick="togglePromoPanel()">
      🎁 <strong>點擊展開：專屬現金券與回贈疊加試算 ▼</strong>
    </div>
@@ -573,15 +571,15 @@
     cost: 500000,
     hasCompany: false,
     companyLimit: 0,
-    companyRate: 0,
+    companyRate: 80,
     companyPay: 0,
-    hasPersonal: true,
+    hasPersonal: false,
     persType: 'trad',
     personalDed: 0,
-    persLimit: 350000,
+    persLimit: 0,
     persRate: 80,
-    personalPay: 280000,
-    finalGap: 220000,
+    personalPay: 0,
+    finalGap: 500000,
     alertMsg: '',
     premMode: 'annual',
     selectedFinalPlan: 'wise',
@@ -602,26 +600,30 @@
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
     
-    // 判斷公司醫保
+    // 公司醫保判定
     var hasCompStr = (p.get('hasCompany') || '').toLowerCase();
     appState.hasCompany = (hasCompStr === 'yes' || hasCompStr === 'true' || hasCompStr === '有');
     appState.companyLimit = parseSafeNum(p.get('companyLimit'));
     appState.companyRate = parseSafeNum(p.get('companyRate')) || 80;
     
-    // 判斷個人醫保
+    // 個人醫保判定
     var hasPersStr = (p.get('hasPersonal') || '').toLowerCase();
     appState.hasPersonal = (hasPersStr === 'yes' || hasPersStr === 'true' || hasPersStr === '有');
     
-    // 判斷個人醫保類型 (全數/高端 vs 傳統/細項)
+    // 個人醫保類型判定 (全數 vs 傳統)
     var pTypeStr = decodeURIComponent(p.get('persType') || '').toLowerCase();
-    if (pTypeStr.includes('trad') || pTypeStr.includes('傳統') || pTypeStr.includes('細項')) {
+    var pDedVal = parseSafeNum(p.get('deductible'));
+    var pLimitVal = parseSafeNum(p.get('persLimit'));
+    
+    // 智能容錯：若有填 persLimit，或 pTypeStr 包含傳統/細項，一律視為傳統醫保
+    if (pLimitVal > 0 || pTypeStr.includes('trad') || pTypeStr.includes('傳統') || pTypeStr.includes('細項')) {
       appState.persType = 'trad';
     } else {
       appState.persType = 'full';
     }
     
-    appState.personalDed = parseSafeNum(p.get('deductible'));
-    appState.persLimit = parseSafeNum(p.get('persLimit')) || 350000;
+    appState.personalDed = pDedVal;
+    appState.persLimit = pLimitVal;
     appState.persRate = parseSafeNum(p.get('persRate')) || 80;
     if (p.get('alertMsg')) appState.alertMsg = p.get('alertMsg');
     
@@ -633,19 +635,22 @@
       appState.role = 'adult';
     }
 
-    // 計算第一層與第二層賠償
+    // 計算公司醫保賠償
     var cost = appState.cost;
     var compPay = 0;
-    if (appState.hasCompany && appState.role === 'adult') {
+    if (appState.hasCompany && appState.role === 'adult' && appState.companyLimit > 0) {
       compPay = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
     }
     appState.companyPay = compPay;
 
+    // 計算個人醫保賠償
     var remain = Math.max(0, cost - compPay);
     var persPay = 0;
     if (appState.hasPersonal) {
       if (appState.persType === 'trad') {
-        persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
+        if (appState.persLimit > 0) {
+          persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
+        }
       } else {
         persPay = Math.max(0, remain - appState.personalDed);
       }
@@ -712,7 +717,7 @@
 
     // 03 頁與 05 頁數據渲染
     document.getElementById('m3-cost-text').innerText = 'HK$ ' + appState.cost.toLocaleString();
-    if (isChild || !appState.hasCompany) {
+    if (isChild || !appState.hasCompany || appState.companyPay === 0) {
       document.getElementById('m3-comp-row').style.display = 'none';
       document.getElementById('m5-comp-row').style.display = 'none';
     } else {
@@ -722,11 +727,10 @@
       document.getElementById('m5-comp-val').innerText = '- HK$ ' + Math.round(appState.companyPay).toLocaleString();
     }
     
-    // 個人醫保動態顯示 (精確判定傳統 vs 高端)
-    if (appState.hasPersonal) {
+    // 個人醫保動態顯示
+    if (appState.hasPersonal && appState.personalPay > 0) {
       document.getElementById('m3-pers-row').style.display = 'flex';
       document.getElementById('m5-pers-row').style.display = 'flex';
-      
       document.getElementById('m3-pers-label').innerText = '第二層（個人醫保預計賠償）：';
       document.getElementById('m3-pers-text').innerText = 'HK$ ' + Math.round(appState.personalPay).toLocaleString();
       document.getElementById('m5-pers-val').innerText = '- HK$ ' + Math.round(appState.personalPay).toLocaleString();
@@ -850,7 +854,7 @@
     
     var cost = c.total;
     var comp = 0;
-    if (appState.hasCompany && appState.role === 'adult') {
+    if (appState.hasCompany && appState.role === 'adult' && appState.companyLimit > 0) {
       comp = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
     }
     
@@ -858,7 +862,7 @@
     var persPay = 0;
     if (appState.hasPersonal) {
       if (appState.persType === 'trad') {
-        persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
+        if (appState.persLimit > 0) persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
       } else {
         persPay = Math.max(0, remain - appState.personalDed);
       }
@@ -871,7 +875,7 @@
       compText += ' (無公司醫保)';
     }
     document.getElementById('case-comp-text').innerText = compText;
-    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + (persPay > 0 ? ' (全數賠償)' : ' (無自付抵消)');
+    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + (persPay > 0 ? ' (全數賠償)' : ' (無個人賠償)');
     
     var flexiOOP = cost > 100000 ? Math.round((cost - comp) * 0.45) : 0;
     document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
@@ -884,14 +888,14 @@
     document.getElementById('case-total-input').value = 'HK$ ' + num.toLocaleString();
     
     var comp = 0;
-    if (appState.hasCompany && appState.role === 'adult') {
+    if (appState.hasCompany && appState.role === 'adult' && appState.companyLimit > 0) {
       comp = Math.min(num, appState.companyLimit) * (appState.companyRate / 100);
     }
     var remain = Math.max(0, num - comp);
     var persPay = 0;
     if (appState.hasPersonal) {
       if (appState.persType === 'trad') {
-        persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
+        if (appState.persLimit > 0) persPay = Math.min(remain, appState.persLimit) * (appState.persRate / 100);
       } else {
         persPay = Math.max(0, remain - appState.personalDed);
       }
@@ -902,7 +906,7 @@
       compText += ' (已達公司上限)';
     }
     document.getElementById('case-comp-text').innerText = compText;
-    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + ' (全數賠償)';
+    document.getElementById('case-pers-text').innerText = 'HK$ ' + Math.round(persPay).toLocaleString() + (persPay > 0 ? ' (全數賠償)' : ' (無個人賠償)');
     
     var flexiOOP = num > 100000 ? Math.round((num - comp) * 0.45) : 0;
     document.getElementById('case-oop-elite').innerText = 'HK$ 0 (全賠)';
@@ -1079,7 +1083,7 @@
 
   function syncDatabase() {
     var syncBadge = document.getElementById('sync-status-badge');
-    var cached = localStorage.getItem('AVA_MED_V675_CACHE');
+    var cached = localStorage.getItem('AVA_MED_V676_CACHE');
     if (cached) {
       try {
         db = JSON.parse(cached);
@@ -1092,7 +1096,7 @@
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          localStorage.setItem('AVA_MED_V675_CACHE', JSON.stringify(remote));
+          localStorage.setItem('AVA_MED_V676_CACHE', JSON.stringify(remote));
           syncBadge.innerText = '● 雲端同步完成';
           syncBadge.classList.add('status-ok');
           applyRoleContent();
