@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.1.1 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.1.2 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -40,8 +40,10 @@
       font-size: 13px; font-weight: 700; color: #64748b;
     }
     .v-badge { font-size: 11px; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 10px; cursor: pointer; }
+    .role-toggle-btn { font-size: 11.5px; font-weight: 800; padding: 4px 10px; border-radius: 12px; background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; cursor: pointer; transition: 0.2s; }
     #sync-status-badge { font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 10px; background: #eee; color: #666; }
     .status-ok { background: #d4edda !important; color: #155724 !important; }
+    .status-cache { background: #e0e7ff !important; color: #3730a3 !important; }
     
     .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
     .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed var(--pink-border); background: #f8f9fa; color: #555; transition: 0.2s; }
@@ -155,7 +157,7 @@
     
     .cross-sell-alert { background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
     
-    /* 溫馨提示危疾 App 導流卡片 (與 CIApp 風格對應) */
+    /* 溫馨提示危疾 App 導流卡片 */
     .warm-tip-card {
       background: #f0f7ff;
       border: 1.5px solid #bfdbfe;
@@ -235,13 +237,13 @@
 <body>
 <div class="app-shell">
   <div class="header-version-bar">
-    <div>
+    <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.1</span>
-      <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.2</span>
+      <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
-      <div id="sync-status-badge">🔄 連接雲端庫...</div>
+      <div id="sync-status-badge">🔄 載入中...</div>
       <button type="button" onclick="openAdminModal()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
     </div>
   </div>
@@ -309,8 +311,8 @@
     </div>
     <div class="checklist-grid" id="checklistGridContainer"></div>
     <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" id="btnBackToLastDynamic">← 返上一頁</button>
-      <button type="button" class="btn-primary" onclick="goToStage('scenarios')">下一步：情境案例推演 →</button>
+      <button type="button" class="btn-secondary" id="btnBackToLastDynamic">← 上一步</button>
+      <button type="button" class="btn-primary" onclick="goToStage('scenarios')">下一步 →</button>
     </div>
   </div>
   <!-- ==================== 07 情境案例 ==================== -->
@@ -338,7 +340,7 @@
       </div>
       
       <div style="margin-bottom:12px;">
-        <label style="font-size:12px; font-weight:bold; color:#666;"">✏️ 手術/治療基本開支 (可手動輸入壓力測試)：</label>
+        <label style="font-size:12px; font-weight:bold; color:#666;">✏️ 手術/治療基本開支 (可手動輸入壓力測試)：</label>
         <input type="text" id="case-total-input" value="HK$ 174,397" oninput="handleManualCostInput(this.value)" style="font-size:17px; font-weight:800; color:#1a3a6e;">
       </div>
       <div class="oop-row-grid">
@@ -357,8 +359,8 @@
       </div>
     </div>
     <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('prod-intro')">← 返回專屬方案</button>
-      <button type="button" class="btn-primary" onclick="goToStage('premium-val')">下一步：保費與價值 →</button>
+      <button type="button" class="btn-secondary" onclick="goToStage('prod-intro')">← 上一步</button>
+      <button type="button" class="btn-primary" onclick="goToStage('premium-val')">下一步 →</button>
     </div>
   </div>
   <!-- ==================== 08 保費與價值 ==================== -->
@@ -439,8 +441,8 @@
       </div>
     </div>
     <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('scenarios')">← 返回情景案例</button>
-      <button type="button" class="btn-primary" onclick="goToStage('confirm')">下一步：保障總結 →</button>
+      <button type="button" class="btn-secondary" onclick="goToStage('scenarios')">← 上一步</button>
+      <button type="button" class="btn-primary" onclick="goToStage('confirm')">下一步 →</button>
     </div>
   </div>
   <!-- ==================== 09 保障總結 (含動態溫馨提示危疾導流) ==================== -->
@@ -459,7 +461,7 @@
       <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
     </div>
     
-    <!-- 動態注意提醒 (如有 alertMsg) -->
+    <!-- 動態注意提醒 -->
     <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
       ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
       <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
@@ -520,7 +522,7 @@
       </div>
     </div>
     <div class="nav-btn-group">
-      <button type="button" class="btn-secondary" onclick="goToStage('premium-val')">← 返回調整預算</button>
+      <button type="button" class="btn-secondary" onclick="goToStage('premium-val')">← 上一步</button>
       <button type="button" class="btn-success" onclick="alert('✅ 資料已確認，即將進入專屬申請流程！')">✅ 符合，進入辦理手續 →</button>
     </div>
   </div>
@@ -585,6 +587,7 @@
 </div>
 <script>
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
+  const STORAGE_KEY_MED_DB = "AVA_MED_APP_DB_CACHE_V7";
   
   const firebaseConfig = {
     apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
@@ -617,12 +620,12 @@
   var DEFAULT_FALLBACK_DB = {
     pages: [
       { pageId: "m1_adult", role: "adult", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：", quoteAlert: "" },
-      { pageId: "m2_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：", quoteAlert: "💭 <strong>如果係你，你會比較希望係 A 定 B？</strong>" },
+      { pageId: "m2_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：", quoteAlert: "" },
       { pageId: "m4_adult", role: "adult", stepOrder: 3, tagName: "03 ｜ 現有防線確認", title: "面對醫療選擇時嘅取捨", subtitle: "你現時擁有嘅醫療保障，是否能完全支持你嘅選擇？", quoteAlert: "" },
       { pageId: "m5_adult", role: "adult", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "", quoteAlert: "" },
       
       { pageId: "m1_child", role: "child", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當孩子需要醫療時，你最重視的是甚麼？", subtitle: "有些事情可以等，但醫療無得等：", quoteAlert: "" },
-      { pageId: "m2_child", role: "child", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果孩子突然需要即時接受治療……", subtitle: "真正需要醫療時，你希望作出的決定：", quoteAlert: "💭 面對孩子健康，你會希望擁有邊種選擇？" },
+      { pageId: "m2_child", role: "child", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果孩子突然需要即時接受治療……", subtitle: "真正需要醫療時，你希望作出的決定：", quoteAlert: "" },
       { pageId: "m4_child", role: "child", stepOrder: 3, tagName: "03 ｜ 兒童防線確認", title: "給孩子最全面的後盾", subtitle: "確認孩子現時具備的私家醫療資源：", quoteAlert: "" },
       { pageId: "m5_child", role: "child", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "兒童醫療全數保障總結", subtitle: "", quoteAlert: "" }
     ],
@@ -658,7 +661,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.1.1",
+      "資料版本": "7.1.2",
       "預設模式": "adult",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -679,6 +682,31 @@
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
+
+  function loadLocalCache() {
+    try {
+      var cached = localStorage.getItem(STORAGE_KEY_MED_DB);
+      if (cached) {
+        var parsed = JSON.parse(cached);
+        if (parsed && parsed.status === 'success') {
+          db = parsed;
+          return true;
+        }
+      }
+    } catch(e) {
+      console.warn("讀取快取失敗:", e);
+    }
+    return false;
+  }
+
+  function saveLocalCache(dataObj) {
+    try {
+      localStorage.setItem(STORAGE_KEY_MED_DB, JSON.stringify(dataObj));
+    } catch(e) {
+      console.warn("寫入快取失敗:", e);
+    }
+  }
+
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
@@ -704,6 +732,12 @@
     }
     appState.companyPay = compPay;
   }
+
+  function toggleRoleMode() {
+    appState.role = (appState.role === 'child') ? 'adult' : 'child';
+    applyRoleContent();
+  }
+
   // ==================== 全動態頁面渲染引擎 ====================
   function renderDynamicPages() {
     var r = appState.role;
@@ -743,7 +777,6 @@
           <div class="info-quote-box" style="font-size:14.5px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
             🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
           </div>` : ''}
-          ${p.quoteAlert ? `<div class="info-quote-box" style="font-size:15px; font-weight:800; color:var(--primary); text-align:center;">${p.quoteAlert}</div>` : ''}
         `;
       } else {
         var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b) => Number(a.order) - Number(b.order));
@@ -765,7 +798,7 @@
         <div class="nav-btn-group">
           ${!isFirst ? `<button type="button" class="btn-secondary" onclick="goToStage('${prevTarget}')">← 上一步</button>` : ''}
           <button type="button" class="btn-primary" onclick="goToStage('${nextTarget}')">
-            ${isLastDynamic ? '下一步：檢視專屬方案 →' : '下一步 →'}
+            ${isLastDynamic ? '下一步 →' : '下一步 →'}
           </button>
         </div>
       `;
@@ -788,12 +821,18 @@
       if (btnBack) btnBack.onclick = function() { goToStage(lastDynamicId); };
     }
   }
+
   function applyRoleContent() {
     var isChild = appState.role === 'child';
-    document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
+    var btn = document.getElementById('btnRoleSwitch');
+    if (btn) {
+      btn.innerText = isChild ? "👶 兒童模式" : "👨‍👩‍👧 成人模式";
+      btn.style.background = isChild ? "#fef3c7" : "#e0e7ff";
+      btn.style.color = isChild ? "#b45309" : "#3730a3";
+    }
+    
     document.getElementById('valAge').value = isChild ? "5" : "35";
     
-    // 更新頂部額度文字
     var cfg = db.config || {};
     if (isChild) {
       document.getElementById('elite-deductible').value = "0";
@@ -813,7 +852,6 @@
     
     renderDynamicPages();
     
-    // 動態亮點清單
     if (db.highlights) {
       var hlList = db.highlights.filter(h => h.role === appState.role).sort((a,b)=>a.order-b.order);
       var hlHtml = '';
@@ -829,7 +867,6 @@
     }
     
     updateCiRedirectUrl();
-    
     renderPlanChecklist();
     selectScenarioCategory('日間手術');
     updateValPremiums();
@@ -887,7 +924,8 @@
     badge.innerText = allChecked ? '✓ 符合條件（享半私家）' : '⚠️ 條件未符（降為普通房級別）';
     renderPlanChecklist();
   }
-  // ==================== 07 頁三大情境切換與 5x5 檔案呈現 ====================
+
+  // ==================== 07 頁三大情境切換 ====================
   function selectScenarioCategory(cat) {
     appState.currentCaseCat = cat;
     document.querySelectorAll('.sc-tab-btn').forEach(b => b.classList.remove('selected'));
@@ -948,7 +986,6 @@
     var num = parseSafeNum(val);
     if (isNaN(num)) num = 0;
     
-    // 動態獲取最新選取的自付額
     var eliteDedEl = document.getElementById('elite-deductible');
     var wiseDedEl = document.getElementById('wise-deductible');
     var eliteDed = eliteDedEl ? Number(eliteDedEl.value) : 16000;
@@ -1125,7 +1162,6 @@
     if (target) target.classList.add('active');
     window.scrollTo(0, 0);
     
-    // 進入第07頁情境推演時，即時重算
     if (stageId === 'scenarios') {
       recalcCustomCost(document.getElementById('case-total-input').value);
     }
@@ -1399,7 +1435,6 @@
     btn.innerText = "⏳ 正在同步至 Google Sheet...";
     btn.disabled = true;
     
-    // 收集頁面資料
     document.querySelectorAll('[data-adm-page-title]').forEach(el => {
       var idx = Number(el.dataset.admPageTitle);
       if (db.pages[idx]) db.pages[idx].title = el.innerText.trim();
@@ -1417,7 +1452,6 @@
       if (db.pages[idx]) db.pages[idx].quoteAlert = el.innerText.trim();
     });
     
-    // 收集選項
     document.querySelectorAll('[data-adm-opt-title]').forEach(el => {
       var idx = Number(el.dataset.admOptTitle);
       if (db.options[idx]) {
@@ -1427,10 +1461,8 @@
       }
     });
     
-    // 收集 06 亮點
     document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { if (db.highlights[idx]) db.highlights[idx].text = el.innerText.trim(); });
     
-    // 收集 06 專屬方案細項表格
     document.querySelectorAll('[data-adm-pi-name]').forEach((el, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = el.innerText.trim();
@@ -1445,7 +1477,6 @@
       }
     });
     
-    // 收集 07 案例
     var newCases = [];
     document.querySelectorAll('[data-adm-case-name]').forEach((inp, idx) => {
       var rawFiles = document.querySelector(`[data-adm-case-files="${idx}"]`).value;
@@ -1458,7 +1489,6 @@
     });
     db.claimCases = newCases;
     
-    // 收集系統設定
     if (!db.config) db.config = {};
     document.querySelectorAll('[data-adm-config]').forEach(inp => {
       db.config[inp.dataset.admConfig] = inp.value;
@@ -1467,6 +1497,7 @@
     fetch(GAS_API_URL, { method: "POST", body: JSON.stringify(db) })
       .then(res => res.json())
       .then(res => {
+        saveLocalCache({ status: 'success', ...db });
         alert("✅ Google Sheet 雙向同步成功！");
         closeAdminModal();
         applyRoleContent();
@@ -1477,22 +1508,60 @@
         btn.disabled = false;
       });
   }
-  function initApp() {
-    initParams();
-    applyRoleContent();
+
+  function fetchFullRemoteData() {
     fetch(GAS_API_URL)
       .then(res => res.json())
       .then(remote => {
         if (remote && remote.status === 'success') {
           db = remote;
-          document.getElementById('sync-status-badge').innerText = '● 雲端同步完成';
-          document.getElementById('sync-status-badge').classList.add('status-ok');
+          saveLocalCache(remote);
+          var badge = document.getElementById('sync-status-badge');
+          if (badge) {
+            badge.innerText = '● 雲端同步完成';
+            badge.className = 'status-ok';
+          }
           applyRoleContent();
         }
       })
       .catch(() => {
-        document.getElementById('sync-status-badge').innerText = '○ 離線模式';
+        var badge = document.getElementById('sync-status-badge');
+        if (badge) badge.innerText = '○ 離線模式';
       });
+  }
+
+  function initApp() {
+    initParams();
+    var hasCache = loadLocalCache();
+    var badge = document.getElementById('sync-status-badge');
+    
+    if (hasCache) {
+      if (badge) {
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.1.2') + ')';
+        badge.className = 'status-cache';
+      }
+      applyRoleContent();
+      
+      // 背景輕量檢查版本號
+      fetch(GAS_API_URL + (GAS_API_URL.includes('?') ? '&' : '?') + 'action=checkVersion')
+        .then(res => res.json())
+        .then(verRes => {
+          var remoteVer = verRes.version || (verRes.config && verRes.config["資料版本"]);
+          var currentVer = db.config ? db.config["資料版本"] : null;
+          if (remoteVer && remoteVer !== currentVer) {
+            fetchFullRemoteData();
+          } else if (badge) {
+            badge.innerText = '● 雲端已是最新';
+            badge.className = 'status-ok';
+          }
+        })
+        .catch(() => {
+          if (badge) badge.innerText = '⚡ 離線快取模式';
+        });
+    } else {
+      applyRoleContent();
+      fetchFullRemoteData();
+    }
   }
   
   initApp();
