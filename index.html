@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.0.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.1.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -169,7 +169,7 @@
       background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 12px;
     }
     .admin-card {
-      background: #eef2f5; width: 100%; max-width: 890px; max-height: 94vh; border-radius: 16px;
+      background: #eef2f5; width: 100%; max-width: 920px; max-height: 94vh; border-radius: 16px;
       display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
     .admin-header { padding: 14px 20px; background: #1a3a6e; color: #ffffff; display: flex; justify-content: space-between; align-items: center; }
@@ -192,7 +192,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.0.0</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.0</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -494,7 +494,7 @@
     </div>
     <div class="admin-nav-tabs">
       <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">頁面流程與選項管理</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案鏡像</button>
+      <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案細項鏡像</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與 Firebase 上載</button>
       <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
     </div>
@@ -507,16 +507,22 @@
         </div>
         <div id="adminP0103Mirror"></div>
       </div>
-      <!-- 2. 06 專屬方案 1:1 鏡像 -->
+      
+      <!-- 2. 06 專屬方案 1:1 鏡像 (對應 Google Sheet 專屬方案細項) -->
       <div id="admTab-p06" class="adm-section-panel" style="display:none;">
         <div class="stage-card" style="display:block; margin:0; box-shadow:none;">
           <div class="success-box">
             <strong style="color:#065f46; font-size:13px;">✨ 產品亮點清單 (點擊粉紅框修改)：</strong>
             <ul class="bullet-list" id="adminMirrorHighlights" style="margin-top:8px;"></ul>
           </div>
-          <div class="checklist-grid" id="adminMirrorChecklist" style="margin-top:14px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; margin-bottom:6px;">
+            <strong style="color:var(--primary); font-size:13px;">📋 專屬方案細項表格（對應「專屬方案細項」工作表）：</strong>
+            <button type="button" onclick="addAdminPlanItem()" style="background:var(--primary); color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增項目</button>
+          </div>
+          <div class="checklist-grid" id="adminMirrorChecklist"></div>
         </div>
       </div>
+      
       <!-- 3. 07 索償案例管理 (Firebase 直線上載) -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -525,7 +531,8 @@
         </div>
         <div id="adminCasesList"></div>
       </div>
-      <!-- 4. 系統設定 -->
+      
+      <!-- 4. 系統設定 (對應 Google Sheet 系統設定) -->
       <div id="admTab-pConfig" class="adm-section-panel" style="display:none;">
         <div class="stage-card" style="display:block; margin:0;" id="adminConfigList"></div>
       </div>
@@ -606,6 +613,24 @@
       { pageId: "m4_child", optionKey: "yes", icon: "🛡️", title: "已有全數索償高額醫療", desc: "具備完整私家覆蓋。", order: 1 },
       { pageId: "m4_child", optionKey: "no", icon: "⚠️", title: "尚未建立專屬兒童高額醫保", desc: "任何私家自費治療均需由家長積蓄承擔。", order: 2 }
     ],
+    planItems: [
+      { itemId: "item1", name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "⚠️ 受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "⚠️ 上限 $848", flexiSub: "(限3日內)" },
+      { itemId: "item2", name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "⚠️ 每次 $600", wiseGenSub: "(全年15次)", flexiMain: "❌ 不適用", flexiSub: "" },
+      { itemId: "item3", name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "❌ 不適用", wiseGenSub: "(已是普通房)", flexiMain: "❌ 不適用", flexiSub: "" },
+      { itemId: "item4", name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "(標靶/化療/免疫)", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "(標靶/化療/免疫)", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "(標靶/化療/免疫)", flexiMain: "⚠️ 上限 $96,000", flexiSub: "(每年限額)" },
+      { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
+    ],
+    config: {
+      "資料版本": "7.1.0",
+      "預設模式": "adult",
+      "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
+      "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
+      "成人靈活額度": "⚠️ 靈活：受細項設有索償上限 ❌",
+      "兒童尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬",
+      "兒童睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬",
+      "兒童靈活額度": "⚠️ 靈活：受細項設有索償上限 ❌",
+      "危疾App網址": "https://ivancww.github.io/CIApp"
+    },
     claimCases: [
       { category: "日間手術", caseName: "(網絡) 腸胃鏡檢查", totalCost: 17714, files: [] },
       { category: "住院治療", caseName: "子宮肌瘤引起滯留", totalCost: 174397, files: [] },
@@ -653,7 +678,6 @@
     if (!container) return;
     container.innerHTML = '';
     
-    // 依據角色及 stepOrder 排序頁面
     var pages = (db.pages || []).filter(p => p.role === r).sort((a,b) => Number(a.stepOrder) - Number(b.stepOrder));
     if (pages.length === 0) {
       pages = DEFAULT_FALLBACK_DB.pages.filter(p => p.role === r).sort((a,b) => Number(a.stepOrder) - Number(b.stepOrder));
@@ -669,7 +693,6 @@
       var contentHtml = '';
       
       if (isGapSummaryPage) {
-        // 缺口總結特殊頁面
         var gapVal = Math.max(0, appState.cost - appState.companyPay);
         var compDisplay = (appState.hasCompany && appState.companyPay > 0 && r !== 'child') ? 'flex' : 'none';
         contentHtml = `
@@ -700,7 +723,6 @@
           </div>
         `;
       } else {
-        // 標準動態題目選項
         var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b) => Number(a.order) - Number(b.order));
         var optsHtml = '';
         opts.forEach(o => {
@@ -737,7 +759,6 @@
       container.innerHTML += cardHtml;
     });
     
-    // 設定 06 頁返回按鈕跳轉至動態流程的最後一頁
     if (pages.length > 0) {
       var lastDynamicId = pages[pages.length - 1].pageId;
       var btnBack = document.getElementById('btnBackToLastDynamic');
@@ -750,19 +771,27 @@
     document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
     document.getElementById('valAge').value = isChild ? "5" : "35";
     
+    // 更新頂部額度文字
+    var cfg = db.config || {};
     if (isChild) {
       document.getElementById('elite-deductible').value = "0";
       document.getElementById('wise-deductible').value = "0";
       document.getElementById('valEliteDed').value = "0";
       document.getElementById('valWiseDed').value = "0";
       document.getElementById('sumFirstLine').innerText = "零保障 / 公立基本醫療";
+      if (cfg["兒童尊顯額度"]) document.getElementById('banner-elite').innerText = "👑 尊顯：" + cfg["兒童尊顯額度"];
+      if (cfg["兒童睿選額度"]) document.getElementById('banner-wise').innerText = "🛡️ 睿選：" + cfg["兒童睿選額度"];
+      if (cfg["兒童靈活額度"]) document.getElementById('banner-flexi').innerText = cfg["兒童靈活額度"];
     } else {
       document.getElementById('sumFirstLine').innerText = appState.hasCompany ? "公司團體醫保" : "個人儲備承擔";
+      if (cfg["成人尊顯額度"]) document.getElementById('banner-elite').innerText = "👑 尊顯：" + cfg["成人尊顯額度"];
+      if (cfg["成人睿選額度"]) document.getElementById('banner-wise').innerText = "🛡️ 睿選：" + cfg["成人睿選額度"];
+      if (cfg["成人靈活額度"]) document.getElementById('banner-flexi').innerText = cfg["成人靈活額度"];
     }
     
     renderDynamicPages();
     
-    // 動態亮點清單過濾 (成人/兒童)
+    // 動態亮點清單
     if (db.highlights) {
       var hlList = db.highlights.filter(h => h.role === appState.role).sort((a,b)=>a.order-b.order);
       var hlHtml = '';
@@ -770,7 +799,6 @@
       document.getElementById('prod-bullet-list').innerHTML = hlHtml;
     }
     
-    // 09 頁面注意提醒與危疾 App 導流
     if (appState.alertMsg) {
       document.getElementById('crossSellBox').style.display = 'block';
       document.getElementById('crossSellMsg').innerText = appState.alertMsg;
@@ -793,13 +821,7 @@
     var isChild = appState.role === 'child';
     var isWiseSemi = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
     
-    var items = (db && db.planItems && db.planItems.length > 0) ? db.planItems : [
-      { name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "⚠️ 受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "⚠️ 上限 $848", flexiSub: "(限3日內)" },
-      { name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "⚠️ 每次 $600", wiseGenSub: "(全年15次)", flexiMain: "❌ 不適用", flexiSub: "" },
-      { name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "❌ 不適用", wiseGenSub: "(已是普通房)", flexiMain: "❌ 不適用", flexiSub: "" },
-      { name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "", flexiMain: "⚠️ 上限 $96,000", flexiSub: "" },
-      { name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張)", flexiMain: "❌ 不設保障", flexiSub: "", isChildOnly: true }
-    ];
+    var items = (db && db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
     var html = `
       <div class="checklist-row header-row">
         <div class="col-item">保障項目</div>
@@ -823,7 +845,7 @@
             ${wSub ? `<br><span style="font-size:10px; color:#666;">${wSub}</span>` : ''}
           </div>
           <div class="col-flexi plan-col-flexi">
-            <strong style="${item.flexiMain.includes('❌') ? 'color:var(--danger);' : ''}">${item.flexiMain}</strong>
+            <strong style="${(item.flexiMain||'').includes('❌') ? 'color:var(--danger);' : ''}">${item.flexiMain}</strong>
             ${item.flexiSub ? `<br><span style="font-size:10px;">${item.flexiSub}</span>` : ''}
           </div>
         </div>`;
@@ -919,7 +941,7 @@
     document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(flexiOOP).toLocaleString();
   }
 
-  // ==================== 08 保費精算 (含折扣及扣稅明細顯示) ====================
+  // ==================== 08 保費精算 ====================
   function setPremMode(mode) {
     appState.premMode = mode;
     document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
@@ -1196,7 +1218,7 @@
   function renderAdminP06Mirror() {
     var hlBox = document.getElementById('adminMirrorHighlights');
     hlBox.innerHTML = '';
-    (db.highlights || []).forEach((h, idx) => {
+    (db.highlights || DEFAULT_FALLBACK_DB.highlights).forEach((h, idx) => {
       hlBox.innerHTML += `
         <li style="margin-bottom:6px; list-style:none;">
           <span style="font-size:11px; font-weight:bold; color:var(--primary);">[${h.role === 'adult' ? '成人' : '兒童'}]</span>
@@ -1205,23 +1227,68 @@
     });
     
     var tb = document.getElementById('adminMirrorChecklist');
+    var items = (db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
+    db.planItems = items;
+    
     var html = `
       <div class="checklist-row header-row">
         <div class="col-item">保障項目</div>
-        <div class="col-elite">尊顯 (左)</div>
-        <div class="col-wise">睿選 (中)</div>
-        <div class="col-flexi">靈活 (右)</div>
+        <div class="col-elite">尊顯 (主/細)</div>
+        <div class="col-wise">睿選半私家 (主/細)</div>
+        <div class="col-wise" style="background:#e6f0fa;">睿選普通房 (主/細)</div>
+        <div class="col-flexi">靈活 (主/細)</div>
+        <div style="width:40px; padding:10px 4px;">操作</div>
       </div>`;
-    (db.planItems || []).forEach((pi, idx) => {
+      
+    items.forEach((pi, idx) => {
       html += `
         <div class="checklist-row">
           <div class="col-item editable-mirror" contenteditable="true" data-adm-pi-name="${idx}">${pi.name}</div>
-          <div class="col-elite editable-mirror" contenteditable="true" data-adm-pi-elite="${idx}">${pi.eliteMain}</div>
-          <div class="col-wise editable-mirror" contenteditable="true" data-adm-pi-wise="${idx}">${pi.wiseSemiMain}</div>
-          <div class="col-flexi editable-mirror" contenteditable="true" data-adm-pi-flexi="${idx}">${pi.flexiMain}</div>
+          <div class="col-elite">
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-elitemain="${idx}" style="font-weight:bold;">${pi.eliteMain||''}</div>
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-elitesub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.eliteSub||''}</div>
+          </div>
+          <div class="col-wise">
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisesemimain="${idx}" style="font-weight:bold;">${pi.wiseSemiMain||''}</div>
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisesemisub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.wiseSemiSub||''}</div>
+          </div>
+          <div class="col-wise" style="background:#f8fbff;">
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisegenmain="${idx}" style="font-weight:bold;">${pi.wiseGenMain||''}</div>
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisegensub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.wiseGenSub||''}</div>
+          </div>
+          <div class="col-flexi">
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-fleximain="${idx}" style="font-weight:bold;">${pi.flexiMain||''}</div>
+            <div class="editable-mirror" contenteditable="true" data-adm-pi-flexisub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.flexiSub||''}</div>
+          </div>
+          <div style="width:40px; display:flex; align-items:center; justify-content:center;">
+            <button type="button" onclick="deleteAdminPlanItem(${idx})" style="background:#fee2e2; color:#dc2626; border:none; border-radius:4px; padding:4px; font-size:11px; cursor:pointer;">✕</button>
+          </div>
         </div>`;
     });
     tb.innerHTML = html;
+  }
+
+  function addAdminPlanItem() {
+    if (!db.planItems) db.planItems = [];
+    var count = db.planItems.length + 1;
+    db.planItems.push({
+      itemId: "item" + count,
+      name: "🩺 新保障項目",
+      eliteMain: "✅ 全數賠償",
+      eliteSub: "",
+      wiseSemiMain: "✅ 全數賠償",
+      wiseSemiSub: "",
+      wiseGenMain: "⚠️ 普通房分項",
+      wiseGenSub: "",
+      flexiMain: "❌ 不適用",
+      flexiSub: ""
+    });
+    renderAdminP06Mirror();
+  }
+
+  function deleteAdminPlanItem(idx) {
+    db.planItems.splice(idx, 1);
+    renderAdminP06Mirror();
   }
 
   function renderAdminCasesList() {
@@ -1300,11 +1367,14 @@
 
   function renderAdminConfigList() {
     var box = document.getElementById('adminConfigList');
-    box.innerHTML = '<strong style="color:var(--primary); font-size:14px;">⚙️ 系統設定 & 額度文字</strong><div style="margin-top:10px;">';
-    for (const [k, v] of Object.entries(db.config || {})) {
+    var cfg = (db.config && Object.keys(db.config).length > 0) ? db.config : DEFAULT_FALLBACK_DB.config;
+    db.config = cfg;
+    
+    box.innerHTML = '<strong style="color:var(--primary); font-size:14px;">⚙️ 系統設定 & 額度文字（對應「系統設定」工作表）</strong><div style="margin-top:10px;">';
+    for (const [k, v] of Object.entries(cfg)) {
       box.innerHTML += `
         <div style="margin-bottom:8px;">
-          <label style="font-size:12px; font-weight:bold;">${k}</label>
+          <label style="font-size:12px; font-weight:bold; color:#475569;">${k}</label>
           <input type="text" data-adm-config="${k}" value="${v}">
         </div>`;
     }
@@ -1344,14 +1414,21 @@
       }
     });
     
-    // 收集 06 亮點與表格
+    // 收集 06 亮點
     document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { if (db.highlights[idx]) db.highlights[idx].text = el.innerText.trim(); });
+    
+    // 收集 06 專屬方案細項表格
     document.querySelectorAll('[data-adm-pi-name]').forEach((el, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = el.innerText.trim();
-        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elite="${idx}"]`).innerText.trim();
-        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wise="${idx}"]`).innerText.trim();
-        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-flexi="${idx}"]`).innerText.trim();
+        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elitemain="${idx}"]`).innerText.trim();
+        db.planItems[idx].eliteSub = document.querySelector(`[data-adm-pi-elitesub="${idx}"]`).innerText.trim();
+        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wisesemimain="${idx}"]`).innerText.trim();
+        db.planItems[idx].wiseSemiSub = document.querySelector(`[data-adm-pi-wisesemisub="${idx}"]`).innerText.trim();
+        db.planItems[idx].wiseGenMain = document.querySelector(`[data-adm-pi-wisegenmain="${idx}"]`).innerText.trim();
+        db.planItems[idx].wiseGenSub = document.querySelector(`[data-adm-pi-wisegensub="${idx}"]`).innerText.trim();
+        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-fleximain="${idx}"]`).innerText.trim();
+        db.planItems[idx].flexiSub = document.querySelector(`[data-adm-pi-flexisub="${idx}"]`).innerText.trim();
       }
     });
     
