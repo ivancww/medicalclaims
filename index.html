@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.1.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.1.1 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -155,13 +155,58 @@
     
     .cross-sell-alert { background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
     
-    /* 危疾 App 導流按鈕 */
-    .ci-link-btn {
-      display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px;
-      background: #f0f7ff; border: 1.5px solid #bfdbfe; color: #1e40af; text-decoration: none; font-size: 14px; font-weight: 800; margin: 14px 0; transition: 0.2s;
+    /* 溫馨提示危疾 App 導流卡片 (與 CIApp 風格對應) */
+    .warm-tip-card {
+      background: #f0f7ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 16px;
+      margin: 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.04);
     }
-    .ci-link-btn:active { transform: scale(0.98); }
-    .ci-link-btn img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+    .warm-tip-card:hover {
+      border-color: var(--primary);
+      background: #e0f2fe;
+      transform: translateY(-1px);
+    }
+    .warm-tip-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .warm-tip-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .warm-tip-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .warm-tip-desc {
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .warm-tip-action {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
     
     /* 後台 1:1 鏡像編輯模式 */
     #adminModal {
@@ -192,7 +237,7 @@
   <div class="header-version-bar">
     <div>
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.0</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.1</span>
       <span id="role-tag-display" style="font-size:11px; font-weight:bold; background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; margin-left:6px;">👨‍👩‍👧 成人模式</span>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -200,10 +245,8 @@
       <button type="button" onclick="openAdminModal()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
     </div>
   </div>
-
   <!-- ==================== 前台動態題目卡片掛載容器 ==================== -->
   <div id="dynamic-pages-container"></div>
-
   <!-- ==================== 06 專屬方案 (動態亮點) ==================== -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -270,7 +313,6 @@
       <button type="button" class="btn-primary" onclick="goToStage('scenarios')">下一步：情境案例推演 →</button>
     </div>
   </div>
-
   <!-- ==================== 07 情境案例 ==================== -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">情境案例 ｜ 實況推演</span>
@@ -296,7 +338,7 @@
       </div>
       
       <div style="margin-bottom:12px;">
-        <label style="font-size:12px; font-weight:bold; color:#666;">✏️ 手術/治療基本開支 (可手動輸入壓力測試)：</label>
+        <label style="font-size:12px; font-weight:bold; color:#666;"">✏️ 手術/治療基本開支 (可手動輸入壓力測試)：</label>
         <input type="text" id="case-total-input" value="HK$ 174,397" oninput="handleManualCostInput(this.value)" style="font-size:17px; font-weight:800; color:#1a3a6e;">
       </div>
       <div class="oop-row-grid">
@@ -319,7 +361,6 @@
       <button type="button" class="btn-primary" onclick="goToStage('premium-val')">下一步：保費與價值 →</button>
     </div>
   </div>
-
   <!-- ==================== 08 保費與價值 ==================== -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -348,7 +389,7 @@
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
       <div>
         <label style="font-size:12px; font-weight:bold; color:var(--elite-color);">👑 尊顯自付額</label>
-        <select id="valEliteDed" onchange="updateValPremiums()">
+        <select id="valEliteDed" onchange="syncDeductibles('elite', this.value)">
           <option value="0">HK$ 0</option>
           <option value="16000" selected>HK$ 16,000</option>
           <option value="25000">HK$ 25,000</option>
@@ -356,7 +397,7 @@
       </div>
       <div>
         <label style="font-size:12px; font-weight:bold; color:var(--wise-color);">🛡️ 睿選自付額</label>
-        <select id="valWiseDed" onchange="updateValPremiums()">
+        <select id="valWiseDed" onchange="syncDeductibles('wise', this.value)">
           <option value="0">HK$ 0</option>
           <option value="8800">HK$ 8,800</option>
           <option value="18000" selected>HK$ 18,000</option>
@@ -402,8 +443,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('confirm')">下一步：保障總結 →</button>
     </div>
   </div>
-
-  <!-- ==================== 09 保障總結 (含危疾App導流) ==================== -->
+  <!-- ==================== 09 保障總結 (含動態溫馨提示危疾導流) ==================== -->
   <div class="stage-card" id="stage-confirm">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保障總結 ｜ 方案總結</span>
@@ -425,12 +465,13 @@
       <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
     </div>
     
-    <!-- 危疾 App 導流按鈕 -->
-    <a href="#" id="ciRedirectBtn" target="_blank" rel="noopener noreferrer" class="ci-link-btn">
-      <img src="https://ivancww.github.io/CIApp/icon-192.png" alt="CI App Logo" onerror="this.src='https://ivancww.github.io/medicalclaims/icon-192.png';">
-      <div style="display:flex; flex-direction:column; gap:2px;">
-        <span style="font-size:15px; font-weight:800;">🛡️ 檢視第二戰線：危疾生活規劃 App</span>
-        <span style="font-size:12px; font-weight:600; opacity:0.85;">計算停工休養/照護現金流儲備缺口 →</span>
+    <!-- 溫馨提示危疾 App 導流卡片 (與 CIApp 對應) -->
+    <a href="#" id="ciRedirectBtn" target="_blank" rel="noopener noreferrer" class="warm-tip-card">
+      <img src="https://ivancww.github.io/CIApp/icon-192.png" alt="CI App Logo" class="warm-tip-logo" onerror="this.src='https://ivancww.github.io/medicalclaims/icon-192.png';">
+      <div class="warm-tip-content">
+        <div class="warm-tip-title" id="ciTipTitle">🛡️ 溫馨提示：危疾生活防線</div>
+        <div class="warm-tip-desc" id="ciTipDesc">先了解大病休養期間之生活儲備，確認停工休養或專職照護基金可支撐幾多個月。</div>
+        <div class="warm-tip-action" id="ciTipAction">檢視第二戰線 (生活現金流儲備) →</div>
       </div>
     </a>
     
@@ -484,7 +525,6 @@
     </div>
   </div>
 </div>
-
 <!-- ==================== 1:1 粉紅虛線鏡像後台管理系統 ==================== -->
 <div id="adminModal">
   <div class="admin-card">
@@ -508,7 +548,7 @@
         <div id="adminP0103Mirror"></div>
       </div>
       
-      <!-- 2. 06 專屬方案 1:1 鏡像 (對應 Google Sheet 專屬方案細項) -->
+      <!-- 2. 06 專屬方案 1:1 鏡像 -->
       <div id="admTab-p06" class="adm-section-panel" style="display:none;">
         <div class="stage-card" style="display:block; margin:0; box-shadow:none;">
           <div class="success-box">
@@ -523,7 +563,7 @@
         </div>
       </div>
       
-      <!-- 3. 07 索償案例管理 (Firebase 直線上載) -->
+      <!-- 3. 07 索償案例管理 -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (Firebase Storage 多檔上載)</strong>
@@ -532,7 +572,7 @@
         <div id="adminCasesList"></div>
       </div>
       
-      <!-- 4. 系統設定 (對應 Google Sheet 系統設定) -->
+      <!-- 4. 系統設定 -->
       <div id="admTab-pConfig" class="adm-section-panel" style="display:none;">
         <div class="stage-card" style="display:block; margin:0;" id="adminConfigList"></div>
       </div>
@@ -543,11 +583,9 @@
     </div>
   </div>
 </div>
-
 <script>
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
   
-  // ======================== Firebase Storage 配置 ========================
   const firebaseConfig = {
     apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
     authDomain: "medical-and-ci.firebaseapp.com",
@@ -561,7 +599,6 @@
   if (!firebase.apps.length) {
     try { firebase.initializeApp(firebaseConfig); } catch(e) { console.error("Firebase init error", e); }
   }
-
   var appState = {
     role: 'adult',
     cost: 500000,
@@ -582,12 +619,12 @@
       { pageId: "m1_adult", role: "adult", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：", quoteAlert: "" },
       { pageId: "m2_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：", quoteAlert: "💭 <strong>如果係你，你會比較希望係 A 定 B？</strong>" },
       { pageId: "m4_adult", role: "adult", stepOrder: 3, tagName: "03 ｜ 現有防線確認", title: "面對醫療選擇時嘅取捨", subtitle: "你現時擁有嘅醫療保障，是否能完全支持你嘅選擇？", quoteAlert: "" },
-      { pageId: "m5_adult", role: "adult", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "", quoteAlert: "❓「呢個缺口由你自己應付，你認為可接受嗎？」" },
+      { pageId: "m5_adult", role: "adult", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "", quoteAlert: "" },
       
       { pageId: "m1_child", role: "child", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當孩子需要醫療時，你最重視的是甚麼？", subtitle: "有些事情可以等，但醫療無得等：", quoteAlert: "" },
       { pageId: "m2_child", role: "child", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果孩子突然需要即時接受治療……", subtitle: "真正需要醫療時，你希望作出的決定：", quoteAlert: "💭 面對孩子健康，你會希望擁有邊種選擇？" },
       { pageId: "m4_child", role: "child", stepOrder: 3, tagName: "03 ｜ 兒童防線確認", title: "給孩子最全面的後盾", subtitle: "確認孩子現時具備的私家醫療資源：", quoteAlert: "" },
-      { pageId: "m5_child", role: "child", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "兒童醫療全數保障總結", subtitle: "", quoteAlert: "你希望由家庭積蓄全數承擔，定係由保險全數化解？" }
+      { pageId: "m5_child", role: "child", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "兒童醫療全數保障總結", subtitle: "", quoteAlert: "" }
     ],
     highlights: [
       { role: "adult", order: 1, text: "終身 $6,000 萬高額醫療保障，實報實銷" },
@@ -621,7 +658,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.1.0",
+      "資料版本": "7.1.1",
       "預設模式": "adult",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -637,14 +674,11 @@
       { category: "癌症治療", caseName: "急性視網膜脫落 / 標靶治療", totalCost: 275073, files: [] }
     ]
   };
-
   var db = DEFAULT_FALLBACK_DB;
-
   function parseSafeNum(val) {
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
-
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
@@ -670,7 +704,6 @@
     }
     appState.companyPay = compPay;
   }
-
   // ==================== 全動態頁面渲染引擎 ====================
   function renderDynamicPages() {
     var r = appState.role;
@@ -711,16 +744,6 @@
             🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
           </div>` : ''}
           ${p.quoteAlert ? `<div class="info-quote-box" style="font-size:15px; font-weight:800; color:var(--primary); text-align:center;">${p.quoteAlert}</div>` : ''}
-          <div class="choice-list" style="margin-top: 15px;">
-            <button type="button" class="choice-btn" onclick="alert('感謝檢視！建議定期檢視醫療通脹。');" style="border-color:#059669; background:#f4fbf7;">
-              <span class="c-title" style="color:#059669;">✅ 可以，完全接受</span>
-              <span class="c-desc">我願意以個人儲備承擔差額。</span>
-            </button>
-            <button type="button" class="choice-btn" onclick="goToStage('prod-intro')" style="border-color:var(--primary); background:var(--primary-light);">
-              <span class="c-title" style="color:var(--primary);">❌ 不可以，希望能解決此缺口</span>
-              <span class="c-desc">希望享有全數賠償及高階醫療選擇，進入專屬方案。</span>
-            </button>
-          </div>
         `;
       } else {
         var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b) => Number(a.order) - Number(b.order));
@@ -765,7 +788,6 @@
       if (btnBack) btnBack.onclick = function() { goToStage(lastDynamicId); };
     }
   }
-
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     document.getElementById('role-tag-display').innerText = isChild ? '👶 兒童模式' : '👨‍👩‍👧 成人模式';
@@ -806,13 +828,18 @@
       document.getElementById('crossSellBox').style.display = 'none';
     }
     
-    var ciBase = (db.config && db.config["危疾App網址"]) || "https://ivancww.github.io/CIApp";
-    var ciUrl = ciBase.trim().replace(/\/+$/, '') + `?role=${appState.role}&cost=${appState.cost}&hasCompany=${appState.hasCompany}&alertMsg=${encodeURIComponent(appState.alertMsg||'')}`;
-    document.getElementById('ciRedirectBtn').href = ciUrl;
+    updateCiRedirectUrl();
     
     renderPlanChecklist();
     selectScenarioCategory('日間手術');
     updateValPremiums();
+  }
+
+  function updateCiRedirectUrl() {
+    var ciBase = (db.config && db.config["危疾App網址"]) || "https://ivancww.github.io/CIApp";
+    var ciUrl = ciBase.trim().replace(/\/+$/, '') + 
+      `?role=${appState.role}&cost=${appState.cost}&hasCompany=${appState.hasCompany?'yes':'no'}&companyLimit=${appState.companyLimit||0}&companyRate=${appState.companyRate||80}&alertMsg=${encodeURIComponent(appState.alertMsg||'')}`;
+    document.getElementById('ciRedirectBtn').href = ciUrl;
   }
 
   function renderPlanChecklist() {
@@ -853,7 +880,6 @@
     tbody.innerHTML = html;
     applyAllPlanVisibilities();
   }
-
   function checkWiseCond() {
     var allChecked = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
     var badge = document.getElementById('wise-status-badge');
@@ -861,7 +887,6 @@
     badge.innerText = allChecked ? '✓ 符合條件（享半私家）' : '⚠️ 條件未符（降為普通房級別）';
     renderPlanChecklist();
   }
-
   // ==================== 07 頁三大情境切換與 5x5 檔案呈現 ====================
   function selectScenarioCategory(cat) {
     appState.currentCaseCat = cat;
@@ -881,7 +906,6 @@
     });
     renderSelectedCase(0);
   }
-
   function renderSelectedCase(idx) {
     var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_FALLBACK_DB.claimCases;
     var filtered = cList.filter(c => c.category === appState.currentCaseCat);
@@ -912,22 +936,23 @@
     }
     recalcCustomCost(c.totalCost);
   }
-
   function toggleFilesView() {
     var gallery = document.getElementById('caseFilesGrid');
     gallery.style.display = (gallery.style.display === 'grid') ? 'none' : 'grid';
   }
-
   function handleManualCostInput(val) {
     var num = parseSafeNum(val);
     recalcCustomCost(num);
   }
-
   function recalcCustomCost(val) {
     var num = parseSafeNum(val);
     if (isNaN(num)) num = 0;
-    var eliteDed = Number(document.getElementById('elite-deductible').value) || 16000;
-    var wiseDed = Number(document.getElementById('wise-deductible').value) || 18000;
+    
+    // 動態獲取最新選取的自付額
+    var eliteDedEl = document.getElementById('elite-deductible');
+    var wiseDedEl = document.getElementById('wise-deductible');
+    var eliteDed = eliteDedEl ? Number(eliteDedEl.value) : 16000;
+    var wiseDed = wiseDedEl ? Number(wiseDedEl.value) : 18000;
     
     var eliteOOP = Math.min(num, eliteDed);
     var wiseOOP = Math.min(num, wiseDed);
@@ -940,7 +965,6 @@
     document.getElementById('case-oop-wise').innerText = 'HK$ ' + Math.round(wiseOOP).toLocaleString();
     document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(flexiOOP).toLocaleString();
   }
-
   // ==================== 08 保費精算 ====================
   function setPremMode(mode) {
     appState.premMode = mode;
@@ -948,14 +972,22 @@
     document.getElementById('btnModeMonthly').classList.toggle('active', mode === 'monthly');
     updateValPremiums();
   }
-
   function syncDeductibles(type, val) {
-    if (type === 'elite') document.getElementById('valEliteDed').value = val;
-    if (type === 'wise') document.getElementById('valWiseDed').value = val;
+    if (type === 'elite') {
+      var d1 = document.getElementById('elite-deductible');
+      var d2 = document.getElementById('valEliteDed');
+      if (d1) d1.value = val;
+      if (d2) d2.value = val;
+    }
+    if (type === 'wise') {
+      var d1 = document.getElementById('wise-deductible');
+      var d2 = document.getElementById('valWiseDed');
+      if (d1) d1.value = val;
+      if (d2) d2.value = val;
+    }
     recalcCustomCost(document.getElementById('case-total-input').value);
     updateValPremiums();
   }
-
   function selectFinalPlan(plan) {
     appState.selectedFinalPlan = plan;
     document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
@@ -983,7 +1015,6 @@
     document.getElementById('sumPrice').innerText = appState.selectedFinalPrice;
     calcRebateDetails();
   }
-
   function updateValPremiums() {
     var age = Number(document.getElementById('valAge').value) || 35;
     var gender = document.getElementById('valGender').value;
@@ -1045,13 +1076,11 @@
     
     selectFinalPlan(appState.selectedFinalPlan);
   }
-
   function togglePromoPanel() {
     var p = document.getElementById('promoPanel');
     p.style.display = (p.style.display === 'block') ? 'none' : 'block';
     calcRebateDetails();
   }
-
   function calcRebateDetails() {
     var c200 = Number(document.getElementById('coupon200').value) || 0;
     var c500 = Number(document.getElementById('coupon500').value) || 0;
@@ -1073,7 +1102,6 @@
     document.getElementById('valRebateY3').innerText = 'HK$ ' + rebateY3.toLocaleString();
     document.getElementById('valTotalSavings').innerText = 'HK$ ' + totalSavings.toLocaleString();
   }
-
   function togglePlanVis(plan) {
     appState.planVis[plan] = !appState.planVis[plan];
     var isShown = appState.planVis[plan];
@@ -1081,26 +1109,27 @@
     if (btn) btn.classList.toggle('off', !isShown);
     applyAllPlanVisibilities();
   }
-
   function applyAllPlanVisibilities() {
     ['elite', 'wise', 'flexi'].forEach(function(plan) {
       var isShown = appState.planVis[plan];
       document.querySelectorAll('.plan-col-' + plan).forEach(c => c.style.display = isShown ? '' : 'none');
     });
   }
-
   function selectBtn(btn) {
     btn.closest('.choice-list').querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
   }
-
   function goToStage(stageId) {
     document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
     var target = document.getElementById('stage-' + stageId);
     if (target) target.classList.add('active');
     window.scrollTo(0, 0);
+    
+    // 進入第07頁情境推演時，即時重算
+    if (stageId === 'scenarios') {
+      recalcCustomCost(document.getElementById('case-total-input').value);
+    }
   }
-
   // ==================== 1:1 粉紅虛線鏡像後台管理系統 ====================
   function openAdminModal() {
     renderAdminP0103Mirror();
@@ -1109,16 +1138,13 @@
     renderAdminConfigList();
     document.getElementById('adminModal').style.display = 'flex';
   }
-
   function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
-
   function switchAdminTab(tabId) {
     document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.adm-section-panel').forEach(p => p.style.display = 'none');
     event.target.classList.add('active');
     document.getElementById('admTab-' + tabId).style.display = 'block';
   }
-
   function renderAdminP0103Mirror() {
     var box = document.getElementById('adminP0103Mirror');
     box.innerHTML = '';
@@ -1170,7 +1196,6 @@
         </div>`;
     });
   }
-
   function addAdminNewPage() {
     if (!db.pages) db.pages = [];
     var newPageId = "m_custom_" + Date.now().toString().slice(-4);
@@ -1186,7 +1211,6 @@
     });
     renderAdminP0103Mirror();
   }
-
   function deleteAdminPage(idx) {
     if (confirm("確定刪除此頁面？該頁面對應之選項亦會同步移除。")) {
       var targetPageId = db.pages[idx].pageId;
@@ -1195,7 +1219,6 @@
       renderAdminP0103Mirror();
     }
   }
-
   function addAdminOption(pageId) {
     if (!db.options) db.options = [];
     var count = db.options.filter(o => o.pageId === pageId).length + 1;
@@ -1209,12 +1232,10 @@
     });
     renderAdminP0103Mirror();
   }
-
   function deleteAdminOption(idx) {
     db.options.splice(idx, 1);
     renderAdminP0103Mirror();
   }
-
   function renderAdminP06Mirror() {
     var hlBox = document.getElementById('adminMirrorHighlights');
     hlBox.innerHTML = '';
@@ -1267,7 +1288,6 @@
     });
     tb.innerHTML = html;
   }
-
   function addAdminPlanItem() {
     if (!db.planItems) db.planItems = [];
     var count = db.planItems.length + 1;
@@ -1285,12 +1305,10 @@
     });
     renderAdminP06Mirror();
   }
-
   function deleteAdminPlanItem(idx) {
     db.planItems.splice(idx, 1);
     renderAdminP06Mirror();
   }
-
   function renderAdminCasesList() {
     var box = document.getElementById('adminCasesList');
     box.innerHTML = '';
@@ -1319,7 +1337,6 @@
         </div>`;
     });
   }
-
   function uploadFilesToFirebase(input, idx) {
     var files = Array.from(input.files);
     if (!files || files.length === 0) return;
@@ -1353,18 +1370,15 @@
       alert("Firebase 初始化異常：" + e.message);
     }
   }
-
   function addAdminCase() {
     if (!db.claimCases) db.claimCases = [];
     db.claimCases.push({ category: "日間手術", caseName: "新實況案例", totalCost: 20000, files: [] });
     renderAdminCasesList();
   }
-
   function deleteAdminCase(idx) {
     db.claimCases.splice(idx, 1);
     renderAdminCasesList();
   }
-
   function renderAdminConfigList() {
     var box = document.getElementById('adminConfigList');
     var cfg = (db.config && Object.keys(db.config).length > 0) ? db.config : DEFAULT_FALLBACK_DB.config;
@@ -1380,7 +1394,6 @@
     }
     box.innerHTML += '</div>';
   }
-
   function saveAdminData() {
     var btn = document.getElementById('btnSaveAdmin');
     btn.innerText = "⏳ 正在同步至 Google Sheet...";
@@ -1464,7 +1477,6 @@
         btn.disabled = false;
       });
   }
-
   function initApp() {
     initParams();
     applyRoleContent();
