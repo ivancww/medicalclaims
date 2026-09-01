@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.1.6 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.1.5 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -63,10 +63,41 @@
     .stage-title { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
     .stage-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 18px; }
     
-    .dignity-headline-box { font-size: 17px; font-weight: 800; color: #334155; line-height: 1.6; margin-bottom: 16px; }
-    .dignity-highlight-text { display: block; font-size: 23px; font-weight: 900; color: #1d4ed8; line-height: 1.4; margin-top: 6px; letter-spacing: 0.5px; }
-    .dignity-image-wrap { width: 100%; border-radius: 12px; overflow: hidden; margin: 16px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); background: #f1f5f9; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); }
-    .dignity-image-wrap img { width: 100%; height: auto; max-height: 360px; object-fit: cover; display: block; }
+    .dignity-headline-box {
+      font-size: 17px;
+      font-weight: 800;
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .dignity-highlight-text {
+      display: block;
+      font-size: 23px;
+      font-weight: 900;
+      color: #1d4ed8;
+      line-height: 1.4;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
+    .dignity-image-wrap {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 16px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid var(--border);
+    }
+    .dignity-image-wrap img {
+      width: 100%;
+      height: auto;
+      max-height: 360px;
+      object-fit: cover;
+      display: block;
+    }
 
     .choice-list { display: flex; flex-direction: column; gap: 10px; }
     .choice-btn {
@@ -242,7 +273,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.6</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.5</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -250,8 +281,9 @@
       <button type="button" onclick="openAdminModal()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
     </div>
   </div>
+  <!-- 前台動態題目卡片掛載容器 -->
   <div id="dynamic-pages-container"></div>
-  
+  <!-- 06 專屬方案 (動態亮點) -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">專屬方案</span>
@@ -317,7 +349,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('scenarios')">下一步 →</button>
     </div>
   </div>
-
+  <!-- 07 情境案例 -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">情境案例 ｜ 實況推演</span>
     <h2 class="stage-title">常見醫療開支壓力測試</h2>
@@ -365,7 +397,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('premium-val')">下一步 →</button>
     </div>
   </div>
-
+  <!-- 08 保費與價值 -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保費與價值 ｜ 精算預算</span>
@@ -447,7 +479,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('confirm')">下一步 →</button>
     </div>
   </div>
-
+  <!-- 09 保障總結 -->
   <div class="stage-card" id="stage-confirm">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保障總結 ｜ 方案總結</span>
@@ -463,11 +495,13 @@
       <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
     </div>
     
+    <!-- 動態注意提醒 -->
     <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
       ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
       <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
     </div>
     
+    <!-- 溫馨提示危疾 App 導流卡片 -->
     <a href="#" id="ciRedirectBtn" target="_blank" rel="noopener noreferrer" class="warm-tip-card">
       <img src="https://ivancww.github.io/CIApp/icon-192.png" alt="CI App Logo" class="warm-tip-logo" onerror="this.src='https://ivancww.github.io/medicalclaims/icon-192.png';">
       <div class="warm-tip-content">
@@ -527,8 +561,7 @@
     </div>
   </div>
 </div>
-
-<!-- 鏡像後台管理系統 -->
+<!-- 1:1 粉紅虛線鏡像後台管理系統 -->
 <div id="adminModal">
   <div class="admin-card">
     <div class="admin-header">
@@ -599,6 +632,8 @@
   if (!firebase.apps.length) {
     try { firebase.initializeApp(firebaseConfig); } catch(e) { console.error("Firebase init error", e); }
   }
+  const storage = firebase.storage();
+
   var appState = {
     role: 'adult',
     cost: 500000,
@@ -678,7 +713,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.1.6",
+      "資料版本": "7.1.5",
       "預設模式": "adult",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -1206,8 +1241,8 @@
       recalcCustomCost(document.getElementById('case-total-input').value);
     }
   }
-
-  // ==================== 後台管理系統 (支援直接上載圖片至 Firebase) ====================
+  
+  // ==================== 後台管理系統 (支援頁面上載圖片) ====================
   function openAdminModal() {
     renderAdminP0103Mirror();
     renderAdminP06Mirror();
@@ -1256,20 +1291,20 @@
             <div class="editable-mirror" contenteditable="true" data-adm-page-title="${pIdx}" style="font-size:16px; font-weight:800;">${p.title}</div>
           </div>
           <div style="margin-bottom:6px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">重點粗體大字 (highlightText)：</label>
-            <div class="editable-mirror" contenteditable="true" data-adm-page-hl="${pIdx}" style="font-size:14px; font-weight:800; color:#1d4ed8;">${p.highlightText || ''}</div>
+            <label style="font-size:11px; font-weight:bold; color:#666;">重點粗體字 (highlightText)：</label>
+            <input type="text" data-adm-page-hl="${pIdx}" value="${p.highlightText || ''}" placeholder="更重要，是需要治療時，保留你的選擇..." style="margin-top:2px;">
           </div>
           <div style="margin-bottom:6px;">
             <label style="font-size:11px; font-weight:bold; color:#666;">副標題指引：</label>
             <div class="editable-mirror" contenteditable="true" data-adm-page-sub="${pIdx}" style="font-size:13px; color:#666;">${p.subtitle || ''}</div>
           </div>
           <div style="margin-bottom:8px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">頁面配圖 (可直接上載或貼上網址)：</label>
+            <label style="font-size:11px; font-weight:bold; color:#666;">圖片網址 (imageUrl) / 支援直接上載：</label>
             <div style="display:flex; gap:6px; align-items:center;">
-              <input type="text" id="admPageImg_${pIdx}" data-adm-page-img="${pIdx}" value="${p.imageUrl || ''}" placeholder="https://firebasestorage..." style="flex:1; margin-top:0;">
-              <label id="uploadPageLabel_${pIdx}" style="background:#1a3a6e; color:#fff; padding:7px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
+              <input type="text" id="admMedPageImg_${pIdx}" data-adm-page-img="${pIdx}" value="${p.imageUrl || ''}" placeholder="https://firebasestorage..." style="flex:1; margin-top:0;">
+              <label id="uploadMedPageLabel_${pIdx}" style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
                 📤 上載圖片
-                <input type="file" accept="image/*" style="display:none;" onchange="uploadPageImageToFirebase(this, ${pIdx})">
+                <input type="file" accept="image/*" style="display:none;" onchange="uploadMedPageImageToFirebase(this, ${pIdx})">
               </label>
             </div>
           </div>
@@ -1284,26 +1319,26 @@
     });
   }
 
-  function uploadPageImageToFirebase(input, pIdx) {
-    var file = input.files[0];
+  async function uploadMedPageImageToFirebase(input, pageIdx) {
+    const file = input.files[0];
     if (!file) return;
-    var btnLabel = document.getElementById('uploadPageLabel_' + pIdx);
-    btnLabel.innerText = "⏳ 上載中...";
+    const uploadLabel = document.getElementById(`uploadMedPageLabel_${pageIdx}`);
+    const textInput = document.getElementById(`admMedPageImg_${pageIdx}`);
+    
+    uploadLabel.innerText = "⏳ 上載中...";
     try {
-      var storageRef = firebase.storage().ref();
-      var cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-      var fileRef = storageRef.child(`pages/${Date.now()}_${cleanName}`);
-      fileRef.put(file).then(snapshot => snapshot.ref.getDownloadURL()).then(url => {
-        document.getElementById('admPageImg_' + pIdx).value = url;
-        btnLabel.innerText = "📤 上載圖片";
-        alert("✅ 圖片已成功上載至 Firebase Storage！請記得點擊下方「💾 儲存並同步至 Google Sheet」。");
-      }).catch(err => {
-        btnLabel.innerText = "📤 上載圖片";
-        alert("❌ 上載失敗：" + err.message);
-      });
-    } catch(e) {
-      btnLabel.innerText = "📤 上載圖片";
-      alert("Firebase 異常：" + e.message);
+      const safeFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const storageRef = storage.ref(`med_pages/${Date.now()}_${safeFileName}`);
+      const snapshot = await storageRef.put(file);
+      const downloadURL = await snapshot.ref.getDownloadURL();
+      
+      textInput.value = downloadURL;
+      if (db.pages[pageIdx]) db.pages[pageIdx].imageUrl = downloadURL;
+      uploadLabel.innerText = "📤 上載圖片";
+      alert("✅ 圖片上傳至 Firebase 成功！請點擊下方「💾 儲存並同步至 Google Sheet」保存。");
+    } catch(err) {
+      uploadLabel.innerText = "📤 上載圖片";
+      alert("❌ 圖片上傳失敗：" + err.message);
     }
   }
 
@@ -1474,6 +1509,7 @@
         alert("✅ 成功上載 " + urls.length + " 個檔案至 Firebase Storage！");
       }).catch(err => {
         uploadBtn.innerText = "📤 上載文件";
+        console.error("Firebase Storage Upload Error: ", err);
         alert("❌ 上載失敗，請檢查 Firebase Storage Rules 設定：" + err.message);
       });
     } catch(e) {
@@ -1514,9 +1550,9 @@
       var idx = Number(el.dataset.admPageTitle);
       if (db.pages[idx]) db.pages[idx].title = el.innerText.trim();
     });
-    document.querySelectorAll('[data-adm-page-hl]').forEach(el => {
-      var idx = Number(el.dataset.admPageHl);
-      if (db.pages[idx]) db.pages[idx].highlightText = el.innerText.trim();
+    document.querySelectorAll('[data-adm-page-hl]').forEach(inp => {
+      var idx = Number(inp.dataset.admPageHl);
+      if (db.pages[idx]) db.pages[idx].highlightText = inp.value.trim();
     });
     document.querySelectorAll('[data-adm-page-sub]').forEach(el => {
       var idx = Number(el.dataset.admPageSub);
@@ -1617,7 +1653,7 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.1.6') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.1.5') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
