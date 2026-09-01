@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.1.2 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.1.3 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -63,6 +63,43 @@
     .stage-title { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
     .stage-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 18px; }
     
+    /* 核心主題尊嚴大字標題框 */
+    .dignity-headline-box {
+      font-size: 17px;
+      font-weight: 800;
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .dignity-highlight-text {
+      display: block;
+      font-size: 23px;
+      font-weight: 900;
+      color: #1d4ed8;
+      line-height: 1.4;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
+    .dignity-image-wrap {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 16px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      background: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 180px;
+    }
+    .dignity-image-wrap img {
+      width: 100%;
+      height: auto;
+      max-height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+
     .choice-list { display: flex; flex-direction: column; gap: 10px; }
     .choice-btn {
       display: flex; flex-direction: column; gap: 4px; text-align: left; width: 100%; padding: 15px 18px;
@@ -157,60 +194,7 @@
     
     .cross-sell-alert { background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
     
-    /* 溫馨提示危疾 App 導流卡片 */
-    .warm-tip-card {
-      background: #f0f7ff;
-      border: 1.5px solid #bfdbfe;
-      border-radius: 14px;
-      padding: 16px;
-      margin: 14px 0;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      text-decoration: none;
-      transition: 0.2s ease;
-      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.04);
-    }
-    .warm-tip-card:hover {
-      border-color: var(--primary);
-      background: #e0f2fe;
-      transform: translateY(-1px);
-    }
-    .warm-tip-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      object-fit: cover;
-      flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .warm-tip-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .warm-tip-title {
-      font-size: 15.5px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-    .warm-tip-desc {
-      font-size: 12.5px;
-      color: #475569;
-      line-height: 1.5;
-    }
-    .warm-tip-action {
-      font-size: 13.5px;
-      font-weight: 800;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 2px;
-    }
-    
-    /* 後台 1:1 鏡像編輯模式 */
+    /* 鏡像後台管理系統 */
     #adminModal {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 12px;
@@ -239,7 +223,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.2</span>
+      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.3</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
@@ -247,9 +231,9 @@
       <button type="button" onclick="openAdminModal()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
     </div>
   </div>
-  <!-- ==================== 前台動態題目卡片掛載容器 ==================== -->
+  <!-- 前台動態題目卡片掛載容器 -->
   <div id="dynamic-pages-container"></div>
-  <!-- ==================== 06 專屬方案 (動態亮點) ==================== -->
+  <!-- 06 專屬方案 (動態亮點) -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">專屬方案</span>
@@ -315,7 +299,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('scenarios')">下一步 →</button>
     </div>
   </div>
-  <!-- ==================== 07 情境案例 ==================== -->
+  <!-- 07 情境案例 -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">情境案例 ｜ 實況推演</span>
     <h2 class="stage-title">常見醫療開支壓力測試</h2>
@@ -363,7 +347,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('premium-val')">下一步 →</button>
     </div>
   </div>
-  <!-- ==================== 08 保費與價值 ==================== -->
+  <!-- 08 保費與價值 -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保費與價值 ｜ 精算預算</span>
@@ -445,7 +429,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('confirm')">下一步 →</button>
     </div>
   </div>
-  <!-- ==================== 09 保障總結 (含動態溫馨提示危疾導流) ==================== -->
+  <!-- 09 保障總結 -->
   <div class="stage-card" id="stage-confirm">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保障總結 ｜ 方案總結</span>
@@ -467,7 +451,7 @@
       <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
     </div>
     
-    <!-- 溫馨提示危疾 App 導流卡片 (與 CIApp 對應) -->
+    <!-- 溫馨提示危疾 App 導流卡片 -->
     <a href="#" id="ciRedirectBtn" target="_blank" rel="noopener noreferrer" class="warm-tip-card">
       <img src="https://ivancww.github.io/CIApp/icon-192.png" alt="CI App Logo" class="warm-tip-logo" onerror="this.src='https://ivancww.github.io/medicalclaims/icon-192.png';">
       <div class="warm-tip-content">
@@ -527,7 +511,7 @@
     </div>
   </div>
 </div>
-<!-- ==================== 1:1 粉紅虛線鏡像後台管理系統 ==================== -->
+<!-- 1:1 粉紅虛線鏡像後台管理系統 -->
 <div id="adminModal">
   <div class="admin-card">
     <div class="admin-header">
@@ -541,7 +525,6 @@
       <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
     </div>
     <div class="admin-body">
-      <!-- 1. 動態頁面與選項鏡像 -->
       <div id="admTab-p0103" class="adm-section-panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <strong style="color:var(--primary); font-size:14px;">📄 動態頁面結構管理（與 Google Sheet 同步）</strong>
@@ -550,7 +533,6 @@
         <div id="adminP0103Mirror"></div>
       </div>
       
-      <!-- 2. 06 專屬方案 1:1 鏡像 -->
       <div id="admTab-p06" class="adm-section-panel" style="display:none;">
         <div class="stage-card" style="display:block; margin:0; box-shadow:none;">
           <div class="success-box">
@@ -565,7 +547,6 @@
         </div>
       </div>
       
-      <!-- 3. 07 索償案例管理 -->
       <div id="admTab-p07" class="adm-section-panel" style="display:none;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (Firebase Storage 多檔上載)</strong>
@@ -574,7 +555,6 @@
         <div id="adminCasesList"></div>
       </div>
       
-      <!-- 4. 系統設定 -->
       <div id="admTab-pConfig" class="adm-section-panel" style="display:none;">
         <div class="stage-card" style="display:block; margin:0;" id="adminConfigList"></div>
       </div>
@@ -617,17 +597,38 @@
     planVis: { elite: true, wise: true, flexi: true }
   };
   
+  // 預設加插核心主題尊嚴頁面 (m_dignity)
   var DEFAULT_FALLBACK_DB = {
     pages: [
-      { pageId: "m1_adult", role: "adult", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：", quoteAlert: "" },
-      { pageId: "m2_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：", quoteAlert: "" },
-      { pageId: "m4_adult", role: "adult", stepOrder: 3, tagName: "03 ｜ 現有防線確認", title: "面對醫療選擇時嘅取捨", subtitle: "你現時擁有嘅醫療保障，是否能完全支持你嘅選擇？", quoteAlert: "" },
-      { pageId: "m5_adult", role: "adult", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "", quoteAlert: "" },
+      { 
+        pageId: "m_dignity_adult", 
+        role: "adult", 
+        stepOrder: 1, 
+        tagName: "01 ｜ 醫療核心價值", 
+        title: "醫療保險，不止係一份報銷保障", 
+        highlightText: "更重要，是需要治療時，保留你的選擇、自主與尊嚴。",
+        imageUrl: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80",
+        subtitle: "面對突如其來的健康挑戰，尊嚴來自於不用向費用妥協："
+      },
+      { pageId: "m1_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：" },
+      { pageId: "m2_adult", role: "adult", stepOrder: 3, tagName: "03 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：" },
+      { pageId: "m4_adult", role: "adult", stepOrder: 4, tagName: "04 ｜ 現有防線確認", title: "面對醫療選擇時嘅取捨", subtitle: "你現時擁有嘅醫療保障，是否能完全支持你嘅選擇？" },
+      { pageId: "m5_adult", role: "adult", stepOrder: 5, tagName: "05 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "" },
       
-      { pageId: "m1_child", role: "child", stepOrder: 1, tagName: "01 ｜ 關注/重視", title: "當孩子需要醫療時，你最重視的是甚麼？", subtitle: "有些事情可以等，但醫療無得等：", quoteAlert: "" },
-      { pageId: "m2_child", role: "child", stepOrder: 2, tagName: "02 ｜ 想像一下情境", title: "如果孩子突然需要即時接受治療……", subtitle: "真正需要醫療時，你希望作出的決定：", quoteAlert: "" },
-      { pageId: "m4_child", role: "child", stepOrder: 3, tagName: "03 ｜ 兒童防線確認", title: "給孩子最全面的後盾", subtitle: "確認孩子現時具備的私家醫療資源：", quoteAlert: "" },
-      { pageId: "m5_child", role: "child", stepOrder: 4, tagName: "04 ｜ 缺口 ➔ 解決方案", title: "兒童醫療全數保障總結", subtitle: "", quoteAlert: "" }
+      { 
+        pageId: "m_dignity_child", 
+        role: "child", 
+        stepOrder: 1, 
+        tagName: "01 ｜ 守護核心價值", 
+        title: "兒童醫療，不止係一份報銷保障", 
+        highlightText: "更重要，是孩子需要治療時，給予最好的醫療選擇與全天候守護。",
+        imageUrl: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80",
+        subtitle: "給孩子最頂級的私家醫療資源與無微不至的照護："
+      },
+      { pageId: "m1_child", role: "child", stepOrder: 2, tagName: "02 ｜ 關注/重視", title: "當孩子需要醫療時，你最重視的是甚麼？", subtitle: "有些事情可以等，但醫療無得等：" },
+      { pageId: "m2_child", role: "child", stepOrder: 3, tagName: "03 ｜ 想像一下情境", title: "如果孩子突然需要即時接受治療……", subtitle: "真正需要醫療時，你希望作出的決定：" },
+      { pageId: "m4_child", role: "child", stepOrder: 4, tagName: "04 ｜ 兒童防線確認", title: "給孩子最全面的後盾", subtitle: "確認孩子現時具備的私家醫療資源：" },
+      { pageId: "m5_child", role: "child", stepOrder: 5, tagName: "05 ｜ 缺口 ➔ 解決方案", title: "兒童醫療全數保障總結", subtitle: "" }
     ],
     highlights: [
       { role: "adult", order: 1, text: "終身 $6,000 萬高額醫療保障，實報實銷" },
@@ -661,7 +662,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.1.2",
+      "資料版本": "7.1.3",
       "預設模式": "adult",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -738,7 +739,7 @@
     applyRoleContent();
   }
 
-  // ==================== 全動態頁面渲染引擎 ====================
+  // ==================== 全動態頁面渲染引擎 (含尊嚴大字與Firebase秒開圖) ====================
   function renderDynamicPages() {
     var r = appState.role;
     var container = document.getElementById('dynamic-pages-container');
@@ -756,10 +757,23 @@
       var prevTarget = isFirst ? null : pages[idx - 1].pageId;
       var nextTarget = isLastDynamic ? 'prod-intro' : pages[idx + 1].pageId;
       
+      var isDignityPage = p.pageId.includes('dignity');
       var isGapSummaryPage = p.pageId.includes('m5') || (p.title && p.title.includes('總結'));
       var contentHtml = '';
       
-      if (isGapSummaryPage) {
+      if (isDignityPage) {
+        var hlText = p.highlightText || "更重要，是需要治療時，保留你的選擇、自主與尊嚴。";
+        var imgUrl = p.imageUrl || "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80";
+        contentHtml = `
+          <div class="dignity-headline-box">
+            ${p.title}
+            <span class="dignity-highlight-text">${hlText}</span>
+          </div>
+          <div class="dignity-image-wrap">
+            <img src="${imgUrl}" alt="Healthcare Dignity" loading="eager" onerror="this.style.display='none';">
+          </div>
+        `;
+      } else if (isGapSummaryPage) {
         var gapVal = Math.max(0, appState.cost - appState.companyPay);
         var compDisplay = (appState.hasCompany && appState.companyPay > 0 && r !== 'child') ? 'flex' : 'none';
         contentHtml = `
@@ -803,10 +817,11 @@
         </div>
       `;
       
+      var titleHtml = isDignityPage ? '' : `<h2 class="stage-title">${p.title}</h2>`;
       var cardHtml = `
         <div class="stage-card ${isFirst ? 'active' : ''}" id="stage-${p.pageId}">
           <span class="stage-tag">${p.tagName || `步驟 ${idx+1}`}</span>
-          <h2 class="stage-title">${p.title}</h2>
+          ${titleHtml}
           ${p.subtitle ? `<p class="stage-desc">${p.subtitle}</p>` : ''}
           ${contentHtml}
           ${navButtons}
@@ -925,7 +940,6 @@
     renderPlanChecklist();
   }
 
-  // ==================== 07 頁三大情境切換 ====================
   function selectScenarioCategory(cat) {
     appState.currentCaseCat = cat;
     document.querySelectorAll('.sc-tab-btn').forEach(b => b.classList.remove('selected'));
@@ -1002,7 +1016,6 @@
     document.getElementById('case-oop-wise').innerText = 'HK$ ' + Math.round(wiseOOP).toLocaleString();
     document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(flexiOOP).toLocaleString();
   }
-  // ==================== 08 保費精算 ====================
   function setPremMode(mode) {
     appState.premMode = mode;
     document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
@@ -1166,7 +1179,7 @@
       recalcCustomCost(document.getElementById('case-total-input').value);
     }
   }
-  // ==================== 1:1 粉紅虛線鏡像後台管理系統 ====================
+  // ==================== 後台管理系統 ====================
   function openAdminModal() {
     renderAdminP0103Mirror();
     renderAdminP06Mirror();
@@ -1219,8 +1232,8 @@
             <div class="editable-mirror" contenteditable="true" data-adm-page-sub="${pIdx}" style="font-size:13px; color:#666;">${p.subtitle || ''}</div>
           </div>
           <div style="margin-bottom:8px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">提示金句 (QuoteAlert)：</label>
-            <div class="editable-mirror" contenteditable="true" data-adm-page-quote="${pIdx}" style="font-size:12px; color:#92400e;">${p.quoteAlert || ''}</div>
+            <label style="font-size:11px; font-weight:bold; color:#666;">圖片網址 (Firebase / 外部)：</label>
+            <input type="text" data-adm-page-img="${pIdx}" value="${p.imageUrl || ''}" placeholder="https://..." style="margin-top:2px;">
           </div>
           <div style="margin-top:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1243,7 +1256,7 @@
       tagName: `0${count} ｜ 自訂步驟`,
       title: "請在此輸入新頁面標題",
       subtitle: "請在此輸入副標題或評估說明",
-      quoteAlert: ""
+      imageUrl: ""
     });
     renderAdminP0103Mirror();
   }
@@ -1447,9 +1460,9 @@
       var idx = Number(el.dataset.admPageTag);
       if (db.pages[idx]) db.pages[idx].tagName = el.innerText.trim();
     });
-    document.querySelectorAll('[data-adm-page-quote]').forEach(el => {
-      var idx = Number(el.dataset.admPageQuote);
-      if (db.pages[idx]) db.pages[idx].quoteAlert = el.innerText.trim();
+    document.querySelectorAll('[data-adm-page-img]').forEach(inp => {
+      var idx = Number(inp.dataset.admPageImg);
+      if (db.pages[idx]) db.pages[idx].imageUrl = inp.value.trim();
     });
     
     document.querySelectorAll('[data-adm-opt-title]').forEach(el => {
@@ -1537,12 +1550,11 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.1.2') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.1.3') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
       
-      // 背景輕量檢查版本號
       fetch(GAS_API_URL + (GAS_API_URL.includes('?') ? '&' : '?') + 'action=checkVersion')
         .then(res => res.json())
         .then(verRes => {
