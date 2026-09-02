@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.2.2 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.2.5 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -238,7 +238,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.2.2</span>
+      <span class="v-badge" id="appVersion">v7.2.5</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -409,7 +409,7 @@
       </div>
     </div>
 
-    <!-- 4. AIA Vitality 預設隱藏折疊修復 -->
+    <!-- AIA Vitality 預設隱藏折疊 -->
     <div id="vitality-wrap-box" style="margin:12px 0; font-size:13px; background:#eff6ff; padding:12px; border-radius:8px; border:1px solid #bfdbfe;">
       <div class="vitality-toggle-header" onclick="toggleVitalityDetails()">
         <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#1e40af;" onclick="event.stopPropagation();">
@@ -574,12 +574,12 @@
       <div id="adminVisualContainer"></div>
     </div>
 
-    <!-- 1. 系統設定 (動態完整渲染所有 key) -->
+    <!-- 系統設定 -->
     <div id="adminTabConfigSection" style="display:none;">
       <div class="admin-card-section" id="adminConfigContainer"></div>
     </div>
 
-    <!-- 3. 專屬方案細項 (完整呈現與編輯 8 個欄位) -->
+    <!-- 專屬方案細項 -->
     <div id="adminTabP06Section" style="display:none;">
       <div class="admin-card-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -685,7 +685,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "6.8.1",
+      "資料版本": "7.2.5",
       "預設模式": "adult",
       "公司醫保溫馨提示": "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -709,13 +709,23 @@
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
 
+  function applyDatabaseMerge(remote) {
+    if (!remote) return;
+    db = remote;
+    if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
+    // 強制補齊重要預設值
+    if (!db.config["公司醫保溫馨提示"]) {
+      db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
+    }
+  }
+
   function loadLocalCache() {
     try {
       var cached = localStorage.getItem(STORAGE_KEY_MED_DB);
       if (cached) {
         var parsed = JSON.parse(cached);
         if (parsed && parsed.status === 'success') {
-          db = parsed;
+          applyDatabaseMerge(parsed);
           return true;
         }
       }
@@ -756,6 +766,7 @@
     applyRoleContent();
   }
 
+  // 1. 動態頁面渲染：修復置中圖片與粗體字顯示
   function renderDynamicPages() {
     var r = appState.role;
     var container = document.getElementById('dynamic-pages-container');
@@ -773,21 +784,20 @@
       var prevTarget = isFirst ? null : pages[idx - 1].pageId;
       var nextTarget = isLastDynamic ? 'prod-intro' : pages[idx + 1].pageId;
       
-      var isDignityPage = p.pageId.includes('dignity');
-      var isGapSummaryPage = p.pageId.includes('m5') || (p.title && p.title.includes('總結'));
+      var isGapSummaryPage = p.pageId.includes('m5') || (p.title && p.title.includes('自付差額')) || (p.title && p.title.includes('總結'));
+      var hasImageOrHl = (p.imageUrl && p.imageUrl.trim() !== '') || (p.highlightText && p.highlightText.trim() !== '') || isFirst;
       var contentHtml = '';
       
-      if (isDignityPage) {
+      if (hasImageOrHl && !isGapSummaryPage) {
         var hlText = p.highlightText || "更重要，是需要治療時，保留你的選擇、自主與尊嚴。";
-        var imgUrl = p.imageUrl || "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80";
+        var imgDisplay = (p.imageUrl && p.imageUrl.trim() !== '') ? 
+          `<div class="dignity-image-wrap"><img src="${p.imageUrl}" alt="Healthcare Dignity" loading="eager" onerror="this.style.display='none';"></div>` : '';
         contentHtml = `
           <div class="dignity-headline-box">
             ${p.title}
             <span class="dignity-highlight-text">${hlText}</span>
           </div>
-          <div class="dignity-image-wrap">
-            <img src="${imgUrl}" alt="Healthcare Dignity" loading="eager" onerror="this.style.display='none';">
-          </div>
+          ${imgDisplay}
         `;
       } else if (isGapSummaryPage) {
         var cfg = db.config || DEFAULT_FALLBACK_DB.config;
@@ -895,7 +905,7 @@
         </div>
       `;
       
-      var titleHtml = isDignityPage ? '' : `<h2 class="stage-title">${p.title}</h2>`;
+      var titleHtml = (hasImageOrHl && !isGapSummaryPage) ? '' : `<h2 class="stage-title">${p.title}</h2>`;
       var cardHtml = `
         <div class="stage-card ${isFirst ? 'active' : ''}" id="stage-${p.pageId}">
           <span class="stage-tag">${p.tagName || `步驟 ${idx+1}`}</span>
@@ -997,7 +1007,6 @@
     updateCiRedirectUrl();
   }
 
-  // 2. 亮點資料修復渲染
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     var btn = document.getElementById('btnRoleSwitch');
@@ -1026,7 +1035,6 @@
     
     renderDynamicPages();
     
-    // 渲染產品亮點
     var allHl = (db.highlights && db.highlights.length > 0) ? db.highlights : DEFAULT_FALLBACK_DB.highlights;
     var hlList = allHl.filter(h => h.role === appState.role).sort((a,b)=>Number(a.order)-Number(b.order));
     var hlHtml = '';
@@ -1055,7 +1063,6 @@
     if (ciBtn) ciBtn.href = ciUrl;
   }
 
-  // 3. 專屬方案細項前台表格完整渲染
   function renderPlanChecklist() {
     var tbody = document.getElementById('checklistGridContainer');
     if (!tbody) return;
@@ -1236,7 +1243,6 @@
     calcRebateDetails();
   }
 
-  // 4. Vitality 展開/隱藏切換
   function toggleVitalityDetails() {
     var box = document.getElementById('vitality-details-content');
     var arrow = document.getElementById('vitality-arrow-icon');
@@ -1535,11 +1541,15 @@
     renderAdminVisualLayout();
   }
 
-  // 1. 系統設定後台修復：完整支援所有 Google Sheet 設定
+  // 2. 系統設定後台渲染：強制保證帶出「公司醫保溫馨提示」
   function renderAdminConfigLayout() {
     const container = document.getElementById('adminConfigContainer');
     if (!container) return;
-    const cfg = db.config || DEFAULT_FALLBACK_DB.config;
+    if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
+    if (!db.config["公司醫保溫馨提示"]) {
+      db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
+    }
+    const cfg = db.config;
     let html = '<h3 style="color:var(--primary); margin:0 0 12px 0;">⚙️ 系統參數設定 (對應 Google Sheet 系統設定)</h3><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
     for (const [k, v] of Object.entries(cfg)) {
       html += `<div><label class="admin-label">${k}</label><input type="text" data-adm-config-key="${k}" value="${v}"></div>`;
@@ -1548,7 +1558,6 @@
     container.innerHTML = html;
   }
 
-  // 3. 專屬方案細項後台完整編輯器 (涵蓋 8 個欄位)
   function renderAdminP06Mirror() {
     const box = document.getElementById('adminPlanItemsEditor');
     if (!box) return;
@@ -1562,7 +1571,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <div style="display:flex; align-items:center; gap:8px; flex:1;">
               <span style="font-weight:bold; font-size:13px; color:var(--primary);">項目 ${idx+1}：</span>
-              <input type="text" data-adm-pi-name="${idx}" value="${pi.name}" placeholder="項目名稱 (例如：🩺 出院後覆診)" style="flex:1; margin-top:0;">
+              <input type="text" data-adm-pi-name="${idx}" value="${pi.name}" placeholder="項目名稱" style="flex:1; margin-top:0;">
             </div>
             <button type="button" onclick="deleteAdminPlanItem(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer; margin-left:8px;">🗑️ 刪除</button>
           </div>
@@ -1570,44 +1579,44 @@
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
             <div>
               <label class="admin-label">👑 尊顯主內容：</label>
-              <input type="text" data-adm-pi-elitemain="${idx}" value="${pi.eliteMain || ''}" placeholder="例如：✅ 全數賠償">
+              <input type="text" data-adm-pi-elitemain="${idx}" value="${pi.eliteMain || ''}">
             </div>
             <div>
               <label class="admin-label">👑 尊顯細字說明：</label>
-              <input type="text" data-adm-pi-elitesub="${idx}" value="${pi.eliteSub || ''}" placeholder="例如：(90-365日)">
+              <input type="text" data-adm-pi-elitesub="${idx}" value="${pi.eliteSub || ''}">
             </div>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
             <div>
               <label class="admin-label">🛡️ 睿選半私家主內容：</label>
-              <input type="text" data-adm-pi-wisesemimain="${idx}" value="${pi.wiseSemiMain || ''}" placeholder="例如：✅ 全數賠償">
+              <input type="text" data-adm-pi-wisesemimain="${idx}" value="${pi.wiseSemiMain || ''}">
             </div>
             <div>
               <label class="admin-label">🛡️ 睿選半私家細字說明：</label>
-              <input type="text" data-adm-pi-wisesemisub="${idx}" value="${pi.wiseSemiSub || ''}" placeholder="例如：(90-365日)">
+              <input type="text" data-adm-pi-wisesemisub="${idx}" value="${pi.wiseSemiSub || ''}">
             </div>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
             <div>
               <label class="admin-label">🏨 睿選普通房主內容：</label>
-              <input type="text" data-adm-pi-wisegenmain="${idx}" value="${pi.wiseGenMain || ''}" placeholder="例如：受限於普通房分項">
+              <input type="text" data-adm-pi-wisegenmain="${idx}" value="${pi.wiseGenMain || ''}">
             </div>
             <div>
               <label class="admin-label">🏨 睿選普通房細字說明：</label>
-              <input type="text" data-adm-pi-wisegensub="${idx}" value="${pi.wiseGenSub || ''}" placeholder="例如：(90-365日)">
+              <input type="text" data-adm-pi-wisegensub="${idx}" value="${pi.wiseGenSub || ''}">
             </div>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
             <div>
               <label class="admin-label">⚠️ 靈活主內容：</label>
-              <input type="text" data-adm-pi-fleximain="${idx}" value="${pi.flexiMain || ''}" placeholder="例如：上限 $848">
+              <input type="text" data-adm-pi-fleximain="${idx}" value="${pi.flexiMain || ''}">
             </div>
             <div>
               <label class="admin-label">⚠️ 靈活細字說明：</label>
-              <input type="text" data-adm-pi-flexisub="${idx}" value="${pi.flexiSub || ''}" placeholder="例如：(限3次)">
+              <input type="text" data-adm-pi-flexisub="${idx}" value="${pi.flexiSub || ''}">
             </div>
           </div>
         </div>`;
@@ -1720,7 +1729,7 @@
       db.config[inp.dataset.admConfigKey] = inp.value;
     });
     
-    // 3. 專屬方案細項 (完整保存 8 欄)
+    // 3. 專屬方案細項
     document.querySelectorAll('[data-adm-pi-name]').forEach((inp, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = inp.value;
@@ -1766,7 +1775,7 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '6.8.1') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.2.5') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
@@ -1797,7 +1806,7 @@
       .then(res => res.json())
       .then(remote => {
         if (remote && remote.status === 'success') {
-          db = remote;
+          applyDatabaseMerge(remote);
           saveLocalCache(remote);
           const badge = document.getElementById('sync-status-badge');
           if (badge) {
