@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.1.5 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.2.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -63,42 +63,11 @@
     .stage-title { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
     .stage-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 18px; }
     
-    .dignity-headline-box {
-      font-size: 17px;
-      font-weight: 800;
-      color: #334155;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-    .dignity-highlight-text {
-      display: block;
-      font-size: 23px;
-      font-weight: 900;
-      color: #1d4ed8;
-      line-height: 1.4;
-      margin-top: 6px;
-      letter-spacing: 0.5px;
-    }
-    .dignity-image-wrap {
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      margin: 16px 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      background: #f1f5f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid var(--border);
-    }
-    .dignity-image-wrap img {
-      width: 100%;
-      height: auto;
-      max-height: 360px;
-      object-fit: cover;
-      display: block;
-    }
-
+    .dignity-headline-box { font-size: 17px; font-weight: 800; color: #334155; line-height: 1.6; margin-bottom: 16px; }
+    .dignity-highlight-text { display: block; font-size: 23px; font-weight: 900; color: #1d4ed8; line-height: 1.4; margin-top: 6px; letter-spacing: 0.5px; }
+    .dignity-image-wrap { width: 100%; border-radius: 12px; overflow: hidden; margin: 16px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); background: #f1f5f9; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); }
+    .dignity-image-wrap img { width: 100%; height: auto; max-height: 360px; object-fit: cover; display: block; }
+    
     .choice-list { display: flex; flex-direction: column; gap: 10px; }
     .choice-btn {
       display: flex; flex-direction: column; gap: 4px; text-align: left; width: 100%; padding: 15px 18px;
@@ -161,9 +130,7 @@
     .sc-tab-btn {
       border: 1.5px dashed var(--pink-border); border-radius: 10px; padding: 12px 6px; background: #fff; cursor: pointer; text-align: center; font-size: 13.5px; font-weight: 800; color: #555; transition: 0.2s;
     }
-    .sc-tab-btn.selected {
-      border: 2px solid var(--primary); background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(26,58,110,0.15);
-    }
+    .sc-tab-btn.selected { border: 2px solid var(--primary); background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(26,58,110,0.15); }
     
     .oop-row-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
     @media (max-width: 600px) { .oop-row-grid { grid-template-columns: 1fr; } }
@@ -194,78 +161,45 @@
     .cross-sell-alert { background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
     
     .warm-tip-card {
-      background: #f0f7ff;
-      border: 1.5px solid #bfdbfe;
-      border-radius: 14px;
-      padding: 16px;
-      margin: 14px 0;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      text-decoration: none;
-      transition: 0.2s ease;
-      box-shadow: 0 2px 8px rgba(30, 58, 138, 0.04);
+      background: #f0f7ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 16px; margin: 14px 0;
+      display: flex; align-items: center; gap: 14px; text-decoration: none; transition: 0.2s ease; box-shadow: 0 2px 8px rgba(30, 58, 138, 0.04);
     }
-    .warm-tip-card:hover {
-      border-color: var(--primary);
-      background: #e0f2fe;
-      transform: translateY(-1px);
-    }
-    .warm-tip-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      object-fit: cover;
-      flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .warm-tip-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .warm-tip-title {
-      font-size: 15.5px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-    .warm-tip-desc {
-      font-size: 12.5px;
-      color: #475569;
-      line-height: 1.5;
-    }
-    .warm-tip-action {
-      font-size: 13.5px;
-      font-weight: 800;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 2px;
-    }
+    .warm-tip-card:hover { border-color: var(--primary); background: #e0f2fe; transform: translateY(-1px); }
+    .warm-tip-logo { width: 48px; height: 48px; border-radius: 12px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .warm-tip-content { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .warm-tip-title { font-size: 15.5px; font-weight: 800; color: var(--primary); }
+    .warm-tip-desc { font-size: 12.5px; color: #475569; line-height: 1.5; }
+    .warm-tip-action { font-size: 13.5px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
     
-    #adminModal {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 12px;
+    /* 全螢幕雲端後台管理樣式 (圖 1 & 圖 2 規範) */
+    #adminFullScreenModal {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #f1f5f9; z-index: 9999999; flex-direction: column; overflow: hidden;
     }
-    .admin-card {
-      background: #eef2f5; width: 100%; max-width: 920px; max-height: 94vh; border-radius: 16px;
-      display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    .admin-header-nav {
+      background: #1a3a6e; color: #fff; padding: 12px 16px; display: flex;
+      justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); flex-shrink: 0;
     }
-    .admin-header { padding: 14px 20px; background: #1a3a6e; color: #ffffff; display: flex; justify-content: space-between; align-items: center; }
-    .admin-nav-tabs { display: flex; gap: 6px; padding: 10px 16px; background: #e2e8f0; overflow-x: auto; flex-shrink: 0; }
-    .admin-nav-btn { padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 8px; border: none; background: #fff; cursor: pointer; color: #475569; white-space: nowrap; }
-    .admin-nav-btn.active { background: #1a3a6e; color: #fff; }
-    .admin-body { padding: 18px; overflow-y: auto; flex: 1; }
-    
-    .editable-mirror {
-      border: 2px dashed #f472b6 !important; background: #fff0f5 !important;
-      border-radius: 8px; padding: 4px 8px; outline: none; transition: 0.2s;
+    .admin-tab-bar {
+      display: flex; gap: 8px; background: #e2e8f0; padding: 8px 16px;
+      border-bottom: 1px solid #cbd5e1; flex-shrink: 0; overflow-x: auto;
     }
-    .editable-mirror:focus {
-      border-color: #db2777 !important; background: #ffffff !important; box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.2);
+    .admin-tab-btn {
+      padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 800;
+      border: none; background: #fff; color: #475569; cursor: pointer; white-space: nowrap;
     }
+    .admin-tab-btn.active { background: #1a3a6e; color: #fff; }
+    .admin-scroll-body {
+      flex: 1; overflow-y: auto; padding: 16px; max-width: 900px; width: 100%; margin: 0 auto; -webkit-overflow-scrolling: touch;
+    }
+    .admin-card-section {
+      background: #fff; border-radius: 12px; border: 1.5px solid #cbd5e1; padding: 16px; margin-bottom: 16px;
+    }
+    .admin-label { font-size: 12px; font-weight: 800; color: #475569; margin-top: 8px; display: block; }
+    .btn-move {
+      background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold;
+    }
+    .btn-move:hover { background: #e2e8f0; }
   </style>
 </head>
 <body>
@@ -273,17 +207,17 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion" onclick="openAdminModal()" title="點擊開啟後台鏡像管理">v7.1.5</span>
+      <span class="v-badge" id="appVersion">v7.2.0</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
+      <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <div id="sync-status-badge">🔄 載入中...</div>
-      <button type="button" onclick="openAdminModal()" style="background:none; border:none; font-size:16px; cursor:pointer;" title="後台管理">⚙️</button>
-    </div>
+    <div id="sync-status-badge">🔄 載入中...</div>
   </div>
+
   <!-- 前台動態題目卡片掛載容器 -->
   <div id="dynamic-pages-container"></div>
-  <!-- 06 專屬方案 (動態亮點) -->
+
+  <!-- 06 專屬方案 -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">專屬方案</span>
@@ -349,6 +283,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('scenarios')">下一步 →</button>
     </div>
   </div>
+
   <!-- 07 情境案例 -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">情境案例 ｜ 實況推演</span>
@@ -397,6 +332,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('premium-val')">下一步 →</button>
     </div>
   </div>
+
   <!-- 08 保費與價值 -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -445,7 +381,6 @@
       <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
         <input type="checkbox" id="chkDiscount" onchange="updateValPremiums()" style="width:auto; margin:0;">
         參加「AIA Vitality」享保費 9 折優惠
-        <span onclick="alert('🌟 AIA Vitality 健康程式優惠：\n• 每年會費：HK$ 430\n• 會員專享：每月送 2 張戲院戲飛 或 Starbucks 飲品券\n• 每年額外送：HK$ 250 萬寧 或 HKTVmall 現金券！'); event.preventDefault();" style="color:#d97706; font-size:14px; cursor:pointer; font-weight:900;" title="點擊查看會費與優惠細節">[*]</span>
       </label>
       <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
         <input type="checkbox" id="chkTax" onchange="updateValPremiums()" style="width:auto; margin:0;">
@@ -479,6 +414,7 @@
       <button type="button" class="btn-primary" onclick="goToStage('confirm')">下一步 →</button>
     </div>
   </div>
+
   <!-- 09 保障總結 -->
   <div class="stage-card" id="stage-confirm">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -495,13 +431,11 @@
       <div>💵 <strong>預算投入：</strong> <strong style="color:var(--danger); font-size:20px;" id="sumPrice">HK$ --</strong></div>
     </div>
     
-    <!-- 動態注意提醒 -->
     <div class="cross-sell-alert" id="crossSellBox" style="display:none;">
       ⚠️ <strong>關鍵保障提醒（第二戰線）：</strong><br>
       <span id="crossSellMsg">留意大病休養或照護期間之生活現金流真空，建議同時檢視危疾規劃。</span>
     </div>
     
-    <!-- 溫馨提示危疾 App 導流卡片 -->
     <a href="#" id="ciRedirectBtn" target="_blank" rel="noopener noreferrer" class="warm-tip-card">
       <img src="https://ivancww.github.io/CIApp/icon-192.png" alt="CI App Logo" class="warm-tip-logo" onerror="this.src='https://ivancww.github.io/medicalclaims/icon-192.png';">
       <div class="warm-tip-content">
@@ -561,60 +495,69 @@
     </div>
   </div>
 </div>
-<!-- 1:1 粉紅虛線鏡像後台管理系統 -->
-<div id="adminModal">
-  <div class="admin-card">
-    <div class="admin-header">
-      <span style="font-weight:800; font-size:15px;">🛠️ AVA 視覺化後台鏡像系統 (粉紅虛線可點擊修改)</span>
-      <button type="button" onclick="closeAdminModal()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
+
+<!-- 全螢幕雲端後台管理系統 (完全比照圖 1 & 圖 2) -->
+<div id="adminFullScreenModal">
+  <div class="admin-header-nav">
+    <span style="font-weight:800; font-size:15px;">⚙️ Medical App 雲端後台管理控制台</span>
+    <div style="display:flex; gap:8px;">
+      <button type="button" class="btn-primary" style="padding:6px 14px; font-size:12px; background:#10b981;" onclick="saveAllAdminData()">💾 儲存同步至 Google Sheet</button>
+      <button type="button" style="background:#64748b; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; font-weight:bold;" onclick="closeAdminModal()">關閉</button>
     </div>
-    <div class="admin-nav-tabs">
-      <button class="admin-nav-btn active" onclick="switchAdminTab('p0103')">頁面流程與選項管理</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('p06')">06 專屬方案細項鏡像</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('p07')">07 索償案例與 Firebase 上載</button>
-      <button class="admin-nav-btn" onclick="switchAdminTab('pConfig')">系統設定</button>
+  </div>
+  
+  <div class="admin-tab-bar">
+    <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('pages', this)">📄 頁面流程與題目管理</button>
+    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('config', this)">⚙️ 系統參數設定</button>
+    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p06', this)">📋 專屬方案細項</button>
+    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p07', this)">📑 實況案例管理</button>
+  </div>
+
+  <div class="admin-scroll-body">
+    <!-- 頁面管理分頁 (圖 1 & 圖 2 模式) -->
+    <div id="adminTabPagesSection">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:12px; font-weight:bold; color:#475569;">切換編輯模式：</label>
+          <select id="adminRoleSelect" style="font-weight:bold; width:180px;" onchange="renderAdminVisualLayout()">
+            <option value="adult" selected>👨‍👩‍👧 編輯：成人模式</option>
+            <option value="child">👶 編輯：兒童模式</option>
+          </select>
+        </div>
+        <button type="button" onclick="addAdminNewPage()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增頁面</button>
+      </div>
+      <div id="adminVisualContainer"></div>
     </div>
-    <div class="admin-body">
-      <div id="admTab-p0103" class="adm-section-panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <strong style="color:var(--primary); font-size:14px;">📄 動態頁面結構管理（與 Google Sheet 同步）</strong>
-          <button type="button" onclick="addAdminNewPage()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增頁面</button>
+
+    <!-- 系統設定 -->
+    <div id="adminTabConfigSection" style="display:none;">
+      <div class="admin-card-section" id="adminConfigContainer"></div>
+    </div>
+
+    <!-- 專屬方案細項 -->
+    <div id="adminTabP06Section" style="display:none;">
+      <div class="admin-card-section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 style="color:var(--primary); margin:0; font-size:15px;">📋 專屬方案細項表格</h3>
+          <button type="button" onclick="addAdminPlanItem()" style="background:var(--primary); color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增項目</button>
         </div>
-        <div id="adminP0103Mirror"></div>
+        <div class="checklist-grid" id="adminMirrorChecklist"></div>
       </div>
-      
-      <div id="admTab-p06" class="adm-section-panel" style="display:none;">
-        <div class="stage-card" style="display:block; margin:0; box-shadow:none;">
-          <div class="success-box">
-            <strong style="color:#065f46; font-size:13px;">✨ 產品亮點清單 (點擊粉紅框修改)：</strong>
-            <ul class="bullet-list" id="adminMirrorHighlights" style="margin-top:8px;"></ul>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; margin-bottom:6px;">
-            <strong style="color:var(--primary); font-size:13px;">📋 專屬方案細項表格（對應「專屬方案細項」工作表）：</strong>
-            <button type="button" onclick="addAdminPlanItem()" style="background:var(--primary); color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增項目</button>
-          </div>
-          <div class="checklist-grid" id="adminMirrorChecklist"></div>
-        </div>
-      </div>
-      
-      <div id="admTab-p07" class="adm-section-panel" style="display:none;">
+    </div>
+
+    <!-- 實況案例管理 -->
+    <div id="adminTabP07Section" style="display:none;">
+      <div class="admin-card-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <strong style="color:var(--primary); font-size:14px;">📑 實況案例管理 (Firebase Storage 多檔上載)</strong>
+          <h3 style="color:var(--primary); margin:0; font-size:15px;">📑 實況案例管理 (Firebase Storage)</h3>
           <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增案例</button>
         </div>
         <div id="adminCasesList"></div>
       </div>
-      
-      <div id="admTab-pConfig" class="adm-section-panel" style="display:none;">
-        <div class="stage-card" style="display:block; margin:0;" id="adminConfigList"></div>
-      </div>
-    </div>
-    <div style="padding:14px 20px; background:#f1f5f9; display:flex; gap:10px; border-top:1px solid #e2e8f0;">
-      <button type="button" class="btn-secondary" onclick="closeAdminModal()" style="flex:1;">取消</button>
-      <button type="button" class="btn-primary" id="btnSaveAdmin" onclick="saveAdminData()" style="flex:2;">💾 儲存並同步至 Google Sheet</button>
     </div>
   </div>
 </div>
+
 <script>
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
   const STORAGE_KEY_MED_DB = "AVA_MED_APP_DB_CACHE_V7";
@@ -623,17 +566,14 @@
     apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
     authDomain: "medical-and-ci.firebaseapp.com",
     projectId: "medical-and-ci",
-    storageBucket: "medical-and-ci.firebasestorage.app",
-    messagingSenderId: "857984223277",
-    appId: "1:857984223277:web:bd64aa72fc7e374c3450a4",
-    measurementId: "G-VC775G3QRW"
+    storageBucket: "medical-and-ci.firebasestorage.app"
   };
   
   if (!firebase.apps.length) {
     try { firebase.initializeApp(firebaseConfig); } catch(e) { console.error("Firebase init error", e); }
   }
   const storage = firebase.storage();
-
+  
   var appState = {
     role: 'adult',
     cost: 500000,
@@ -651,31 +591,12 @@
   
   var DEFAULT_FALLBACK_DB = {
     pages: [
-      { 
-        pageId: "m_dignity_adult", 
-        role: "adult", 
-        stepOrder: 1, 
-        tagName: "01 ｜ 醫療核心價值", 
-        title: "醫療保險，不止係一份報銷保障", 
-        highlightText: "更重要，是需要治療時，保留你的選擇、自主與尊嚴。",
-        imageUrl: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80",
-        subtitle: "面對突如其來的健康挑戰，尊嚴來自於不用向費用妥協："
-      },
+      { pageId: "m_dignity_adult", role: "adult", stepOrder: 1, tagName: "01 ｜ 醫療核心價值", title: "醫療保險，不止係一份報銷保障", highlightText: "更重要，是需要治療時，保留你的選擇、自主與尊嚴。", imageUrl: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=800&q=80", subtitle: "面對突如其來的健康挑戰，尊嚴來自於不用向費用妥協：" },
       { pageId: "m1_adult", role: "adult", stepOrder: 2, tagName: "02 ｜ 關注/重視", title: "當需要醫療時，你最重視的是甚麼？", subtitle: "確認你真正的價值取向，建立本次檢視的方向：" },
       { pageId: "m2_adult", role: "adult", stepOrder: 3, tagName: "03 ｜ 想像一下情境", title: "如果有一日，需要即時接受治療……", subtitle: "用一個非常簡單嘅生活情境，你希望自己可以：" },
       { pageId: "m4_adult", role: "adult", stepOrder: 4, tagName: "04 ｜ 現有防線確認", title: "面對醫療選擇時嘅取捨", subtitle: "你現時擁有嘅醫療保障，是否能完全支持你嘅選擇？" },
       { pageId: "m5_adult", role: "adult", stepOrder: 5, tagName: "05 ｜ 缺口 ➔ 解決方案", title: "醫療自付差額總結", subtitle: "" },
-      
-      { 
-        pageId: "m_dignity_child", 
-        role: "child", 
-        stepOrder: 1, 
-        tagName: "01 ｜ 守護核心價值", 
-        title: "兒童醫療，不止係一份報銷保障", 
-        highlightText: "更重要，是孩子需要治療時，給予最好的醫療選擇與全天候守護。",
-        imageUrl: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80",
-        subtitle: "給孩子最頂級的私家醫療資源與無微不至的照護："
-      },
+      { pageId: "m_dignity_child", role: "child", stepOrder: 1, tagName: "01 ｜ 守護核心價值", title: "兒童醫療，不止係一份報銷保障", highlightText: "更重要，是孩子需要治療時，給予最好的醫療選擇與全天候守護。", imageUrl: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80", subtitle: "給孩子最頂級的私家醫療資源與無微不至的照護：" },
       { pageId: "m1_child", role: "child", stepOrder: 2, tagName: "02 ｜ 關注/重視", title: "當孩子需要醫療時，你最重視的是甚麼？", subtitle: "有些事情可以等，但醫療無得等：" },
       { pageId: "m2_child", role: "child", stepOrder: 3, tagName: "03 ｜ 想像一下情境", title: "如果孩子突然需要即時接受治療……", subtitle: "真正需要醫療時，你希望作出的決定：" },
       { pageId: "m4_child", role: "child", stepOrder: 4, tagName: "04 ｜ 兒童防線確認", title: "給孩子最全面的後盾", subtitle: "確認孩子現時具備的私家醫療資源：" },
@@ -713,7 +634,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.1.5",
+      "資料版本": "7.2.0",
       "預設模式": "adult",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -730,20 +651,10 @@
     ]
   };
   var db = DEFAULT_FALLBACK_DB;
+
   function parseSafeNum(val) {
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
-  }
-
-  function preloadPageImages() {
-    if (db && db.pages) {
-      db.pages.forEach(p => {
-        if (p.imageUrl) {
-          const img = new Image();
-          img.src = p.imageUrl;
-        }
-      });
-    }
   }
 
   function loadLocalCache() {
@@ -753,28 +664,20 @@
         var parsed = JSON.parse(cached);
         if (parsed && parsed.status === 'success') {
           db = parsed;
-          preloadPageImages();
           return true;
         }
       }
-    } catch(e) {
-      console.warn("讀取快取失敗:", e);
-    }
+    } catch(e) { console.warn("讀取快取失敗:", e); }
     return false;
   }
 
   function saveLocalCache(dataObj) {
-    try {
-      localStorage.setItem(STORAGE_KEY_MED_DB, JSON.stringify(dataObj));
-    } catch(e) {
-      console.warn("寫入快取失敗:", e);
-    }
+    try { localStorage.setItem(STORAGE_KEY_MED_DB, JSON.stringify(dataObj)); } catch(e) {}
   }
 
   function initParams() {
     var p = new URLSearchParams(window.location.search);
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
-    
     var hasCompStr = (p.get('hasCompany') || '').toLowerCase();
     appState.hasCompany = (hasCompStr === 'yes' || hasCompStr === 'true' || hasCompStr === '有');
     appState.companyLimit = parseSafeNum(p.get('companyLimit'));
@@ -797,6 +700,7 @@
     appState.companyPay = compPay;
   }
 
+  // 手動切換模式 (即時響應)
   function toggleRoleMode() {
     appState.role = (appState.role === 'child') ? 'adult' : 'child';
     applyRoleContent();
@@ -994,6 +898,7 @@
     tbody.innerHTML = html;
     applyAllPlanVisibilities();
   }
+
   function checkWiseCond() {
     var allChecked = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
     var badge = document.getElementById('wise-status-badge');
@@ -1020,6 +925,7 @@
     });
     renderSelectedCase(0);
   }
+
   function renderSelectedCase(idx) {
     var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_FALLBACK_DB.claimCases;
     var filtered = cList.filter(c => c.category === appState.currentCaseCat);
@@ -1050,14 +956,17 @@
     }
     recalcCustomCost(c.totalCost);
   }
+
   function toggleFilesView() {
     var gallery = document.getElementById('caseFilesGrid');
     gallery.style.display = (gallery.style.display === 'grid') ? 'none' : 'grid';
   }
+
   function handleManualCostInput(val) {
     var num = parseSafeNum(val);
     recalcCustomCost(num);
   }
+
   function recalcCustomCost(val) {
     var num = parseSafeNum(val);
     if (isNaN(num)) num = 0;
@@ -1078,12 +987,14 @@
     document.getElementById('case-oop-wise').innerText = 'HK$ ' + Math.round(wiseOOP).toLocaleString();
     document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(flexiOOP).toLocaleString();
   }
+
   function setPremMode(mode) {
     appState.premMode = mode;
     document.getElementById('btnModeAnnual').classList.toggle('active', mode === 'annual');
     document.getElementById('btnModeMonthly').classList.toggle('active', mode === 'monthly');
     updateValPremiums();
   }
+
   function syncDeductibles(type, val) {
     if (type === 'elite') {
       var d1 = document.getElementById('elite-deductible');
@@ -1100,6 +1011,7 @@
     recalcCustomCost(document.getElementById('case-total-input').value);
     updateValPremiums();
   }
+
   function selectFinalPlan(plan) {
     appState.selectedFinalPlan = plan;
     document.querySelectorAll('.plan-select-card').forEach(c => c.classList.remove('selected'));
@@ -1127,6 +1039,7 @@
     document.getElementById('sumPrice').innerText = appState.selectedFinalPrice;
     calcRebateDetails();
   }
+
   function updateValPremiums() {
     var age = Number(document.getElementById('valAge').value) || 35;
     var gender = document.getElementById('valGender').value;
@@ -1175,10 +1088,8 @@
     
     document.getElementById('valPriceElite').innerText = resE.str;
     document.getElementById('valDetailElite').innerText = resE.detailStr;
-    
     document.getElementById('valPriceWise').innerText = resW.str;
     document.getElementById('valDetailWise').innerText = resW.detailStr;
-    
     document.getElementById('valPriceFlexi').innerText = resF.str;
     document.getElementById('valDetailFlexi').innerText = resF.detailStr;
     
@@ -1188,11 +1099,13 @@
     
     selectFinalPlan(appState.selectedFinalPlan);
   }
+
   function togglePromoPanel() {
     var p = document.getElementById('promoPanel');
     p.style.display = (p.style.display === 'block') ? 'none' : 'block';
     calcRebateDetails();
   }
+
   function calcRebateDetails() {
     var c200 = Number(document.getElementById('coupon200').value) || 0;
     var c500 = Number(document.getElementById('coupon500').value) || 0;
@@ -1214,6 +1127,7 @@
     document.getElementById('valRebateY3').innerText = 'HK$ ' + rebateY3.toLocaleString();
     document.getElementById('valTotalSavings').innerText = 'HK$ ' + totalSavings.toLocaleString();
   }
+
   function togglePlanVis(plan) {
     appState.planVis[plan] = !appState.planVis[plan];
     var isShown = appState.planVis[plan];
@@ -1221,213 +1135,231 @@
     if (btn) btn.classList.toggle('off', !isShown);
     applyAllPlanVisibilities();
   }
+
   function applyAllPlanVisibilities() {
     ['elite', 'wise', 'flexi'].forEach(function(plan) {
       var isShown = appState.planVis[plan];
       document.querySelectorAll('.plan-col-' + plan).forEach(c => c.style.display = isShown ? '' : 'none');
     });
   }
+
   function selectBtn(btn) {
     btn.closest('.choice-list').querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
   }
+
   function goToStage(stageId) {
     document.querySelectorAll('.stage-card').forEach(s => s.classList.remove('active'));
     var target = document.getElementById('stage-' + stageId);
     if (target) target.classList.add('active');
     window.scrollTo(0, 0);
-    
     if (stageId === 'scenarios') {
       recalcCustomCost(document.getElementById('case-total-input').value);
     }
   }
-  
-  // ==================== 後台管理系統 (支援頁面上載圖片) ====================
+
+  // ==================== 後台管理系統 (圖 1 & 圖 2 介面模式) ====================
   function openAdminModal() {
-    renderAdminP0103Mirror();
+    document.getElementById('adminFullScreenModal').style.display = 'flex';
+    renderAdminVisualLayout();
+    renderAdminConfigLayout();
     renderAdminP06Mirror();
     renderAdminCasesList();
-    renderAdminConfigList();
-    document.getElementById('adminModal').style.display = 'flex';
   }
-  function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
-  function switchAdminTab(tabId) {
-    document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.adm-section-panel').forEach(p => p.style.display = 'none');
-    event.target.classList.add('active');
-    document.getElementById('admTab-' + tabId).style.display = 'block';
+
+  function closeAdminModal() {
+    document.getElementById('adminFullScreenModal').style.display = 'none';
   }
-  function renderAdminP0103Mirror() {
-    var box = document.getElementById('adminP0103Mirror');
-    box.innerHTML = '';
+
+  function switchAdminTab(tabKey, btn) {
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('adminTabPagesSection').style.display = (tabKey === 'pages') ? 'block' : 'none';
+    document.getElementById('adminTabConfigSection').style.display = (tabKey === 'config') ? 'block' : 'none';
+    document.getElementById('adminTabP06Section').style.display = (tabKey === 'p06') ? 'block' : 'none';
+    document.getElementById('adminTabP07Section').style.display = (tabKey === 'p07') ? 'block' : 'none';
     
-    (db.pages || []).forEach((p, pIdx) => {
-      var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b)=>a.order-b.order);
-      var optsHtml = '';
-      opts.forEach((o) => {
-        var globalOptIdx = db.options.indexOf(o);
-        optsHtml += `
-          <div style="background:#fff; border:1px dashed var(--pink-border); border-radius:8px; padding:8px; margin-top:6px; position:relative;">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="editable-mirror" contenteditable="true" data-adm-opt-icon="${globalOptIdx}" style="width:30px; text-align:center;">${o.icon || '📌'}</span>
-              <div class="editable-mirror" contenteditable="true" data-adm-opt-title="${globalOptIdx}" style="flex:1; font-weight:bold;">${o.title}</div>
-              <button type="button" onclick="deleteAdminOption(${globalOptIdx})" style="background:#fee2e2; color:#dc2626; border:none; border-radius:4px; padding:2px 6px; font-size:11px; cursor:pointer;">✕</button>
-            </div>
-            <div class="editable-mirror" contenteditable="true" data-adm-opt-desc="${globalOptIdx}" style="font-size:12px; color:#666; margin-top:4px;">${o.desc || ''}</div>
-          </div>`;
-      });
-      
-      box.innerHTML += `
-        <div class="stage-card" style="display:block; margin-bottom:14px; box-shadow:none; border:1px solid #cbd5e1; position:relative;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="stage-tag" style="margin:0;">【${p.role === 'adult' ? '成人' : '兒童'}】</span>
-              <span class="editable-mirror" contenteditable="true" data-adm-page-tag="${pIdx}" style="font-weight:bold; font-size:12px;">${p.tagName}</span>
-            </div>
-            <button type="button" onclick="deleteAdminPage(${pIdx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer;">🗑️ 刪除頁面</button>
-          </div>
-          <div style="margin-bottom:6px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">頁面大標題：</label>
-            <div class="editable-mirror" contenteditable="true" data-adm-page-title="${pIdx}" style="font-size:16px; font-weight:800;">${p.title}</div>
-          </div>
-          <div style="margin-bottom:6px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">重點粗體字 (highlightText)：</label>
-            <input type="text" data-adm-page-hl="${pIdx}" value="${p.highlightText || ''}" placeholder="更重要，是需要治療時，保留你的選擇..." style="margin-top:2px;">
-          </div>
-          <div style="margin-bottom:6px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">副標題指引：</label>
-            <div class="editable-mirror" contenteditable="true" data-adm-page-sub="${pIdx}" style="font-size:13px; color:#666;">${p.subtitle || ''}</div>
-          </div>
-          <div style="margin-bottom:8px;">
-            <label style="font-size:11px; font-weight:bold; color:#666;">圖片網址 (imageUrl) / 支援直接上載：</label>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <input type="text" id="admMedPageImg_${pIdx}" data-adm-page-img="${pIdx}" value="${p.imageUrl || ''}" placeholder="https://firebasestorage..." style="flex:1; margin-top:0;">
-              <label id="uploadMedPageLabel_${pIdx}" style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
-                📤 上載圖片
-                <input type="file" accept="image/*" style="display:none;" onchange="uploadMedPageImageToFirebase(this, ${pIdx})">
-              </label>
-            </div>
-          </div>
-          <div style="margin-top:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <strong style="font-size:12px; color:var(--primary);">🔘 選項內容：</strong>
-              <button type="button" onclick="addAdminOption('${p.pageId}')" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:4px; padding:2px 8px; font-size:11px; cursor:pointer;">+ 新增選項</button>
-            </div>
-            ${optsHtml}
-          </div>
-        </div>`;
+    if (tabKey === 'pages') renderAdminVisualLayout();
+    if (tabKey === 'config') renderAdminConfigLayout();
+    if (tabKey === 'p06') renderAdminP06Mirror();
+    if (tabKey === 'p07') renderAdminCasesList();
+  }
+
+  function saveCurrentAdminInputs() {
+    document.querySelectorAll('[data-adm-page-idx]').forEach(card => {
+      const idx = Number(card.dataset.admPageIdx);
+      if (db.pages[idx]) {
+        db.pages[idx].stepOrder = Number(card.querySelector('.adm-order-inp').value) || db.pages[idx].stepOrder;
+        db.pages[idx].tagName = card.querySelector('.adm-tag-inp').value;
+        db.pages[idx].title = card.querySelector('.adm-title-inp').value;
+        db.pages[idx].highlightText = card.querySelector('.adm-hl-inp').value;
+        db.pages[idx].subtitle = card.querySelector('.adm-sub-inp').value;
+        db.pages[idx].imageUrl = card.querySelector('.adm-img-inp').value;
+      }
     });
   }
 
-  async function uploadMedPageImageToFirebase(input, pageIdx) {
+  function movePageOrder(role, currentIndex, direction) {
+    saveCurrentAdminInputs();
+    const rolePages = db.pages.filter(p => p.role === role).sort((a,b) => a.stepOrder - b.stepOrder);
+    const targetIndex = currentIndex + direction;
+    if (targetIndex < 0 || targetIndex >= rolePages.length) return;
+    
+    const tempOrder = rolePages[currentIndex].stepOrder;
+    rolePages[currentIndex].stepOrder = rolePages[targetIndex].stepOrder;
+    rolePages[targetIndex].stepOrder = tempOrder;
+    renderAdminVisualLayout();
+  }
+
+  function renderAdminVisualLayout() {
+    const container = document.getElementById('adminVisualContainer');
+    const selectedRole = document.getElementById('adminRoleSelect').value;
+    const rolePages = db.pages.filter(p => p.role === selectedRole);
+    rolePages.sort((a,b) => Number(a.stepOrder) - Number(b.stepOrder));
+    
+    let html = '';
+    rolePages.forEach((p, rIdx) => {
+      const realIdx = db.pages.indexOf(p);
+      const allOpts = db.options || DEFAULT_FALLBACK_DB.options;
+      const opts = allOpts.filter(o => o.pageId === p.pageId);
+      let optsHtml = '';
+      
+      if (opts.length > 0 || p.pageId.includes('m1') || p.pageId.includes('m2') || p.pageId.includes('m4')) {
+        optsHtml += `
+          <div style="margin-top:12px; border-top:1px dashed #cbd5e1; padding-top:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="font-size:12.5px; color:#2c3e50;">🔘 選項清單：</strong>
+              <button type="button" onclick="addAdminOption('${p.pageId}')" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:4px; padding:2px 8px; font-size:11px; cursor:pointer;">+ 新增選項</button>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">`;
+        opts.forEach((o) => {
+          const oIdx = db.options.indexOf(o);
+          optsHtml += `
+            <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:6px; display:flex; gap:6px; align-items:center;">
+              <input type="text" style="width:45px;" value="${o.icon || '📌'}" onchange="db.options[${oIdx}].icon=this.value">
+              <input type="text" style="flex:1;" value="${o.title}" onchange="db.options[${oIdx}].title=this.value">
+              <button type="button" onclick="deleteAdminOption(${oIdx})" style="background:#fee2e2; color:#dc2626; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">✕</button>
+            </div>`;
+        });
+        optsHtml += `</div></div>`;
+      }
+
+      html += `
+        <div class="admin-card-section" data-adm-page-idx="${realIdx}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <strong style="color:var(--primary); font-size:15px;">步驟</strong>
+              <input type="number" class="adm-order-inp" value="${p.stepOrder}" style="width:60px; text-align:center; padding:4px;" onchange="saveCurrentAdminInputs(); renderAdminVisualLayout();">
+              <button type="button" class="btn-move" onclick="movePageOrder('${selectedRole}', ${rIdx}, -1)">⬆️ 上移</button>
+              <button type="button" class="btn-move" onclick="movePageOrder('${selectedRole}', ${rIdx}, 1)">⬇️ 下移</button>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <input type="text" class="adm-tag-inp" value="${p.tagName}" style="width:160px; margin-top:0;" placeholder="步驟標籤">
+              <button type="button" onclick="deleteAdminPage(${realIdx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:2px 8px; font-size:11px; cursor:pointer;">🗑️ 刪除</button>
+            </div>
+          </div>
+          <div style="margin-top:8px;"><label class="admin-label">主標題：</label><input type="text" class="adm-title-inp" value="${p.title}" style="font-weight:bold; color:var(--primary);"></div>
+          <div style="margin-top:8px;"><label class="admin-label">重點粗體字 (highlightText)：</label><input type="text" class="adm-hl-inp" value="${p.highlightText || ''}" placeholder="更重要，是需要治療時..."></div>
+          <div style="margin-top:8px;"><label class="admin-label">副標題說明：</label><textarea class="adm-sub-inp" style="min-height:45px;">${p.subtitle || ''}</textarea></div>
+          <div style="margin-top:8px;">
+            <label class="admin-label">圖片網址 (imageUrl) / 支援直接上載：</label>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <input type="text" id="admMedPageImg_${realIdx}" class="adm-img-inp" value="${p.imageUrl || ''}" placeholder="https://firebasestorage..." style="flex:1; margin-top:0;">
+              <label id="uploadMedPageLabel_${realIdx}" style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
+                📤 上載圖片
+                <input type="file" accept="image/*" style="display:none;" onchange="uploadSingleImageToFirebase(this, ${realIdx})">
+              </label>
+            </div>
+          </div>
+          ${optsHtml}
+        </div>`;
+    });
+    container.innerHTML = html;
+  }
+
+  async function uploadSingleImageToFirebase(input, pageIdx) {
     const file = input.files[0];
     if (!file) return;
     const uploadLabel = document.getElementById(`uploadMedPageLabel_${pageIdx}`);
     const textInput = document.getElementById(`admMedPageImg_${pageIdx}`);
-    
     uploadLabel.innerText = "⏳ 上載中...";
     try {
       const safeFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
       const storageRef = storage.ref(`med_pages/${Date.now()}_${safeFileName}`);
       const snapshot = await storageRef.put(file);
       const downloadURL = await snapshot.ref.getDownloadURL();
-      
       textInput.value = downloadURL;
       if (db.pages[pageIdx]) db.pages[pageIdx].imageUrl = downloadURL;
       uploadLabel.innerText = "📤 上載圖片";
-      alert("✅ 圖片上傳至 Firebase 成功！請點擊下方「💾 儲存並同步至 Google Sheet」保存。");
+      alert("✅ 圖片上傳成功！請點擊右上角「💾 儲存同步至 Google Sheet」保存。");
     } catch(err) {
       uploadLabel.innerText = "📤 上載圖片";
-      alert("❌ 圖片上傳失敗：" + err.message);
+      alert("❌ 上傳失敗：" + err.message);
     }
   }
 
   function addAdminNewPage() {
-    if (!db.pages) db.pages = [];
-    var newPageId = "m_custom_" + Date.now().toString().slice(-4);
-    var count = db.pages.filter(p => p.role === appState.role).length + 1;
-    db.pages.push({
-      pageId: newPageId,
-      role: appState.role,
-      stepOrder: count,
-      tagName: `0${count} ｜ 自訂步驟`,
-      title: "請在此輸入新頁面標題",
-      subtitle: "請在此輸入副標題或評估說明",
-      imageUrl: "",
-      highlightText: ""
-    });
-    renderAdminP0103Mirror();
+    saveCurrentAdminInputs();
+    const selectedRole = document.getElementById('adminRoleSelect').value;
+    const count = db.pages.filter(p => p.role === selectedRole).length + 1;
+    db.pages.push({ role: selectedRole, stepOrder: count, pageId: "m_custom_" + Date.now().toString().slice(-4), tagName: `0${count} ｜ 自訂步驟`, title: "請在此輸入標題", subtitle: "", imageUrl: "", highlightText: "" });
+    renderAdminVisualLayout();
   }
+
   function deleteAdminPage(idx) {
-    if (confirm("確定刪除此頁面？該頁面對應之選項亦會同步移除。")) {
-      var targetPageId = db.pages[idx].pageId;
+    if (confirm("確定刪除此頁面？")) {
+      const pageId = db.pages[idx].pageId;
       db.pages.splice(idx, 1);
-      db.options = (db.options || []).filter(o => o.pageId !== targetPageId);
-      renderAdminP0103Mirror();
+      db.options = (db.options || []).filter(o => o.pageId !== pageId);
+      renderAdminVisualLayout();
     }
   }
+
   function addAdminOption(pageId) {
     if (!db.options) db.options = [];
-    var count = db.options.filter(o => o.pageId === pageId).length + 1;
-    db.options.push({
-      pageId: pageId,
-      optionKey: "opt_" + count,
-      icon: "📌",
-      title: "新選項標題",
-      desc: "新選項說明文字",
-      order: count
-    });
-    renderAdminP0103Mirror();
+    const count = db.options.filter(o => o.pageId === pageId).length + 1;
+    db.options.push({ pageId: pageId, optionKey: "opt_" + count, icon: "📌", title: "新選項標題", desc: "", order: count });
+    renderAdminVisualLayout();
   }
+
   function deleteAdminOption(idx) {
     db.options.splice(idx, 1);
-    renderAdminP0103Mirror();
+    renderAdminVisualLayout();
   }
+
+  function renderAdminConfigLayout() {
+    const container = document.getElementById('adminConfigContainer');
+    if (!container) return;
+    const cfg = db.config || DEFAULT_FALLBACK_DB.config;
+    let html = '<h3 style="color:var(--primary); margin:0 0 12px 0;">⚙️ 系統參數設定</h3><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
+    for (const [k, v] of Object.entries(cfg)) {
+      html += `<div><label class="admin-label">${k}</label><input type="text" data-adm-config-key="${k}" value="${v}"></div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
   function renderAdminP06Mirror() {
-    var hlBox = document.getElementById('adminMirrorHighlights');
-    hlBox.innerHTML = '';
-    (db.highlights || DEFAULT_FALLBACK_DB.highlights).forEach((h, idx) => {
-      hlBox.innerHTML += `
-        <li style="margin-bottom:6px; list-style:none;">
-          <span style="font-size:11px; font-weight:bold; color:var(--primary);">[${h.role === 'adult' ? '成人' : '兒童'}]</span>
-          <div class="editable-mirror" contenteditable="true" data-adm-hl="${idx}" style="display:inline-block; width:80%;">${h.text}</div>
-        </li>`;
-    });
-    
-    var tb = document.getElementById('adminMirrorChecklist');
-    var items = (db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
+    const tb = document.getElementById('adminMirrorChecklist');
+    if (!tb) return;
+    const items = (db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
     db.planItems = items;
     
-    var html = `
+    let html = `
       <div class="checklist-row header-row">
         <div class="col-item">保障項目</div>
-        <div class="col-elite">尊顯 (主/細)</div>
-        <div class="col-wise">睿選半私家 (主/細)</div>
-        <div class="col-wise" style="background:#e6f0fa;">睿選普通房 (主/細)</div>
-        <div class="col-flexi">靈活 (主/細)</div>
+        <div class="col-elite">尊顯</div>
+        <div class="col-wise">睿選半私家</div>
+        <div class="col-flexi">靈活</div>
         <div style="width:40px; padding:10px 4px;">操作</div>
       </div>`;
-      
     items.forEach((pi, idx) => {
       html += `
         <div class="checklist-row">
-          <div class="col-item editable-mirror" contenteditable="true" data-adm-pi-name="${idx}">${pi.name}</div>
-          <div class="col-elite">
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-elitemain="${idx}" style="font-weight:bold;">${pi.eliteMain||''}</div>
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-elitesub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.eliteSub||''}</div>
-          </div>
-          <div class="col-wise">
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisesemimain="${idx}" style="font-weight:bold;">${pi.wiseSemiMain||''}</div>
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisesemisub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.wiseSemiSub||''}</div>
-          </div>
-          <div class="col-wise" style="background:#f8fbff;">
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisegenmain="${idx}" style="font-weight:bold;">${pi.wiseGenMain||''}</div>
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-wisegensub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.wiseGenSub||''}</div>
-          </div>
-          <div class="col-flexi">
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-fleximain="${idx}" style="font-weight:bold;">${pi.flexiMain||''}</div>
-            <div class="editable-mirror" contenteditable="true" data-adm-pi-flexisub="${idx}" style="font-size:10px; color:#666; margin-top:2px;">${pi.flexiSub||''}</div>
-          </div>
+          <div class="col-item"><input type="text" data-adm-pi-name="${idx}" value="${pi.name}"></div>
+          <div class="col-elite"><input type="text" data-adm-pi-elitemain="${idx}" value="${pi.eliteMain||''}"></div>
+          <div class="col-wise"><input type="text" data-adm-pi-wisesemimain="${idx}" value="${pi.wiseSemiMain||''}"></div>
+          <div class="col-flexi"><input type="text" data-adm-pi-fleximain="${idx}" value="${pi.flexiMain||''}"></div>
           <div style="width:40px; display:flex; align-items:center; justify-content:center;">
             <button type="button" onclick="deleteAdminPlanItem(${idx})" style="background:#fee2e2; color:#dc2626; border:none; border-radius:4px; padding:4px; font-size:11px; cursor:pointer;">✕</button>
           </div>
@@ -1435,29 +1367,22 @@
     });
     tb.innerHTML = html;
   }
+
   function addAdminPlanItem() {
     if (!db.planItems) db.planItems = [];
-    var count = db.planItems.length + 1;
-    db.planItems.push({
-      itemId: "item" + count,
-      name: "🩺 新保障項目",
-      eliteMain: "✅ 全數賠償",
-      eliteSub: "",
-      wiseSemiMain: "✅ 全數賠償",
-      wiseSemiSub: "",
-      wiseGenMain: "⚠️ 普通房分項",
-      wiseGenSub: "",
-      flexiMain: "❌ 不適用",
-      flexiSub: ""
-    });
+    const count = db.planItems.length + 1;
+    db.planItems.push({ itemId: "item" + count, name: "🩺 新保障項目", eliteMain: "✅ 全數賠償", eliteSub: "", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "", wiseGenMain: "⚠️ 普通房分項", wiseGenSub: "", flexiMain: "❌ 不適用", flexiSub: "" });
     renderAdminP06Mirror();
   }
+
   function deleteAdminPlanItem(idx) {
     db.planItems.splice(idx, 1);
     renderAdminP06Mirror();
   }
+
   function renderAdminCasesList() {
-    var box = document.getElementById('adminCasesList');
+    const box = document.getElementById('adminCasesList');
+    if (!box) return;
     box.innerHTML = '';
     (db.claimCases || []).forEach((c, idx) => {
       box.innerHTML += `
@@ -1484,22 +1409,23 @@
         </div>`;
     });
   }
+
   function uploadFilesToFirebase(input, idx) {
-    var files = Array.from(input.files);
+    const files = Array.from(input.files);
     if (!files || files.length === 0) return;
-    var textInput = document.getElementById(`admCaseFiles_${idx}`);
-    var currentFiles = textInput.value ? textInput.value.split(';').map(s=>s.trim()).filter(Boolean) : [];
+    const textInput = document.getElementById(`admCaseFiles_${idx}`);
+    let currentFiles = textInput.value ? textInput.value.split(';').map(s=>s.trim()).filter(Boolean) : [];
     if (currentFiles.length + files.length > 10) {
       alert("⚠️ 每個案例最多只可上載 10 個檔案！");
-      files = files.slice(0, 10 - currentFiles.length);
+      files.length = 10 - currentFiles.length;
     }
-    var uploadBtn = document.getElementById(`uploadLabel_${idx}`);
+    const uploadBtn = document.getElementById(`uploadLabel_${idx}`);
     uploadBtn.innerText = "⏳ 上載中...";
     try {
-      var storageRef = firebase.storage().ref();
-      var uploadPromises = files.map(file => {
-        var cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-        var fileRef = storageRef.child(`claims/${Date.now()}_${cleanName}`);
+      const storageRef = firebase.storage().ref();
+      const uploadPromises = files.map(file => {
+        const cleanName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+        const fileRef = storageRef.child(`claims/${Date.now()}_${cleanName}`);
         return fileRef.put(file).then(snapshot => snapshot.ref.getDownloadURL());
       });
       Promise.all(uploadPromises).then(urls => {
@@ -1509,92 +1435,43 @@
         alert("✅ 成功上載 " + urls.length + " 個檔案至 Firebase Storage！");
       }).catch(err => {
         uploadBtn.innerText = "📤 上載文件";
-        console.error("Firebase Storage Upload Error: ", err);
-        alert("❌ 上載失敗，請檢查 Firebase Storage Rules 設定：" + err.message);
+        alert("❌ 上載失敗：" + err.message);
       });
     } catch(e) {
       uploadBtn.innerText = "📤 上載文件";
-      alert("Firebase 初始化異常：" + e.message);
+      alert("Firebase 異常：" + e.message);
     }
   }
+
   function addAdminCase() {
     if (!db.claimCases) db.claimCases = [];
     db.claimCases.push({ category: "日間手術", caseName: "新實況案例", totalCost: 20000, files: [] });
     renderAdminCasesList();
   }
+
   function deleteAdminCase(idx) {
     db.claimCases.splice(idx, 1);
     renderAdminCasesList();
   }
-  function renderAdminConfigList() {
-    var box = document.getElementById('adminConfigList');
-    var cfg = (db.config && Object.keys(db.config).length > 0) ? db.config : DEFAULT_FALLBACK_DB.config;
-    db.config = cfg;
-    
-    box.innerHTML = '<strong style="color:var(--primary); font-size:14px;">⚙️ 系統設定 & 額度文字（對應「系統設定」工作表）</strong><div style="margin-top:10px;">';
-    for (const [k, v] of Object.entries(cfg)) {
-      box.innerHTML += `
-        <div style="margin-bottom:8px;">
-          <label style="font-size:12px; font-weight:bold; color:#475569;">${k}</label>
-          <input type="text" data-adm-config="${k}" value="${v}">
-        </div>`;
-    }
-    box.innerHTML += '</div>';
-  }
-  function saveAdminData() {
-    var btn = document.getElementById('btnSaveAdmin');
-    btn.innerText = "⏳ 正在同步至 Google Sheet...";
-    btn.disabled = true;
-    
-    document.querySelectorAll('[data-adm-page-title]').forEach(el => {
-      var idx = Number(el.dataset.admPageTitle);
-      if (db.pages[idx]) db.pages[idx].title = el.innerText.trim();
-    });
-    document.querySelectorAll('[data-adm-page-hl]').forEach(inp => {
-      var idx = Number(inp.dataset.admPageHl);
-      if (db.pages[idx]) db.pages[idx].highlightText = inp.value.trim();
-    });
-    document.querySelectorAll('[data-adm-page-sub]').forEach(el => {
-      var idx = Number(el.dataset.admPageSub);
-      if (db.pages[idx]) db.pages[idx].subtitle = el.innerText.trim();
-    });
-    document.querySelectorAll('[data-adm-page-tag]').forEach(el => {
-      var idx = Number(el.dataset.admPageTag);
-      if (db.pages[idx]) db.pages[idx].tagName = el.innerText.trim();
-    });
-    document.querySelectorAll('[data-adm-page-img]').forEach(inp => {
-      var idx = Number(inp.dataset.admPageImg);
-      if (db.pages[idx]) db.pages[idx].imageUrl = inp.value.trim();
+
+  async function saveAllAdminData() {
+    saveCurrentAdminInputs();
+    document.querySelectorAll('[data-adm-config-key]').forEach(inp => {
+      db.config[inp.dataset.admConfigKey] = inp.value;
     });
     
-    document.querySelectorAll('[data-adm-opt-title]').forEach(el => {
-      var idx = Number(el.dataset.admOptTitle);
-      if (db.options[idx]) {
-        db.options[idx].title = el.innerText.trim();
-        db.options[idx].icon = document.querySelector(`[data-adm-opt-icon="${idx}"]`).innerText.trim();
-        db.options[idx].desc = document.querySelector(`[data-adm-opt-desc="${idx}"]`).innerText.trim();
-      }
-    });
-    
-    document.querySelectorAll('[data-adm-hl]').forEach((el, idx) => { if (db.highlights[idx]) db.highlights[idx].text = el.innerText.trim(); });
-    
-    document.querySelectorAll('[data-adm-pi-name]').forEach((el, idx) => {
+    document.querySelectorAll('[data-adm-pi-name]').forEach((inp, idx) => {
       if (db.planItems[idx]) {
-        db.planItems[idx].name = el.innerText.trim();
-        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elitemain="${idx}"]`).innerText.trim();
-        db.planItems[idx].eliteSub = document.querySelector(`[data-adm-pi-elitesub="${idx}"]`).innerText.trim();
-        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wisesemimain="${idx}"]`).innerText.trim();
-        db.planItems[idx].wiseSemiSub = document.querySelector(`[data-adm-pi-wisesemisub="${idx}"]`).innerText.trim();
-        db.planItems[idx].wiseGenMain = document.querySelector(`[data-adm-pi-wisegenmain="${idx}"]`).innerText.trim();
-        db.planItems[idx].wiseGenSub = document.querySelector(`[data-adm-pi-wisegensub="${idx}"]`).innerText.trim();
-        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-fleximain="${idx}"]`).innerText.trim();
-        db.planItems[idx].flexiSub = document.querySelector(`[data-adm-pi-flexisub="${idx}"]`).innerText.trim();
+        db.planItems[idx].name = inp.value;
+        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elitemain="${idx}"]`).value;
+        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wisesemimain="${idx}"]`).value;
+        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-fleximain="${idx}"]`).value;
       }
     });
-    
-    var newCases = [];
+
+    const newCases = [];
     document.querySelectorAll('[data-adm-case-name]').forEach((inp, idx) => {
-      var rawFiles = document.querySelector(`[data-adm-case-files="${idx}"]`).value;
+      const rawFiles = document.querySelector(`[data-adm-case-files="${idx}"]`).value;
       newCases.push({
         category: document.querySelector(`[data-adm-case-cat="${idx}"]`).value,
         caseName: inp.value,
@@ -1603,66 +1480,38 @@
       });
     });
     db.claimCases = newCases;
-    
-    if (!db.config) db.config = {};
-    document.querySelectorAll('[data-adm-config]').forEach(inp => {
-      db.config[inp.dataset.admConfig] = inp.value;
-    });
-    
-    fetch(GAS_API_URL, { method: "POST", body: JSON.stringify(db) })
-      .then(res => res.json())
-      .then(res => {
-        saveLocalCache({ status: 'success', ...db });
-        alert("✅ Google Sheet 雙向同步成功！");
-        closeAdminModal();
-        applyRoleContent();
-      })
-      .catch(err => alert("同步失敗：" + err))
-      .finally(() => {
-        btn.innerText = "💾 儲存並同步至 Google Sheet";
-        btn.disabled = false;
-      });
+
+    try {
+      const payload = { ...db, status: 'success' };
+      await fetch(GAS_API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+      saveLocalCache(payload);
+      alert("✅ 設定已成功同步至 Google Sheet 及本地！");
+      closeAdminModal();
+      applyRoleContent();
+    } catch(e) {
+      alert("⚠️ 同步失敗，請檢查網路。");
+    }
   }
 
-  function fetchFullRemoteData() {
-    fetch(GAS_API_URL)
-      .then(res => res.json())
-      .then(remote => {
-        if (remote && remote.status === 'success') {
-          db = remote;
-          saveLocalCache(remote);
-          preloadPageImages();
-          var badge = document.getElementById('sync-status-badge');
-          if (badge) {
-            badge.innerText = '● 雲端同步完成';
-            badge.className = 'status-ok';
-          }
-          applyRoleContent();
-        }
-      })
-      .catch(() => {
-        var badge = document.getElementById('sync-status-badge');
-        if (badge) badge.innerText = '○ 離線模式';
-      });
-  }
-
+  // 秒開快取 & 靜默版本檢測 (第 4 點)
   function initApp() {
     initParams();
-    var hasCache = loadLocalCache();
-    var badge = document.getElementById('sync-status-badge');
+    const hasCache = loadLocalCache();
+    const badge = document.getElementById('sync-status-badge');
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.1.5') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.2.0') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
       
+      // 背景靜默比對版本
       fetch(GAS_API_URL + (GAS_API_URL.includes('?') ? '&' : '?') + 'action=checkVersion')
         .then(res => res.json())
         .then(verRes => {
-          var remoteVer = verRes.version || (verRes.config && verRes.config["資料版本"]);
-          var currentVer = db.config ? db.config["資料版本"] : null;
+          const remoteVer = verRes.version || (verRes.config && verRes.config["資料版本"]);
+          const currentVer = db.config ? db.config["資料版本"] : null;
           if (remoteVer && remoteVer !== currentVer) {
             fetchFullRemoteData();
           } else if (badge) {
@@ -1678,7 +1527,28 @@
       fetchFullRemoteData();
     }
   }
-  
+
+  function fetchFullRemoteData() {
+    fetch(GAS_API_URL)
+      .then(res => res.json())
+      .then(remote => {
+        if (remote && remote.status === 'success') {
+          db = remote;
+          saveLocalCache(remote);
+          const badge = document.getElementById('sync-status-badge');
+          if (badge) {
+            badge.innerText = '● 雲端同步完成';
+            badge.className = 'status-ok';
+          }
+          applyRoleContent();
+        }
+      })
+      .catch(() => {
+        const badge = document.getElementById('sync-status-badge');
+        if (badge) badge.innerText = '○ 離線模式';
+      });
+  }
+
   initApp();
 </script>
 </body>
