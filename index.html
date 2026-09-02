@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.2.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.2.1 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -23,7 +23,7 @@
       --accent-light: #fffbeb;
       --danger: #dc2626;
       --danger-light: #fef2f2;
-      --warning-bg: #fef3c7;
+      --warning-bg: #fffbeb;
       --border: #cbd5e1;
       --pink-border: #f8d7da;
       --radius: 14px;
@@ -88,6 +88,35 @@
     .stat-grid-box { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin: 15px 0; }
     .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
     .stat-row.total { border-top: 1.5px dashed var(--border); padding-top: 10px; margin-top: 10px; font-weight: 900; font-size: 16px; }
+    
+    /* 專屬微調：自付差額卡片樣式 */
+    .defense-card {
+      background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; margin-top: 10px;
+    }
+    .defense-card h3 {
+      font-size: 13.5px; font-weight: 800; color: var(--primary); margin: 0 0 8px 0;
+    }
+    .input-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .form-group {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px;
+    }
+    .form-group label {
+      font-size: 11.5px; font-weight: 700; color: #64748b;
+    }
+    .yellow-alert-red-text {
+      background: #fffbeb !important;
+      border: 1.5px solid #fde68a !important;
+      border-left: 5px solid #dc2626 !important;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 14px;
+      color: #dc2626 !important;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.6;
+    }
     
     .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
     .bullet-list { margin: 12px 0; padding-left: 0; list-style: none; }
@@ -171,7 +200,7 @@
     .warm-tip-desc { font-size: 12.5px; color: #475569; line-height: 1.5; }
     .warm-tip-action { font-size: 13.5px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
     
-    /* 全螢幕雲端後台管理樣式 (圖 1 & 圖 2 規範) */
+    /* 全螢幕雲端後台管理樣式 */
     #adminFullScreenModal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: #f1f5f9; z-index: 9999999; flex-direction: column; overflow: hidden;
@@ -207,7 +236,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.2.0</span>
+      <span class="v-badge" id="appVersion">v7.2.1</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -496,7 +525,7 @@
   </div>
 </div>
 
-<!-- 全螢幕雲端後台管理系統 (完全比照圖 1 & 圖 2) -->
+<!-- 全螢幕雲端後台管理系統 -->
 <div id="adminFullScreenModal">
   <div class="admin-header-nav">
     <span style="font-weight:800; font-size:15px;">⚙️ Medical App 雲端後台管理控制台</span>
@@ -514,7 +543,7 @@
   </div>
 
   <div class="admin-scroll-body">
-    <!-- 頁面管理分頁 (圖 1 & 圖 2 模式) -->
+    <!-- 頁面管理分頁 -->
     <div id="adminTabPagesSection">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
         <div style="display:flex; align-items:center; gap:8px;">
@@ -578,9 +607,13 @@
     role: 'adult',
     cost: 500000,
     hasCompany: false,
-    companyLimit: 0,
+    companyLimit: 100000,
     companyRate: 80,
     companyPay: 0,
+    hasPersonal: false,
+    personalLimit: 100000,
+    personalRate: 80,
+    personalPay: 0,
     currentCaseCat: '日間手術',
     selectedFinalPlan: 'wise',
     selectedFinalPrice: '--',
@@ -634,8 +667,9 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.2.0",
+      "資料版本": "7.2.1",
       "預設模式": "adult",
+      "公司醫保溫馨提示": "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人靈活額度": "⚠️ 靈活：受細項設有索償上限 ❌",
@@ -680,8 +714,14 @@
     if (p.get('cost')) appState.cost = parseSafeNum(p.get('cost')) || 500000;
     var hasCompStr = (p.get('hasCompany') || '').toLowerCase();
     appState.hasCompany = (hasCompStr === 'yes' || hasCompStr === 'true' || hasCompStr === '有');
-    appState.companyLimit = parseSafeNum(p.get('companyLimit'));
-    appState.companyRate = parseSafeNum(p.get('companyRate')) || 80;
+    if (p.get('companyLimit')) appState.companyLimit = parseSafeNum(p.get('companyLimit'));
+    if (p.get('companyRate')) appState.companyRate = parseSafeNum(p.get('companyRate')) || 80;
+    
+    var hasPersStr = (p.get('hasPersonal') || '').toLowerCase();
+    appState.hasPersonal = (hasPersStr === 'yes' || hasPersStr === 'true' || hasPersStr === '有');
+    if (p.get('personalLimit')) appState.personalLimit = parseSafeNum(p.get('personalLimit'));
+    if (p.get('personalRate')) appState.personalRate = parseSafeNum(p.get('personalRate')) || 80;
+    
     if (p.get('alertMsg')) appState.alertMsg = p.get('alertMsg');
     
     var urlRole = (p.get('role') || '').toLowerCase();
@@ -691,16 +731,8 @@
     } else {
       appState.role = 'adult';
     }
-    
-    var cost = appState.cost;
-    var compPay = 0;
-    if (appState.hasCompany && appState.role === 'adult' && appState.companyLimit > 0) {
-      compPay = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
-    }
-    appState.companyPay = compPay;
   }
 
-  // 手動切換模式 (即時響應)
   function toggleRoleMode() {
     appState.role = (appState.role === 'child') ? 'adult' : 'child';
     applyRoleContent();
@@ -740,23 +772,86 @@
           </div>
         `;
       } else if (isGapSummaryPage) {
-        var gapVal = Math.max(0, appState.cost - appState.companyPay);
-        var compDisplay = (appState.hasCompany && appState.companyPay > 0 && r !== 'child') ? 'flex' : 'none';
+        // 核心優化：加入公司醫保、個人醫保、賠償上限、百分比與自動精算
+        var cfg = db.config || DEFAULT_FALLBACK_DB.config;
+        var warnTipText = cfg["公司醫保溫馨提示"] || "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
+        
         contentHtml = `
-          <div class="stat-grid-box">
-            <div class="stat-row"><span>預計醫療開支：</span><span id="m5-cost-val">HK$ ${appState.cost.toLocaleString()}</span></div>
-            <div class="stat-row" id="m5-comp-row" style="display:${compDisplay};">
-              <span>第一層公司醫保（預計賠付）：</span><span style="color:#059669;" id="m5-comp-val">- HK$ ${Math.round(appState.companyPay).toLocaleString()}</span>
-            </div>
-            <div class="stat-row total">
-              <span style="color:var(--danger);">自身需承擔自付缺口：</span>
-              <span style="color:var(--danger); font-size:20px;" id="m5-gap-val">HK$ ${gapVal.toLocaleString()}</span>
+          <div class="stat-grid-box" style="margin-bottom: 8px;">
+            <div class="stat-row">
+              <span style="font-weight: 700;">預計醫療開支：</span>
+              <input type="text" id="m5-cost-input" value="HK$ ${appState.cost.toLocaleString()}" oninput="onM5CostChange(this)" style="width: 140px; text-align: right; margin-top: 0; font-weight: 800; color: var(--primary);">
             </div>
           </div>
-          ${(appState.hasCompany && r !== 'child') ? `
-          <div class="info-quote-box" style="font-size:14.5px; font-weight:700; color:#c0392b; background:#fff5f5; border-color:#e74c3c;">
-            🤔 <strong>關鍵思考：</strong>「呢道防線係屬於你，定係屬於你而家份工作？」
-          </div>` : ''}
+
+          <!-- 第一層：公司醫保 -->
+          <div class="defense-card">
+            <h3>🏢 第一道防線：公司醫保</h3>
+            <div class="form-group">
+              <label>是否有公司醫保？</label>
+              <select id="m5-has-company" onchange="onM5CompanyToggle(this.value)">
+                <option value="no" ${!appState.hasCompany ? 'selected' : ''}>沒有</option>
+                <option value="yes" ${appState.hasCompany ? 'selected' : ''}>有</option>
+              </select>
+            </div>
+            <div id="m5-company-details" style="display: ${appState.hasCompany ? 'block' : 'none'};">
+              <div class="input-grid">
+                <div class="form-group">
+                  <label>賠償上限 (HK$)</label>
+                  <input type="text" id="m5-company-limit" value="${appState.companyLimit.toLocaleString()}" oninput="onM5CompanyLimitChange(this)">
+                </div>
+                <div class="form-group">
+                  <label>賠償百分比 (%)</label>
+                  <input type="number" id="m5-company-rate" value="${appState.companyRate}" min="0" max="100" oninput="onM5CompanyRateChange(this)">
+                </div>
+              </div>
+              <div class="stat-row" style="margin-top: 6px; font-size: 13px;">
+                <span>公司醫保預計賠付：</span>
+                <strong style="color: #059669;" id="m5-company-pay-display">- HK$ 0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 第二層：個人醫保 -->
+          <div class="defense-card">
+            <h3>🛡️ 第二道防線：個人醫療保險</h3>
+            <div class="form-group">
+              <label>是否有個人醫保？</label>
+              <select id="m5-has-personal" onchange="onM5PersonalToggle(this.value)">
+                <option value="no" ${!appState.hasPersonal ? 'selected' : ''}>沒有</option>
+                <option value="yes" ${appState.hasPersonal ? 'selected' : ''}>有</option>
+              </select>
+            </div>
+            <div id="m5-personal-details" style="display: ${appState.hasPersonal ? 'block' : 'none'};">
+              <div class="input-grid">
+                <div class="form-group">
+                  <label>賠償上限 (HK$)</label>
+                  <input type="text" id="m5-personal-limit" value="${appState.personalLimit.toLocaleString()}" oninput="onM5PersonalLimitChange(this)">
+                </div>
+                <div class="form-group">
+                  <label>賠償百分比 (%)</label>
+                  <input type="number" id="m5-personal-rate" value="${appState.personalRate}" min="0" max="100" oninput="onM5PersonalRateChange(this)">
+                </div>
+              </div>
+              <div class="stat-row" style="margin-top: 6px; font-size: 13px;">
+                <span>個人醫保預計賠付：</span>
+                <strong style="color: #059669;" id="m5-personal-pay-display">- HK$ 0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 自身承擔缺口總結 -->
+          <div class="stat-grid-box" style="margin-top: 12px; border: 2px solid var(--danger); background: #fff;">
+            <div class="stat-row total" style="margin-top: 0; padding-top: 0; border-top: none;">
+              <span style="color: var(--danger); font-size: 16px;">自身需承擔自付缺口：</span>
+              <strong style="color: var(--danger); font-size: 22px;" id="m5-final-gap-display">HK$ 500,000</strong>
+            </div>
+          </div>
+
+          <!-- 有公司醫保時的黃底紅字溫馨提示 -->
+          <div id="m5-company-warm-tip" class="yellow-alert-red-text" style="display: ${appState.hasCompany ? 'block' : 'none'};">
+            ${warnTipText}
+          </div>
         `;
       } else {
         var opts = (db.options || []).filter(o => o.pageId === p.pageId).sort((a,b) => Number(a.order) - Number(b.order));
@@ -801,6 +896,89 @@
       var btnBack = document.getElementById('btnBackToLastDynamic');
       if (btnBack) btnBack.onclick = function() { goToStage(lastDynamicId); };
     }
+    
+    recalculateM5Gap();
+  }
+
+  // ==================== m5 自付差額精算事件 ====================
+  function onM5CostChange(el) {
+    appState.cost = parseSafeNum(el.value);
+    el.value = 'HK$ ' + appState.cost.toLocaleString();
+    recalculateM5Gap();
+  }
+
+  function onM5CompanyToggle(val) {
+    appState.hasCompany = (val === 'yes');
+    var details = document.getElementById('m5-company-details');
+    var tip = document.getElementById('m5-company-warm-tip');
+    if (details) details.style.display = appState.hasCompany ? 'block' : 'none';
+    if (tip) tip.style.display = appState.hasCompany ? 'block' : 'none';
+    recalculateM5Gap();
+  }
+
+  function onM5CompanyLimitChange(el) {
+    appState.companyLimit = parseSafeNum(el.value);
+    el.value = appState.companyLimit.toLocaleString();
+    recalculateM5Gap();
+  }
+
+  function onM5CompanyRateChange(el) {
+    appState.companyRate = Number(el.value) || 0;
+    recalculateM5Gap();
+  }
+
+  function onM5PersonalToggle(val) {
+    appState.hasPersonal = (val === 'yes');
+    var details = document.getElementById('m5-personal-details');
+    if (details) details.style.display = appState.hasPersonal ? 'block' : 'none';
+    recalculateM5Gap();
+  }
+
+  function onM5PersonalLimitChange(el) {
+    appState.personalLimit = parseSafeNum(el.value);
+    el.value = appState.personalLimit.toLocaleString();
+    recalculateM5Gap();
+  }
+
+  function onM5PersonalRateChange(el) {
+    appState.personalRate = Number(el.value) || 0;
+    recalculateM5Gap();
+  }
+
+  function recalculateM5Gap() {
+    var cost = appState.cost;
+    var compPay = 0;
+    if (appState.hasCompany) {
+      compPay = Math.min(cost, appState.companyLimit) * (appState.companyRate / 100);
+    }
+    appState.companyPay = compPay;
+    
+    var remainAfterComp = Math.max(0, cost - compPay);
+    var persPay = 0;
+    if (appState.hasPersonal) {
+      persPay = Math.min(remainAfterComp, appState.personalLimit) * (appState.personalRate / 100);
+    }
+    appState.personalPay = persPay;
+    
+    var finalGap = Math.max(0, cost - compPay - persPay);
+    
+    var cpDisp = document.getElementById('m5-company-pay-display');
+    var ppDisp = document.getElementById('m5-personal-pay-display');
+    var gapDisp = document.getElementById('m5-final-gap-display');
+    
+    if (cpDisp) cpDisp.innerText = '- HK$ ' + Math.round(compPay).toLocaleString();
+    if (ppDisp) ppDisp.innerText = '- HK$ ' + Math.round(persPay).toLocaleString();
+    if (gapDisp) gapDisp.innerText = 'HK$ ' + Math.round(finalGap).toLocaleString();
+    
+    var firstLineEl = document.getElementById('sumFirstLine');
+    if (firstLineEl) {
+      if (appState.hasCompany && appState.hasPersonal) firstLineEl.innerText = "公司醫保 ＋ 個人醫保";
+      else if (appState.hasCompany) firstLineEl.innerText = "公司團體醫保";
+      else if (appState.hasPersonal) firstLineEl.innerText = "個人基本醫保";
+      else firstLineEl.innerText = appState.role === 'child' ? "零保障 / 公立基本醫療" : "個人儲備全額承擔";
+    }
+    
+    updateCiRedirectUrl();
   }
 
   function applyRoleContent() {
@@ -820,12 +998,10 @@
       document.getElementById('wise-deductible').value = "0";
       document.getElementById('valEliteDed').value = "0";
       document.getElementById('valWiseDed').value = "0";
-      document.getElementById('sumFirstLine').innerText = "零保障 / 公立基本醫療";
       if (cfg["兒童尊顯額度"]) document.getElementById('banner-elite').innerText = "👑 尊顯：" + cfg["兒童尊顯額度"];
       if (cfg["兒童睿選額度"]) document.getElementById('banner-wise').innerText = "🛡️ 睿選：" + cfg["兒童睿選額度"];
       if (cfg["兒童靈活額度"]) document.getElementById('banner-flexi').innerText = cfg["兒童靈活額度"];
     } else {
-      document.getElementById('sumFirstLine').innerText = appState.hasCompany ? "公司團體醫保" : "個人儲備承擔";
       if (cfg["成人尊顯額度"]) document.getElementById('banner-elite').innerText = "👑 尊顯：" + cfg["成人尊顯額度"];
       if (cfg["成人睿選額度"]) document.getElementById('banner-wise').innerText = "🛡️ 睿選：" + cfg["成人睿選額度"];
       if (cfg["成人靈活額度"]) document.getElementById('banner-flexi').innerText = cfg["成人靈活額度"];
@@ -856,8 +1032,9 @@
   function updateCiRedirectUrl() {
     var ciBase = (db.config && db.config["危疾App網址"]) || "https://ivancww.github.io/CIApp";
     var ciUrl = ciBase.trim().replace(/\/+$/, '') + 
-      `?role=${appState.role}&cost=${appState.cost}&hasCompany=${appState.hasCompany?'yes':'no'}&companyLimit=${appState.companyLimit||0}&companyRate=${appState.companyRate||80}&alertMsg=${encodeURIComponent(appState.alertMsg||'')}`;
-    document.getElementById('ciRedirectBtn').href = ciUrl;
+      `?role=${appState.role}&cost=${appState.cost}&hasCompany=${appState.hasCompany?'yes':'no'}&companyLimit=${appState.companyLimit||0}&companyRate=${appState.companyRate||80}&hasPersonal=${appState.hasPersonal?'yes':'no'}&personalLimit=${appState.personalLimit||0}&personalRate=${appState.personalRate||80}&alertMsg=${encodeURIComponent(appState.alertMsg||'')}`;
+    var ciBtn = document.getElementById('ciRedirectBtn');
+    if (ciBtn) ciBtn.href = ciUrl;
   }
 
   function renderPlanChecklist() {
@@ -1088,8 +1265,10 @@
     
     document.getElementById('valPriceElite').innerText = resE.str;
     document.getElementById('valDetailElite').innerText = resE.detailStr;
+    
     document.getElementById('valPriceWise').innerText = resW.str;
     document.getElementById('valDetailWise').innerText = resW.detailStr;
+    
     document.getElementById('valPriceFlexi').innerText = resF.str;
     document.getElementById('valDetailFlexi').innerText = resF.detailStr;
     
@@ -1158,7 +1337,7 @@
     }
   }
 
-  // ==================== 後台管理系統 (圖 1 & 圖 2 介面模式) ====================
+  // ==================== 後台管理系統 ====================
   function openAdminModal() {
     document.getElementById('adminFullScreenModal').style.display = 'flex';
     renderAdminVisualLayout();
@@ -1417,7 +1596,7 @@
     let currentFiles = textInput.value ? textInput.value.split(';').map(s=>s.trim()).filter(Boolean) : [];
     if (currentFiles.length + files.length > 10) {
       alert("⚠️ 每個案例最多只可上載 10 個檔案！");
-      files.length = 10 - currentFiles.length;
+      files = files.slice(0, 10 - currentFiles.length);
     }
     const uploadBtn = document.getElementById(`uploadLabel_${idx}`);
     uploadBtn.innerText = "⏳ 上載中...";
@@ -1493,7 +1672,6 @@
     }
   }
 
-  // 秒開快取 & 靜默版本檢測 (第 4 點)
   function initApp() {
     initParams();
     const hasCache = loadLocalCache();
@@ -1501,12 +1679,11 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.2.0') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.2.1') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
       
-      // 背景靜默比對版本
       fetch(GAS_API_URL + (GAS_API_URL.includes('?') ? '&' : '?') + 'action=checkVersion')
         .then(res => res.json())
         .then(verRes => {
