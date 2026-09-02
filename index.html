@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.2.1 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.2.2 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -89,7 +89,6 @@
     .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
     .stat-row.total { border-top: 1.5px dashed var(--border); padding-top: 10px; margin-top: 10px; font-weight: 900; font-size: 16px; }
     
-    /* 專屬微調：自付差額卡片樣式 */
     .defense-card {
       background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; margin-top: 10px;
     }
@@ -187,6 +186,9 @@
     .rebate-row { display: flex; justify-content: space-between; align-items: center; }
     .rebate-total { border-top: 1.5px dashed #cbd5e1; padding-top: 8px; margin-top: 8px; font-weight: 900; font-size: 15px; color: #c0392b; }
     
+    .vitality-toggle-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .vitality-details-box { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #bfdbfe; font-size: 12px; color: #334155; line-height: 1.6; }
+    
     .cross-sell-alert { background: #fff5f5; border: 1.5px dashed var(--danger); border-radius: 12px; padding: 14px; margin: 14px 0; font-size: 13.5px; line-height: 1.6; color: var(--danger); font-weight: 700; }
     
     .warm-tip-card {
@@ -236,7 +238,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.2.1</span>
+      <span class="v-badge" id="appVersion">v7.2.2</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -406,11 +408,25 @@
         </select>
       </div>
     </div>
+
+    <!-- 4. AIA Vitality 預設隱藏折疊修復 -->
+    <div id="vitality-wrap-box" style="margin:12px 0; font-size:13px; background:#eff6ff; padding:12px; border-radius:8px; border:1px solid #bfdbfe;">
+      <div class="vitality-toggle-header" onclick="toggleVitalityDetails()">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#1e40af;" onclick="event.stopPropagation();">
+          <input type="checkbox" id="chkDiscount" checked onchange="updateValPremiums()" style="width:auto; margin:0;">
+          參加「AIA Vitality 健康程式*」享保費 9 折優惠
+        </label>
+        <span id="vitality-arrow-icon" style="font-size:12px; color:#1e40af; font-weight:bold;">▼ 點擊展開說明</span>
+      </div>
+      <div class="vitality-details-box" id="vitality-details-content">
+        • <strong>尊顯 / 睿選 / 靈活計劃</strong>：享保費 <strong>9 折優惠</strong><br>
+        <div style="margin-top:6px; color:#b45309; font-weight:bold;">
+          * 條款及獎賞備註：每年會費 HK$ 430，每月送 2 張戲院戲飛或 Starbucks 飲品券，每年額外送 HK$ 250 萬寧/HKTVmall 現金券！
+        </div>
+      </div>
+    </div>
+
     <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px; font-size:13px; font-weight:600;">
-      <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-        <input type="checkbox" id="chkDiscount" onchange="updateValPremiums()" style="width:auto; margin:0;">
-        參加「AIA Vitality」享保費 9 折優惠
-      </label>
       <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
         <input type="checkbox" id="chkTax" onchange="updateValPremiums()" style="width:auto; margin:0;">
         享受 VHIS 稅務扣減 (按 17% 稅率計算)
@@ -558,19 +574,19 @@
       <div id="adminVisualContainer"></div>
     </div>
 
-    <!-- 系統設定 -->
+    <!-- 1. 系統設定 (動態完整渲染所有 key) -->
     <div id="adminTabConfigSection" style="display:none;">
       <div class="admin-card-section" id="adminConfigContainer"></div>
     </div>
 
-    <!-- 專屬方案細項 -->
+    <!-- 3. 專屬方案細項 (完整呈現與編輯 8 個欄位) -->
     <div id="adminTabP06Section" style="display:none;">
       <div class="admin-card-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h3 style="color:var(--primary); margin:0; font-size:15px;">📋 專屬方案細項表格</h3>
+          <h3 style="color:var(--primary); margin:0; font-size:15px;">📋 專屬方案細項表格 (對應 Google Sheet 完整欄位)</h3>
           <button type="button" onclick="addAdminPlanItem()" style="background:var(--primary); color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增項目</button>
         </div>
-        <div class="checklist-grid" id="adminMirrorChecklist"></div>
+        <div id="adminPlanItemsEditor" style="display:flex; flex-direction:column; gap:12px;"></div>
       </div>
     </div>
 
@@ -639,9 +655,11 @@
       { role: "adult", order: 1, text: "終身 $6,000 萬高額醫療保障，實報實銷" },
       { role: "adult", order: 2, text: "自帶半私家房級別，無需指定網絡醫院限制" },
       { role: "adult", order: 3, text: "特設自付額完美銜接現有保障，槓桿最高" },
-      { role: "child", order: 1, text: "專屬兒童零自付額高額醫療，門診及住院實報實銷" },
-      { role: "child", order: 2, text: "包每日家長陪床費，讓父母全天候陪伴安心照護" },
-      { role: "child", order: 3, text: "特設終身 $6,000 萬額度，覆蓋先進標靶與自費治療" }
+      { role: "adult", order: 4, text: "專屬兒童零自付額高額醫療，門診及住院實報實銷" },
+      { role: "child", order: 1, text: "包每日家長陪床費，讓父母全天候陪伴安心照護" },
+      { role: "child", order: 2, text: "特設終身 $6,000 萬額度，覆蓋先進標靶與自費治療" },
+      { role: "child", order: 3, text: "住院家長陪床費全數賠償，父母全天候貼身守護" },
+      { role: "child", order: 4, text: "癌症用藥" }
     ],
     options: [
       { pageId: "m1_adult", optionKey: "optA", icon: "🏥", title: "可以即時選擇合適嘅醫療", desc: "享有治療自主權，不希望因費用而先作取捨。", order: 1 },
@@ -660,22 +678,22 @@
       { pageId: "m4_child", optionKey: "no", icon: "⚠️", title: "尚未建立專屬兒童高額醫保", desc: "任何私家自費治療均需由家長積蓄承擔。", order: 2 }
     ],
     planItems: [
-      { itemId: "item1", name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "⚠️ 受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "⚠️ 上限 $848", flexiSub: "(限3日內)" },
-      { itemId: "item2", name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "⚠️ 每次 $600", wiseGenSub: "(全年15次)", flexiMain: "❌ 不適用", flexiSub: "" },
-      { itemId: "item3", name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "❌ 不適用", wiseGenSub: "(已是普通房)", flexiMain: "❌ 不適用", flexiSub: "" },
-      { itemId: "item4", name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "(標靶/化療/免疫)", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "(標靶/化療/免疫)", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "(標靶/化療/免疫)", flexiMain: "⚠️ 上限 $96,000", flexiSub: "(每年限額)" },
-      { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "❌ 不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
+      { itemId: "item1", name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "上限 $848", flexiSub: "(限3次)" },
+      { itemId: "item2", name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "每次 $600", wiseGenSub: "(全年15次)", flexiMain: "不適用", flexiSub: "" },
+      { itemId: "item3", name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "不適用", wiseGenSub: "(已是普通房)", flexiMain: "不適用", flexiSub: "" },
+      { itemId: "item4", name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "(標靶/化療/免疫)", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "(標靶/化療/免疫)", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "(標靶/化療/免疫)", flexiMain: "上限 $96,000", flexiSub: "(每年限額)" },
+      { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.2.1",
+      "資料版本": "6.8.1",
       "預設模式": "adult",
       "公司醫保溫馨提示": "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
-      "成人靈活額度": "⚠️ 靈活：受細項設有索償上限 ❌",
+      "成人靈活額度": "靈活：受細項設有索償上限",
       "兒童尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬",
       "兒童睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬",
-      "兒童靈活額度": "⚠️ 靈活：受細項設有索償上限 ❌",
+      "兒童靈活額度": "靈活：受細項設有索償上限",
       "危疾App網址": "https://ivancww.github.io/CIApp"
     },
     claimCases: [
@@ -772,7 +790,6 @@
           </div>
         `;
       } else if (isGapSummaryPage) {
-        // 核心優化：加入公司醫保、個人醫保、賠償上限、百分比與自動精算
         var cfg = db.config || DEFAULT_FALLBACK_DB.config;
         var warnTipText = cfg["公司醫保溫馨提示"] || "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
         
@@ -900,7 +917,6 @@
     recalculateM5Gap();
   }
 
-  // ==================== m5 自付差額精算事件 ====================
   function onM5CostChange(el) {
     appState.cost = parseSafeNum(el.value);
     el.value = 'HK$ ' + appState.cost.toLocaleString();
@@ -981,6 +997,7 @@
     updateCiRedirectUrl();
   }
 
+  // 2. 亮點資料修復渲染
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     var btn = document.getElementById('btnRoleSwitch');
@@ -1009,12 +1026,13 @@
     
     renderDynamicPages();
     
-    if (db.highlights) {
-      var hlList = db.highlights.filter(h => h.role === appState.role).sort((a,b)=>a.order-b.order);
-      var hlHtml = '';
-      hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
-      document.getElementById('prod-bullet-list').innerHTML = hlHtml;
-    }
+    // 渲染產品亮點
+    var allHl = (db.highlights && db.highlights.length > 0) ? db.highlights : DEFAULT_FALLBACK_DB.highlights;
+    var hlList = allHl.filter(h => h.role === appState.role).sort((a,b)=>Number(a.order)-Number(b.order));
+    var hlHtml = '';
+    hlList.forEach(h => { hlHtml += `<li>${h.text}</li>`; });
+    var bulletBox = document.getElementById('prod-bullet-list');
+    if (bulletBox) bulletBox.innerHTML = hlHtml;
     
     if (appState.alertMsg) {
       document.getElementById('crossSellBox').style.display = 'block';
@@ -1037,6 +1055,7 @@
     if (ciBtn) ciBtn.href = ciUrl;
   }
 
+  // 3. 專屬方案細項前台表格完整渲染
   function renderPlanChecklist() {
     var tbody = document.getElementById('checklistGridContainer');
     if (!tbody) return;
@@ -1053,13 +1072,13 @@
       </div>`;
     items.forEach(function(item) {
       if (item.isChildOnly && !isChild) return;
-      var wMain = isWiseSemi ? item.wiseSemiMain : item.wiseGenMain;
-      var wSub = isWiseSemi ? item.wiseSemiSub : item.wiseGenSub;
+      var wMain = isWiseSemi ? (item.wiseSemiMain || '') : (item.wiseGenMain || '');
+      var wSub = isWiseSemi ? (item.wiseSemiSub || '') : (item.wiseGenSub || '');
       html += `
         <div class="checklist-row">
           <div class="col-item">${item.name}</div>
           <div class="col-elite plan-col-elite">
-            <strong>${item.eliteMain}</strong>
+            <strong>${item.eliteMain || ''}</strong>
             ${item.eliteSub ? `<br><span style="font-size:10px; color:#666;">${item.eliteSub}</span>` : ''}
           </div>
           <div class="col-wise plan-col-wise">
@@ -1067,7 +1086,7 @@
             ${wSub ? `<br><span style="font-size:10px; color:#666;">${wSub}</span>` : ''}
           </div>
           <div class="col-flexi plan-col-flexi">
-            <strong style="${(item.flexiMain||'').includes('❌') ? 'color:var(--danger);' : ''}">${item.flexiMain}</strong>
+            <strong style="${(item.flexiMain||'').includes('❌') || (item.flexiMain||'').includes('不') ? 'color:var(--danger);' : ''}">${item.flexiMain || ''}</strong>
             ${item.flexiSub ? `<br><span style="font-size:10px;">${item.flexiSub}</span>` : ''}
           </div>
         </div>`;
@@ -1215,6 +1234,16 @@
     }
     document.getElementById('sumPrice').innerText = appState.selectedFinalPrice;
     calcRebateDetails();
+  }
+
+  // 4. Vitality 展開/隱藏切換
+  function toggleVitalityDetails() {
+    var box = document.getElementById('vitality-details-content');
+    var arrow = document.getElementById('vitality-arrow-icon');
+    if (!box) return;
+    var isShown = (box.style.display === 'block');
+    box.style.display = isShown ? 'none' : 'block';
+    if (arrow) arrow.innerText = isShown ? '▼ 點擊展開說明' : '▲ 點擊收起說明';
   }
 
   function updateValPremiums() {
@@ -1506,11 +1535,12 @@
     renderAdminVisualLayout();
   }
 
+  // 1. 系統設定後台修復：完整支援所有 Google Sheet 設定
   function renderAdminConfigLayout() {
     const container = document.getElementById('adminConfigContainer');
     if (!container) return;
     const cfg = db.config || DEFAULT_FALLBACK_DB.config;
-    let html = '<h3 style="color:var(--primary); margin:0 0 12px 0;">⚙️ 系統參數設定</h3><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
+    let html = '<h3 style="color:var(--primary); margin:0 0 12px 0;">⚙️ 系統參數設定 (對應 Google Sheet 系統設定)</h3><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
     for (const [k, v] of Object.entries(cfg)) {
       html += `<div><label class="admin-label">${k}</label><input type="text" data-adm-config-key="${k}" value="${v}"></div>`;
     }
@@ -1518,39 +1548,88 @@
     container.innerHTML = html;
   }
 
+  // 3. 專屬方案細項後台完整編輯器 (涵蓋 8 個欄位)
   function renderAdminP06Mirror() {
-    const tb = document.getElementById('adminMirrorChecklist');
-    if (!tb) return;
+    const box = document.getElementById('adminPlanItemsEditor');
+    if (!box) return;
     const items = (db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
     db.planItems = items;
     
-    let html = `
-      <div class="checklist-row header-row">
-        <div class="col-item">保障項目</div>
-        <div class="col-elite">尊顯</div>
-        <div class="col-wise">睿選半私家</div>
-        <div class="col-flexi">靈活</div>
-        <div style="width:40px; padding:10px 4px;">操作</div>
-      </div>`;
+    let html = '';
     items.forEach((pi, idx) => {
       html += `
-        <div class="checklist-row">
-          <div class="col-item"><input type="text" data-adm-pi-name="${idx}" value="${pi.name}"></div>
-          <div class="col-elite"><input type="text" data-adm-pi-elitemain="${idx}" value="${pi.eliteMain||''}"></div>
-          <div class="col-wise"><input type="text" data-adm-pi-wisesemimain="${idx}" value="${pi.wiseSemiMain||''}"></div>
-          <div class="col-flexi"><input type="text" data-adm-pi-fleximain="${idx}" value="${pi.flexiMain||''}"></div>
-          <div style="width:40px; display:flex; align-items:center; justify-content:center;">
-            <button type="button" onclick="deleteAdminPlanItem(${idx})" style="background:#fee2e2; color:#dc2626; border:none; border-radius:4px; padding:4px; font-size:11px; cursor:pointer;">✕</button>
+        <div style="background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:10px; padding:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px; flex:1;">
+              <span style="font-weight:bold; font-size:13px; color:var(--primary);">項目 ${idx+1}：</span>
+              <input type="text" data-adm-pi-name="${idx}" value="${pi.name}" placeholder="項目名稱 (例如：🩺 出院後覆診)" style="flex:1; margin-top:0;">
+            </div>
+            <button type="button" onclick="deleteAdminPlanItem(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer; margin-left:8px;">🗑️ 刪除</button>
+          </div>
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
+            <div>
+              <label class="admin-label">👑 尊顯主內容：</label>
+              <input type="text" data-adm-pi-elitemain="${idx}" value="${pi.eliteMain || ''}" placeholder="例如：✅ 全數賠償">
+            </div>
+            <div>
+              <label class="admin-label">👑 尊顯細字說明：</label>
+              <input type="text" data-adm-pi-elitesub="${idx}" value="${pi.eliteSub || ''}" placeholder="例如：(90-365日)">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
+            <div>
+              <label class="admin-label">🛡️ 睿選半私家主內容：</label>
+              <input type="text" data-adm-pi-wisesemimain="${idx}" value="${pi.wiseSemiMain || ''}" placeholder="例如：✅ 全數賠償">
+            </div>
+            <div>
+              <label class="admin-label">🛡️ 睿選半私家細字說明：</label>
+              <input type="text" data-adm-pi-wisesemisub="${idx}" value="${pi.wiseSemiSub || ''}" placeholder="例如：(90-365日)">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
+            <div>
+              <label class="admin-label">🏨 睿選普通房主內容：</label>
+              <input type="text" data-adm-pi-wisegenmain="${idx}" value="${pi.wiseGenMain || ''}" placeholder="例如：受限於普通房分項">
+            </div>
+            <div>
+              <label class="admin-label">🏨 睿選普通房細字說明：</label>
+              <input type="text" data-adm-pi-wisegensub="${idx}" value="${pi.wiseGenSub || ''}" placeholder="例如：(90-365日)">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
+            <div>
+              <label class="admin-label">⚠️ 靈活主內容：</label>
+              <input type="text" data-adm-pi-fleximain="${idx}" value="${pi.flexiMain || ''}" placeholder="例如：上限 $848">
+            </div>
+            <div>
+              <label class="admin-label">⚠️ 靈活細字說明：</label>
+              <input type="text" data-adm-pi-flexisub="${idx}" value="${pi.flexiSub || ''}" placeholder="例如：(限3次)">
+            </div>
           </div>
         </div>`;
     });
-    tb.innerHTML = html;
+    box.innerHTML = html;
   }
 
   function addAdminPlanItem() {
     if (!db.planItems) db.planItems = [];
     const count = db.planItems.length + 1;
-    db.planItems.push({ itemId: "item" + count, name: "🩺 新保障項目", eliteMain: "✅ 全數賠償", eliteSub: "", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "", wiseGenMain: "⚠️ 普通房分項", wiseGenSub: "", flexiMain: "❌ 不適用", flexiSub: "" });
+    db.planItems.push({
+      itemId: "item" + count,
+      name: "🩺 新保障項目",
+      eliteMain: "✅ 全數賠償",
+      eliteSub: "",
+      wiseSemiMain: "✅ 全數賠償",
+      wiseSemiSub: "",
+      wiseGenMain: "受限於普通房分項",
+      wiseGenSub: "",
+      flexiMain: "不適用",
+      flexiSub: ""
+    });
     renderAdminP06Mirror();
   }
 
@@ -1635,16 +1714,24 @@
 
   async function saveAllAdminData() {
     saveCurrentAdminInputs();
+    
+    // 1. 系統參數
     document.querySelectorAll('[data-adm-config-key]').forEach(inp => {
       db.config[inp.dataset.admConfigKey] = inp.value;
     });
     
+    // 3. 專屬方案細項 (完整保存 8 欄)
     document.querySelectorAll('[data-adm-pi-name]').forEach((inp, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = inp.value;
-        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elitemain="${idx}"]`).value;
-        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wisesemimain="${idx}"]`).value;
-        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-fleximain="${idx}"]`).value;
+        db.planItems[idx].eliteMain = document.querySelector(`[data-adm-pi-elitemain="${idx}"]`)?.value || '';
+        db.planItems[idx].eliteSub = document.querySelector(`[data-adm-pi-elitesub="${idx}"]`)?.value || '';
+        db.planItems[idx].wiseSemiMain = document.querySelector(`[data-adm-pi-wisesemimain="${idx}"]`)?.value || '';
+        db.planItems[idx].wiseSemiSub = document.querySelector(`[data-adm-pi-wisesemisub="${idx}"]`)?.value || '';
+        db.planItems[idx].wiseGenMain = document.querySelector(`[data-adm-pi-wisegenmain="${idx}"]`)?.value || '';
+        db.planItems[idx].wiseGenSub = document.querySelector(`[data-adm-pi-wisegensub="${idx}"]`)?.value || '';
+        db.planItems[idx].flexiMain = document.querySelector(`[data-adm-pi-fleximain="${idx}"]`)?.value || '';
+        db.planItems[idx].flexiSub = document.querySelector(`[data-adm-pi-flexisub="${idx}"]`)?.value || '';
       }
     });
 
@@ -1679,7 +1766,7 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.2.1') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '6.8.1') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
