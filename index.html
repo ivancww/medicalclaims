@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.3.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.3.2 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -53,7 +53,6 @@
     .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
     .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
     
-    /* 極細 ! 按鈕樣式 */
     .btn-mini-info {
       width: 17px; height: 17px; border-radius: 50%; font-size: 11px; font-weight: 900;
       display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
@@ -215,7 +214,6 @@
     .warm-tip-desc { font-size: 12.5px; color: #475569; line-height: 1.5; }
     .warm-tip-action { font-size: 13.5px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
     
-    /* 彈窗抽屜與預覽器 CSS (對應膠囊旁 ! 查看) */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px; }
     .modal-box { background: #fff; border-radius: 16px; width: 95vw; max-width: 850px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; position: relative; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
     .modal-close-btn { position: absolute; top: 12px; right: 14px; background: #f1f5f9; border: none; font-size: 20px; font-weight: bold; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; }
@@ -226,7 +224,6 @@
     .media-card-item img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; }
     .media-card-title { margin-top: 6px; font-size: 12px; font-weight: 700; color: #1e293b; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* 全螢幕雲端後台管理樣式 */
     #adminFullScreenModal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: #f1f5f9; z-index: 9999999; flex-direction: column; overflow: hidden;
@@ -262,17 +259,16 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.3.0</span>
+      <span class="v-badge" id="appVersion">v7.3.2</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
     <div id="sync-status-badge">🔄 載入中...</div>
   </div>
 
-  <!-- 前台動態題目卡片掛載容器 -->
   <div id="dynamic-pages-container"></div>
 
-  <!-- 06 專屬方案 (圖1 頂位膠囊旁新增極細 ! 按鈕，並移除自付選單) -->
+  <!-- 06 專屬方案 (產品名稱動態對應) -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">專屬方案</span>
@@ -301,10 +297,9 @@
       <div class="limit-badge flexi plan-col-flexi" id="banner-flexi">⚠️ 靈活：受細項設有索償上限 ❌</div>
     </div>
     
-    <!-- 方案特色區塊 (自付額選項已移至情境案例) -->
     <div class="settings-panel">
       <div class="plan-setting elite-setting plan-col-elite">
-        <h3>👑 高端尊顯計劃</h3>
+        <h3 id="card-title-elite">👑 高端尊顯計劃</h3>
         <div style="background: #fff; padding: 10px 8px; border-radius: 8px; border: 1px dashed #f5b041; text-align: center; margin-top: 4px;">
           <strong style="color: #b9770e; font-size:12.5px;">✨ 尊貴特權</strong>
           <p style="font-size: 11.5px; margin: 4px 0 0 0; color: #555;">無需指定醫院<br>自帶半私家房級別服務</p>
@@ -312,7 +307,7 @@
       </div>
       
       <div class="plan-setting wise-setting plan-col-wise">
-        <h3>🛡️ 高端睿選計劃</h3>
+        <h3 id="card-title-wise">🛡️ 高端睿選計劃</h3>
         <div style="background: #fff; padding: 8px; border-radius: 8px; border: 1px solid #cce5ff; margin-top: 4px;">
           <div id="wise-status-badge" style="background:#28a745; color:#fff; font-size:11px; font-weight:bold; padding:3px 6px; border-radius:4px; text-align:center;">✓ 符合條件（享半私家）</div>
           <div style="font-size:11px; color:#444; margin-top:6px; display:flex; flex-direction:column; gap:4px;">
@@ -324,7 +319,7 @@
       </div>
       
       <div class="plan-setting flexi-setting plan-col-flexi">
-        <h3>⚠️ 靈活計劃</h3>
+        <h3 id="card-title-flexi">⚠️ 傳統靈活計劃</h3>
         <p style="font-size: 12px; color: #c62828; font-weight: bold; margin: 2px 0;">普通房級別</p>
         <p style="font-size: 11px; color: #666; margin: 4px 0;">受限於手術表分項上限<br><strong>SMM 15% 共同保險</strong></p>
       </div>
@@ -336,7 +331,7 @@
     </div>
   </div>
 
-  <!-- 07 情境案例 (圖2 自付額選項移至此處客人自付旁) -->
+  <!-- 07 情境案例 -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">情境案例 ｜ 實況推演</span>
     <h2 class="stage-title">常見醫療開支壓力測試</h2>
@@ -365,10 +360,9 @@
         <input type="text" id="case-total-input" value="HK$ 174,397" oninput="handleManualCostInput(this.value)" style="font-size:17px; font-weight:800; color:#1a3a6e;">
       </div>
       
-      <!-- 自付額選擇已直接嵌入三欄卡片中 -->
       <div class="oop-row-grid">
         <div class="oop-mini-card elite plan-col-elite">
-          <div style="font-size:11.5px; font-weight:bold;">👑 尊顯 客人自付</div>
+          <div style="font-size:11.5px; font-weight:bold;" id="col-title-elite">👑 尊顯 客人自付</div>
           <div style="margin: 4px 0;">
             <select id="elite-deductible" onchange="syncDeductibles('elite', this.value)" style="font-size:12px; padding:4px 6px; font-weight:bold; margin-top:0;">
               <option value="0">自付額: HK$ 0</option>
@@ -380,7 +374,7 @@
         </div>
         
         <div class="oop-mini-card wise plan-col-wise">
-          <div style="font-size:11.5px; font-weight:bold;">🛡️ 睿選 客人自付</div>
+          <div style="font-size:11.5px; font-weight:bold;" id="col-title-wise">🛡️ 睿選 客人自付</div>
           <div style="margin: 4px 0;">
             <select id="wise-deductible" onchange="syncDeductibles('wise', this.value)" style="font-size:12px; padding:4px 6px; font-weight:bold; margin-top:0;">
               <option value="0">自付額: HK$ 0</option>
@@ -393,7 +387,7 @@
         </div>
         
         <div class="oop-mini-card flexi plan-col-flexi">
-          <div style="font-size:11.5px; font-weight:bold;">⚠️ 靈活 客人自付</div>
+          <div style="font-size:11.5px; font-weight:bold;" id="col-title-flexi">⚠️ 靈活 客人自付</div>
           <div style="font-size:11px; color:#666; margin: 6px 0 2px 0;">(SMM 15% 共同保險)</div>
           <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 26,160</div>
         </div>
@@ -476,21 +470,21 @@
     <div style="display:flex; flex-direction:column; gap:10px;">
       <div class="plan-select-card plan-col-elite" id="cardSelectElite" onclick="selectFinalPlan('elite')">
         <input type="radio" name="finalPlan" value="elite">
-        <div style="font-size:13px; font-weight:bold; color:var(--elite-color);">👑 尊顯計劃</div>
+        <div style="font-size:13px; font-weight:bold; color:var(--elite-color);" id="select-label-elite">👑 尊顯計劃</div>
         <div style="font-size:20px; font-weight:900; color:var(--elite-color); margin-top:4px;" id="valPriceElite">HK$ --</div>
         <div style="font-size:11px; color:#666; margin-top:2px;" id="valDetailElite"></div>
       </div>
       
       <div class="plan-select-card plan-col-wise selected" id="cardSelectWise" onclick="selectFinalPlan('wise')">
         <input type="radio" name="finalPlan" value="wise" checked>
-        <div style="font-size:13px; font-weight:bold; color:var(--wise-color);">🛡️ 睿選計劃 (推薦)</div>
+        <div style="font-size:13px; font-weight:bold; color:var(--wise-color);" id="select-label-wise">🛡️ 睿選計劃 (推薦)</div>
         <div style="font-size:20px; font-weight:900; color:var(--wise-color); margin-top:4px;" id="valPriceWise">HK$ --</div>
         <div style="font-size:11px; color:#666; margin-top:2px;" id="valDetailWise"></div>
       </div>
       
       <div class="plan-select-card plan-col-flexi" id="cardSelectFlexi" onclick="selectFinalPlan('flexi')">
         <input type="radio" name="finalPlan" value="flexi">
-        <div style="font-size:13px; font-weight:bold; color:var(--flexi-color);">⚠️ 靈活計劃</div>
+        <div style="font-size:13px; font-weight:bold; color:var(--flexi-color);" id="select-label-flexi">⚠️ 靈活計劃</div>
         <div style="font-size:20px; font-weight:900; color:var(--flexi-color); margin-top:4px;" id="valPriceFlexi">HK$ --</div>
         <div style="font-size:11px; color:#666; margin-top:2px;" id="valDetailFlexi"></div>
       </div>
@@ -582,7 +576,6 @@
   </div>
 </div>
 
-<!-- 計劃說明/圖片抽屜彈窗 (點擊膠囊旁 ! 展開) -->
 <div class="modal-overlay" id="planInfoDrawerOverlay">
   <div class="modal-box">
     <button type="button" class="modal-close-btn" onclick="closePlanInfoDrawer()">×</button>
@@ -596,7 +589,8 @@
   <div class="admin-header-nav">
     <span style="font-weight:800; font-size:15px;">⚙️ Medical App 雲端後台管理控制台</span>
     <div style="display:flex; gap:8px;">
-      <button type="button" class="btn-primary" style="padding:6px 14px; font-size:12px; background:#10b981;" onclick="saveAllAdminData()">💾 儲存同步至 Google Sheet</button>
+      <!-- 3. 上傳中狀態按鈕 -->
+      <button type="button" id="btnAdminSaveSync" class="btn-primary" style="padding:6px 14px; font-size:12px; background:#10b981;" onclick="saveAllAdminData()">💾 儲存同步至 Google Sheet</button>
       <button type="button" style="background:#64748b; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; font-weight:bold;" onclick="closeAdminModal()">關閉</button>
     </div>
   </div>
@@ -604,7 +598,7 @@
   <div class="admin-tab-bar">
     <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('pages', this)">📄 頁面流程與題目管理</button>
     <button type="button" class="admin-tab-btn" onclick="switchAdminTab('config', this)">⚙️ 系統參數設定</button>
-    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p06', this)">📋 專屬方案細項</button>
+    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p06', this)">📋 專屬方案細項與亮點</button>
     <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p07', this)">📑 實況案例與文件管理</button>
   </div>
 
@@ -624,23 +618,33 @@
       <div id="adminVisualContainer"></div>
     </div>
 
-    <!-- 系統設定 -->
+    <!-- 2. 系統參數設定 (包含產品名稱自訂) -->
     <div id="adminTabConfigSection" style="display:none;">
       <div class="admin-card-section" id="adminConfigContainer"></div>
     </div>
 
-    <!-- 專屬方案細項 -->
+    <!-- 1. 專屬方案細項與亮點後台 (完整恢復亮點編輯) -->
     <div id="adminTabP06Section" style="display:none;">
+      <!-- 產品亮點管理區塊 -->
+      <div class="admin-card-section" style="background:#f0fdf4; border-color:#bbf7d0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 style="color:#166534; margin:0; font-size:15px;">✨ 產品亮點文案清單 (對應 Google Sheet「產品亮點」)</h3>
+          <button type="button" onclick="addAdminHighlightItem()" style="background:#059669; color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增亮點</button>
+        </div>
+        <div id="adminHighlightsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- 細項表格管理區塊 -->
       <div class="admin-card-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h3 style="color:var(--primary); margin:0; font-size:15px;">📋 專屬方案細項表格 (對應 Google Sheet 完整欄位)</h3>
-          <button type="button" onclick="addAdminPlanItem()" style="background:var(--primary); color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增項目</button>
+          <h3 style="color:var(--primary); margin:0; font-size:15px;">📋 專屬方案細項表格 (對應 Google Sheet「專屬方案細項」)</h3>
+          <button type="button" onclick="addAdminPlanItem()" style="background:var(--primary); color:#fff; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">+ 新增細項</button>
         </div>
         <div id="adminPlanItemsEditor" style="display:flex; flex-direction:column; gap:12px;"></div>
       </div>
     </div>
 
-    <!-- 實況案例與文件管理 (支援方案文件分類) -->
+    <!-- 實況案例與文件管理 -->
     <div id="adminTabP07Section" style="display:none;">
       <div class="admin-card-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -728,15 +732,18 @@
       { pageId: "m4_child", optionKey: "no", icon: "⚠️", title: "尚未建立專屬兒童高額醫保", desc: "任何私家自費治療均需由家長積蓄承擔。", order: 2 }
     ],
     planItems: [
-      { itemId: "item1", name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "受限於普通房分項", wiseGenSub: "(90-365日)", flexiMain: "上限 $848", flexiSub: "(限3次)" },
+      { itemId: "item1", name: "🩺 出院後覆診", eliteMain: "✅ 全數賠償", eliteSub: "(90-365日)", wiseSemiMain: "✅ 全數賠償", wiseSemiSub: "(90-365日)", wiseGenMain: "受限於普通房，上限$640", wiseGenSub: "(限3次)", flexiMain: "上限 $848", flexiSub: "(限3次)" },
       { itemId: "item2", name: "🌿 出院後中醫", eliteMain: "✅ 每次 $650", eliteSub: "(全年15次)", wiseSemiMain: "✅ 每次 $1,000", wiseSemiSub: "(全年20次)", wiseGenMain: "每次 $600", wiseGenSub: "(全年15次)", flexiMain: "不適用", flexiSub: "" },
       { itemId: "item3", name: "🎁 次級病房每日現金津貼", eliteMain: "每日 $1,200", eliteSub: "(自願降級普通房)", wiseSemiMain: "每日 $2,400", wiseSemiSub: "(自願降級普通房)", wiseGenMain: "不適用", wiseGenSub: "(已是普通房)", flexiMain: "不適用", flexiSub: "" },
       { itemId: "item4", name: "🎗️ 非手術癌症長遠開支", eliteMain: "🛡️ 全數賠償", eliteSub: "(標靶/化療/免疫)", wiseSemiMain: "🛡️ 全數賠償", wiseSemiSub: "(標靶/化療/免疫)", wiseGenMain: "🛡️ 全數賠償", wiseGenSub: "(標靶/化療/免疫)", flexiMain: "上限 $96,000", flexiSub: "(每年限額)" },
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.3.0",
+      "資料版本": "7.3.2",
       "預設模式": "adult",
+      "尊顯計劃名稱": "👑 高端尊顯醫療計劃",
+      "睿選計劃名稱": "🛡️ 高端睿選醫療計劃",
+      "靈活計劃名稱": "⚠️ 傳統靈活醫療計劃",
       "公司醫保溫馨提示": "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
       "成人睿選額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -766,9 +773,12 @@
     if (!remote) return;
     db = remote;
     if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
-    if (!db.config["公司醫保溫馨提示"]) {
-      db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
-    }
+    if (!db.config["尊顯計劃名稱"]) db.config["尊顯計劃名稱"] = "👑 高端尊顯醫療計劃";
+    if (!db.config["睿選計劃名稱"]) db.config["睿選計劃名稱"] = "🛡️ 高端睿選醫療計劃";
+    if (!db.config["靈活計劃名稱"]) db.config["靈活計劃名稱"] = "⚠️ 傳統靈活醫療計劃";
+    if (!db.config["公司醫保溫馨提示"]) db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
+    if (!Array.isArray(db.highlights)) db.highlights = DEFAULT_FALLBACK_DB.highlights;
+    if (!Array.isArray(db.planItems)) db.planItems = DEFAULT_FALLBACK_DB.planItems;
     if (!Array.isArray(db.claimCases)) db.claimCases = DEFAULT_FALLBACK_DB.claimCases;
   }
 
@@ -819,7 +829,6 @@
     applyRoleContent();
   }
 
-  // 動態頁面渲染 (支援置中大圖與粗體字)
   function renderDynamicPages() {
     var r = appState.role;
     var container = document.getElementById('dynamic-pages-container');
@@ -864,7 +873,6 @@
             </div>
           </div>
 
-          <!-- 第一層：公司醫保 -->
           <div class="defense-card">
             <h3>🏢 第一道防線：公司醫保</h3>
             <div class="form-group">
@@ -892,7 +900,6 @@
             </div>
           </div>
 
-          <!-- 第二層：個人醫保 -->
           <div class="defense-card">
             <h3>🛡️ 第二道防線：個人醫療保險</h3>
             <div class="form-group">
@@ -920,7 +927,6 @@
             </div>
           </div>
 
-          <!-- 自身承擔缺口總結 -->
           <div class="stat-grid-box" style="margin-top: 12px; border: 2px solid var(--danger); background: #fff;">
             <div class="stat-row total" style="margin-top: 0; padding-top: 0; border-top: none;">
               <span style="color: var(--danger); font-size: 16px;">自身需承擔自付缺口：</span>
@@ -928,7 +934,6 @@
             </div>
           </div>
 
-          <!-- 溫馨提示 -->
           <div id="m5-company-warm-tip" class="yellow-alert-red-text" style="display: ${appState.hasCompany ? 'block' : 'none'};">
             ${warnTipText}
           </div>
@@ -1060,6 +1065,7 @@
     updateCiRedirectUrl();
   }
 
+  // 2. 應用角色與自訂產品名稱
   function applyRoleContent() {
     var isChild = appState.role === 'child';
     var btn = document.getElementById('btnRoleSwitch');
@@ -1072,22 +1078,44 @@
     document.getElementById('valAge').value = isChild ? "5" : "35";
     
     var cfg = db.config || {};
+    var nameElite = cfg["尊顯計劃名稱"] || "👑 高端尊顯醫療計劃";
+    var nameWise = cfg["睿選計劃名稱"] || "🛡️ 高端睿選醫療計劃";
+    var nameFlexi = cfg["靈活計劃名稱"] || "⚠️ 傳統靈活醫療計劃";
+
+    // 更新各處產品標題
+    if (document.getElementById('vis-btn-elite')) document.getElementById('vis-btn-elite').innerText = nameElite.split(' ')[0] + ' ' + (nameElite.split(' ')[1] || '尊顯');
+    if (document.getElementById('vis-btn-wise')) document.getElementById('vis-btn-wise').innerText = nameWise.split(' ')[0] + ' ' + (nameWise.split(' ')[1] || '睿選');
+    if (document.getElementById('vis-btn-flexi')) document.getElementById('vis-btn-flexi').innerText = nameFlexi.split(' ')[0] + ' ' + (nameFlexi.split(' ')[1] || '靈活');
+
+    if (document.getElementById('card-title-elite')) document.getElementById('card-title-elite').innerText = nameElite;
+    if (document.getElementById('card-title-wise')) document.getElementById('card-title-wise').innerText = nameWise;
+    if (document.getElementById('card-title-flexi')) document.getElementById('card-title-flexi').innerText = nameFlexi;
+
+    if (document.getElementById('col-title-elite')) document.getElementById('col-title-elite').innerText = nameElite + ' 客人自付';
+    if (document.getElementById('col-title-wise')) document.getElementById('col-title-wise').innerText = nameWise + ' 客人自付';
+    if (document.getElementById('col-title-flexi')) document.getElementById('col-title-flexi').innerText = nameFlexi + ' 客人自付';
+
+    if (document.getElementById('select-label-elite')) document.getElementById('select-label-elite').innerText = nameElite;
+    if (document.getElementById('select-label-wise')) document.getElementById('select-label-wise').innerText = nameWise + ' (推薦)';
+    if (document.getElementById('select-label-flexi')) document.getElementById('select-label-flexi').innerText = nameFlexi;
+
     if (isChild) {
       document.getElementById('elite-deductible').value = "0";
       document.getElementById('wise-deductible').value = "0";
       document.getElementById('valEliteDed').value = "0";
       document.getElementById('valWiseDed').value = "0";
-      if (cfg["兒童尊顯額度"]) document.getElementById('banner-elite').innerText = "👑 尊顯：" + cfg["兒童尊顯額度"];
-      if (cfg["兒童睿選額度"]) document.getElementById('banner-wise').innerText = "🛡️ 睿選：" + cfg["兒童睿選額度"];
+      if (cfg["兒童尊顯額度"]) document.getElementById('banner-elite').innerText = (nameElite.split(' ')[0]||'👑') + ' 尊顯：' + cfg["兒童尊顯額度"];
+      if (cfg["兒童睿選額度"]) document.getElementById('banner-wise').innerText = (nameWise.split(' ')[0]||'🛡️') + ' 睿選：' + cfg["兒童睿選額度"];
       if (cfg["兒童靈活額度"]) document.getElementById('banner-flexi').innerText = cfg["兒童靈活額度"];
     } else {
-      if (cfg["成人尊顯額度"]) document.getElementById('banner-elite').innerText = "👑 尊顯：" + cfg["成人尊顯額度"];
-      if (cfg["成人睿選額度"]) document.getElementById('banner-wise').innerText = "🛡️ 睿選：" + cfg["成人睿選額度"];
+      if (cfg["成人尊顯額度"]) document.getElementById('banner-elite').innerText = (nameElite.split(' ')[0]||'👑') + ' 尊顯：' + cfg["成人尊顯額度"];
+      if (cfg["成人睿選額度"]) document.getElementById('banner-wise').innerText = (nameWise.split(' ')[0]||'🛡️') + ' 睿選：' + cfg["成人睿選額度"];
       if (cfg["成人靈活額度"]) document.getElementById('banner-flexi').innerText = cfg["成人靈活額度"];
     }
     
     renderDynamicPages();
     
+    // 1. 產品亮點保證渲染
     var allHl = (db.highlights && db.highlights.length > 0) ? db.highlights : DEFAULT_FALLBACK_DB.highlights;
     var hlList = allHl.filter(h => h.role === appState.role).sort((a,b)=>Number(a.order)-Number(b.order));
     var hlHtml = '';
@@ -1122,13 +1150,18 @@
     var isChild = appState.role === 'child';
     var isWiseSemi = document.getElementById('wCond1').checked && document.getElementById('wCond2').checked && document.getElementById('wCond3').checked;
     
+    var cfg = db.config || DEFAULT_FALLBACK_DB.config;
+    var nameElite = cfg["尊顯計劃名稱"] || "尊顯";
+    var nameWise = cfg["睿選計劃名稱"] || "睿選";
+    var nameFlexi = cfg["靈活計劃名稱"] || "靈活";
+
     var items = (db && db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
     var html = `
       <div class="checklist-row header-row">
         <div class="col-item">保障項目</div>
-        <div class="col-elite plan-col-elite">尊顯 (左)</div>
-        <div class="col-wise plan-col-wise" id="colWiseHeader">${isWiseSemi ? '睿選 (中)' : '睿選 (降為普通房)'}</div>
-        <div class="col-flexi plan-col-flexi">靈活 (右)</div>
+        <div class="col-elite plan-col-elite">${nameElite.split(' ')[1] || '尊顯'} (左)</div>
+        <div class="col-wise plan-col-wise" id="colWiseHeader">${isWiseSemi ? (nameWise.split(' ')[1] || '睿選') + ' (中)' : (nameWise.split(' ')[1] || '睿選') + ' (降為普通房)'}</div>
+        <div class="col-flexi plan-col-flexi">${nameFlexi.split(' ')[1] || '靈活'} (右)</div>
       </div>`;
     items.forEach(function(item) {
       if (item.isChildOnly && !isChild) return;
@@ -1251,7 +1284,6 @@
     updateValPremiums();
   }
 
-  // 1. 自付額同步 (情境案例頁與保費頁雙向聯動)
   function syncDeductibles(type, val) {
     if (type === 'elite') {
       var d1 = document.getElementById('elite-deductible');
@@ -1280,16 +1312,21 @@
       card.querySelector('input').checked = true;
     }
     
+    var cfg = db.config || DEFAULT_FALLBACK_DB.config;
+    var nameElite = cfg["尊顯計劃名稱"] || "👑 高端尊顯醫療計劃";
+    var nameWise = cfg["睿選計劃名稱"] || "🛡️ 高端睿選醫療計劃";
+    var nameFlexi = cfg["靈活計劃名稱"] || "⚠️ 傳統靈活醫療計劃";
+
     if (plan === 'elite') {
-      document.getElementById('sumPlanName').innerText = '👑 高端尊顯醫療計劃 (半私家房)';
+      document.getElementById('sumPlanName').innerText = nameElite + ' (半私家房)';
       document.getElementById('sumCoverage').innerText = '每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，自帶半私家房)';
       appState.selectedFinalPrice = document.getElementById('valPriceElite').innerText;
     } else if (plan === 'wise') {
-      document.getElementById('sumPlanName').innerText = '🛡️ 高端睿選醫療計劃 (半私家房)';
+      document.getElementById('sumPlanName').innerText = nameWise + ' (半私家房)';
       document.getElementById('sumCoverage').innerText = '每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，指定網絡)';
       appState.selectedFinalPrice = document.getElementById('valPriceWise').innerText;
     } else {
-      document.getElementById('sumPlanName').innerText = '⚠️ 傳統靈活醫療計劃 (普通房)';
+      document.getElementById('sumPlanName').innerText = nameFlexi + ' (普通房)';
       document.getElementById('sumCoverage').innerText = '每年 HK$42 萬上限 (設細項分項限制)';
       appState.selectedFinalPrice = document.getElementById('valPriceFlexi').innerText;
     }
@@ -1426,7 +1463,6 @@
     }
   }
 
-  // 2. 膠囊旁 ! 按鈕彈窗 (對應尊顯/睿選/靈活文件展示)
   function openPlanInfoDrawer(categoryName) {
     var overlay = document.getElementById('planInfoDrawerOverlay');
     var titleEl = document.getElementById('planInfoDrawerTitle');
@@ -1638,13 +1674,16 @@
     renderAdminVisualLayout();
   }
 
+  // 2. 系統參數設定 (支援產品名稱自由修改)
   function renderAdminConfigLayout() {
     const container = document.getElementById('adminConfigContainer');
     if (!container) return;
     if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
-    if (!db.config["公司醫保溫馨提示"]) {
-      db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
-    }
+    if (!db.config["尊顯計劃名稱"]) db.config["尊顯計劃名稱"] = "👑 高端尊顯醫療計劃";
+    if (!db.config["睿選計劃名稱"]) db.config["睿選計劃名稱"] = "🛡️ 高端睿選醫療計劃";
+    if (!db.config["靈活計劃名稱"]) db.config["靈活計劃名稱"] = "⚠️ 傳統靈活醫療計劃";
+    if (!db.config["公司醫保溫馨提示"]) db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
+    
     const cfg = db.config;
     let html = '<h3 style="color:var(--primary); margin:0 0 12px 0;">⚙️ 系統參數設定 (對應 Google Sheet 系統設定)</h3><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
     for (const [k, v] of Object.entries(cfg)) {
@@ -1654,7 +1693,30 @@
     container.innerHTML = html;
   }
 
+  // 1. 專屬方案細項與亮點後台整合渲染
   function renderAdminP06Mirror() {
+    // 渲染亮點管理
+    const hlBox = document.getElementById('adminHighlightsList');
+    if (hlBox) {
+      if (!Array.isArray(db.highlights)) db.highlights = DEFAULT_FALLBACK_DB.highlights;
+      let hlHtml = '';
+      db.highlights.forEach((h, idx) => {
+        hlHtml += `
+          <div style="display:flex; gap:8px; align-items:center; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1;">
+            <select data-adm-hl-role="${idx}" style="width:100px; margin-top:0; padding:4px;">
+              <option value="adult" ${h.role==='adult'?'selected':''}>👨‍👩‍👧 成人</option>
+              <option value="child" ${h.role==='child'?'selected':''}>👶 兒童</option>
+            </select>
+            <input type="number" data-adm-hl-order="${idx}" value="${h.order || idx+1}" style="width:50px; margin-top:0; padding:4px; text-align:center;">
+            <input type="text" data-adm-hl-text="${idx}" value="${h.text}" style="flex:1; margin-top:0; padding:4px;" placeholder="亮點文案內容">
+            <button type="button" onclick="deleteAdminHighlightItem(${idx})" style="background:#fee2e2; color:#dc2626; border:none; border-radius:4px; padding:4px 8px; font-size:11px; cursor:pointer;">✕</button>
+          </div>
+        `;
+      });
+      hlBox.innerHTML = hlHtml;
+    }
+
+    // 渲染細項表格
     const box = document.getElementById('adminPlanItemsEditor');
     if (!box) return;
     const items = (db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
@@ -1720,6 +1782,18 @@
     box.innerHTML = html;
   }
 
+  function addAdminHighlightItem() {
+    if (!Array.isArray(db.highlights)) db.highlights = [];
+    const count = db.highlights.length + 1;
+    db.highlights.push({ role: appState.role, order: count, text: "新亮點文案內容" });
+    renderAdminP06Mirror();
+  }
+
+  function deleteAdminHighlightItem(idx) {
+    db.highlights.splice(idx, 1);
+    renderAdminP06Mirror();
+  }
+
   function addAdminPlanItem() {
     if (!db.planItems) db.planItems = [];
     const count = db.planItems.length + 1;
@@ -1743,7 +1817,6 @@
     renderAdminP06Mirror();
   }
 
-  // 2. 實況案例與文件管理 (選項支援尊顯/睿選/靈活文件分類)
   function renderAdminCasesList() {
     const box = document.getElementById('adminCasesList');
     if (!box) return;
@@ -1821,12 +1894,27 @@
     renderAdminCasesList();
   }
 
+  // 3. 儲存時顯示「⏳ 上傳中...」
   async function saveAllAdminData() {
+    const saveBtn = document.getElementById('btnAdminSaveSync');
+    const originalText = saveBtn.innerText;
+    saveBtn.innerText = "⏳ 上傳中...";
+    saveBtn.disabled = true;
+
     saveCurrentAdminInputs();
     
     // 系統參數
     document.querySelectorAll('[data-adm-config-key]').forEach(inp => {
       db.config[inp.dataset.admConfigKey] = inp.value;
+    });
+
+    // 產品亮點
+    document.querySelectorAll('[data-adm-hl-text]').forEach((inp, idx) => {
+      if (db.highlights[idx]) {
+        db.highlights[idx].text = inp.value;
+        db.highlights[idx].role = document.querySelector(`[data-adm-hl-role="${idx}"]`)?.value || 'adult';
+        db.highlights[idx].order = Number(document.querySelector(`[data-adm-hl-order="${idx}"]`)?.value) || idx+1;
+      }
     });
     
     // 專屬方案細項
@@ -1865,6 +1953,9 @@
       applyRoleContent();
     } catch(e) {
       alert("⚠️ 同步失敗，請檢查網路。");
+    } finally {
+      saveBtn.innerText = originalText;
+      saveBtn.disabled = false;
     }
   }
 
@@ -1875,7 +1966,7 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.3.0') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.3.2') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
