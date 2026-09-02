@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.2.5 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.3.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -45,13 +45,26 @@
     .status-ok { background: #d4edda !important; color: #155724 !important; }
     .status-cache { background: #e0e7ff !important; color: #3730a3 !important; }
     
-    .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+    .capsule-unit { display: inline-flex; align-items: center; gap: 2px; }
     .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed var(--pink-border); background: #f8f9fa; color: #555; transition: 0.2s; }
     .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
     .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
     .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
     .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
     
+    /* 極細 ! 按鈕樣式 */
+    .btn-mini-info {
+      width: 17px; height: 17px; border-radius: 50%; font-size: 11px; font-weight: 900;
+      display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+      border: 1px solid var(--border); background: #fff; color: #64748b; padding: 0;
+      transition: 0.2s; flex-shrink: 0; line-height: 1;
+    }
+    .btn-mini-info:hover { transform: scale(1.15); border-color: var(--primary); color: var(--primary); }
+    .btn-mini-info.elite { color: var(--elite-color); border-color: #fdebd0; background: #fffaf0; }
+    .btn-mini-info.wise { color: var(--wise-color); border-color: #cce5ff; background: #f0f7ff; }
+    .btn-mini-info.flexi { color: var(--flexi-color); border-color: #ffdce0; background: #fff5f5; }
+
     .stage-card {
       background: #fff; border-radius: var(--radius); padding: 26px 20px;
       box-shadow: 0 6px 25px rgba(0,0,0,0.06); display: none; margin-bottom: 20px;
@@ -162,11 +175,11 @@
     
     .oop-row-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
     @media (max-width: 600px) { .oop-row-grid { grid-template-columns: 1fr; } }
-    .oop-mini-card { padding: 12px 8px; border-radius: 8px; text-align: center; }
+    .oop-mini-card { padding: 12px 8px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; }
     .oop-mini-card.elite { background: #fffaf0; border: 1px solid #fdebd0; color: var(--elite-color); }
     .oop-mini-card.wise { background: #f0f7ff; border: 1px solid #cce5ff; color: var(--wise-color); }
     .oop-mini-card.flexi { background: #fff5f5; border: 1px solid #ffdce0; color: var(--flexi-color); }
-    .oop-mini-val { font-size: 19px; font-weight: 900; margin-top: 4px; }
+    .oop-mini-val { font-size: 19px; font-weight: 900; margin-top: auto; padding-top: 6px; }
     
     .files-gallery-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
     .gallery-thumb {
@@ -202,6 +215,17 @@
     .warm-tip-desc { font-size: 12.5px; color: #475569; line-height: 1.5; }
     .warm-tip-action { font-size: 13.5px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
     
+    /* 彈窗抽屜與預覽器 CSS (對應膠囊旁 ! 查看) */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px; }
+    .modal-box { background: #fff; border-radius: 16px; width: 95vw; max-width: 850px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; position: relative; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .modal-close-btn { position: absolute; top: 12px; right: 14px; background: #f1f5f9; border: none; font-size: 20px; font-weight: bold; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; }
+    .grid-5x5-slider { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px 4px; overflow-y: auto; max-height: 60vh; }
+    @media (max-width: 600px) { .grid-5x5-slider { grid-template-columns: repeat(2, 1fr); } }
+    .media-card-item { border: 1.5px solid var(--border); border-radius: 10px; background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 8px; cursor: pointer; transition: 0.15s; text-align: center; }
+    .media-card-item:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .media-card-item img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; }
+    .media-card-title { margin-top: 6px; font-size: 12px; font-weight: 700; color: #1e293b; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
     /* 全螢幕雲端後台管理樣式 */
     #adminFullScreenModal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -238,7 +262,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.2.5</span>
+      <span class="v-badge" id="appVersion">v7.3.0</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -248,14 +272,23 @@
   <!-- 前台動態題目卡片掛載容器 -->
   <div id="dynamic-pages-container"></div>
 
-  <!-- 06 專屬方案 -->
+  <!-- 06 專屬方案 (圖1 頂位膠囊旁新增極細 ! 按鈕，並移除自付選單) -->
   <div class="stage-card" id="stage-prod-intro">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">專屬方案</span>
       <div class="plan-visibility-bar" style="margin:0;">
-        <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVis('elite')">👑 尊顯</button>
-        <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVis('wise')">🛡️ 睿選</button>
-        <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVis('flexi')">⚠️ 靈活</button>
+        <div class="capsule-unit">
+          <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVis('elite')">👑 尊顯</button>
+          <button type="button" class="btn-mini-info elite" onclick="openPlanInfoDrawer('尊顯計劃文件')" title="查看尊顯文件/圖片">!</button>
+        </div>
+        <div class="capsule-unit">
+          <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVis('wise')">🛡️ 睿選</button>
+          <button type="button" class="btn-mini-info wise" onclick="openPlanInfoDrawer('睿選計劃文件')" title="查看睿選文件/圖片">!</button>
+        </div>
+        <div class="capsule-unit">
+          <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVis('flexi')">⚠️ 靈活</button>
+          <button type="button" class="btn-mini-info flexi" onclick="openPlanInfoDrawer('靈活計劃文件')" title="查看靈活文件/圖片">!</button>
+        </div>
       </div>
     </div>
     <div class="success-box">
@@ -268,31 +301,19 @@
       <div class="limit-badge flexi plan-col-flexi" id="banner-flexi">⚠️ 靈活：受細項設有索償上限 ❌</div>
     </div>
     
+    <!-- 方案特色區塊 (自付額選項已移至情境案例) -->
     <div class="settings-panel">
       <div class="plan-setting elite-setting plan-col-elite">
         <h3>👑 高端尊顯計劃</h3>
-        <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
-        <select id="elite-deductible" onchange="syncDeductibles('elite', this.value)">
-          <option value="0">HK$ 0</option>
-          <option value="16000" selected>HK$ 16,000</option>
-          <option value="25000">HK$ 25,000</option>
-        </select>
-        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #f5b041; text-align: center;">
-          <strong style="color: #b9770e; font-size:12px;">✨ 尊貴特權</strong>
-          <p style="font-size: 11px; margin: 3px 0 0 0; color: #555;">無需指定醫院<br>自帶半私家房級別服務</p>
+        <div style="background: #fff; padding: 10px 8px; border-radius: 8px; border: 1px dashed #f5b041; text-align: center; margin-top: 4px;">
+          <strong style="color: #b9770e; font-size:12.5px;">✨ 尊貴特權</strong>
+          <p style="font-size: 11.5px; margin: 4px 0 0 0; color: #555;">無需指定醫院<br>自帶半私家房級別服務</p>
         </div>
       </div>
       
       <div class="plan-setting wise-setting plan-col-wise">
         <h3>🛡️ 高端睿選計劃</h3>
-        <label style="font-size:12px; font-weight:bold;">自付額選項：</label>
-        <select id="wise-deductible" onchange="syncDeductibles('wise', this.value)">
-          <option value="0">HK$ 0</option>
-          <option value="8800">HK$ 8,800</option>
-          <option value="18000" selected>HK$ 18,000</option>
-          <option value="30000">HK$ 30,000</option>
-        </select>
-        <div style="margin-top: 8px; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #cce5ff;">
+        <div style="background: #fff; padding: 8px; border-radius: 8px; border: 1px solid #cce5ff; margin-top: 4px;">
           <div id="wise-status-badge" style="background:#28a745; color:#fff; font-size:11px; font-weight:bold; padding:3px 6px; border-radius:4px; text-align:center;">✓ 符合條件（享半私家）</div>
           <div style="font-size:11px; color:#444; margin-top:6px; display:flex; flex-direction:column; gap:4px;">
             <label style="display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="wCond1" checked onchange="checkWiseCond()" style="width:auto; margin:0;"> 🏥 4間指定醫院 (浸會/聖保祿/法國/仁安)</label>
@@ -315,7 +336,7 @@
     </div>
   </div>
 
-  <!-- 07 情境案例 -->
+  <!-- 07 情境案例 (圖2 自付額選項移至此處客人自付旁) -->
   <div class="stage-card" id="stage-scenarios">
     <span class="stage-tag">情境案例 ｜ 實況推演</span>
     <h2 class="stage-title">常見醫療開支壓力測試</h2>
@@ -343,17 +364,37 @@
         <label style="font-size:12px; font-weight:bold; color:#666;">✏️ 手術/治療基本開支 (可手動輸入壓力測試)：</label>
         <input type="text" id="case-total-input" value="HK$ 174,397" oninput="handleManualCostInput(this.value)" style="font-size:17px; font-weight:800; color:#1a3a6e;">
       </div>
+      
+      <!-- 自付額選擇已直接嵌入三欄卡片中 -->
       <div class="oop-row-grid">
         <div class="oop-mini-card elite plan-col-elite">
-          <div style="font-size:11px; font-weight:bold;">👑 尊顯 客人自付</div>
+          <div style="font-size:11.5px; font-weight:bold;">👑 尊顯 客人自付</div>
+          <div style="margin: 4px 0;">
+            <select id="elite-deductible" onchange="syncDeductibles('elite', this.value)" style="font-size:12px; padding:4px 6px; font-weight:bold; margin-top:0;">
+              <option value="0">自付額: HK$ 0</option>
+              <option value="16000" selected>自付額: HK$ 16,000</option>
+              <option value="25000">自付額: HK$ 25,000</option>
+            </select>
+          </div>
           <div class="oop-mini-val" id="case-oop-elite">HK$ 16,000</div>
         </div>
+        
         <div class="oop-mini-card wise plan-col-wise">
-          <div style="font-size:11px; font-weight:bold;">🛡️ 睿選 客人自付</div>
+          <div style="font-size:11.5px; font-weight:bold;">🛡️ 睿選 客人自付</div>
+          <div style="margin: 4px 0;">
+            <select id="wise-deductible" onchange="syncDeductibles('wise', this.value)" style="font-size:12px; padding:4px 6px; font-weight:bold; margin-top:0;">
+              <option value="0">自付額: HK$ 0</option>
+              <option value="8800">自付額: HK$ 8,800</option>
+              <option value="18000" selected>自付額: HK$ 18,000</option>
+              <option value="30000">自付額: HK$ 30,000</option>
+            </select>
+          </div>
           <div class="oop-mini-val" id="case-oop-wise">HK$ 18,000</div>
         </div>
+        
         <div class="oop-mini-card flexi plan-col-flexi">
-          <div style="font-size:11px; font-weight:bold;">⚠️ 靈活 客人自付</div>
+          <div style="font-size:11.5px; font-weight:bold;">⚠️ 靈活 客人自付</div>
+          <div style="font-size:11px; color:#666; margin: 6px 0 2px 0;">(SMM 15% 共同保險)</div>
           <div class="oop-mini-val" id="case-oop-flexi" style="color:var(--danger);">HK$ 26,160</div>
         </div>
       </div>
@@ -409,7 +450,7 @@
       </div>
     </div>
 
-    <!-- AIA Vitality 預設隱藏折疊 -->
+    <!-- AIA Vitality 折疊 -->
     <div id="vitality-wrap-box" style="margin:12px 0; font-size:13px; background:#eff6ff; padding:12px; border-radius:8px; border:1px solid #bfdbfe;">
       <div class="vitality-toggle-header" onclick="toggleVitalityDetails()">
         <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:bold; color:#1e40af;" onclick="event.stopPropagation();">
@@ -541,6 +582,15 @@
   </div>
 </div>
 
+<!-- 計劃說明/圖片抽屜彈窗 (點擊膠囊旁 ! 展開) -->
+<div class="modal-overlay" id="planInfoDrawerOverlay">
+  <div class="modal-box">
+    <button type="button" class="modal-close-btn" onclick="closePlanInfoDrawer()">×</button>
+    <h3 id="planInfoDrawerTitle" style="margin:0 0 10px 0; color:var(--primary); font-size:16px;">保障文件/說明</h3>
+    <div class="grid-5x5-slider" id="planInfoGrid"></div>
+  </div>
+</div>
+
 <!-- 全螢幕雲端後台管理系統 -->
 <div id="adminFullScreenModal">
   <div class="admin-header-nav">
@@ -555,7 +605,7 @@
     <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('pages', this)">📄 頁面流程與題目管理</button>
     <button type="button" class="admin-tab-btn" onclick="switchAdminTab('config', this)">⚙️ 系統參數設定</button>
     <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p06', this)">📋 專屬方案細項</button>
-    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p07', this)">📑 實況案例管理</button>
+    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p07', this)">📑 實況案例與文件管理</button>
   </div>
 
   <div class="admin-scroll-body">
@@ -590,12 +640,12 @@
       </div>
     </div>
 
-    <!-- 實況案例管理 -->
+    <!-- 實況案例與文件管理 (支援方案文件分類) -->
     <div id="adminTabP07Section" style="display:none;">
       <div class="admin-card-section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <h3 style="color:var(--primary); margin:0; font-size:15px;">📑 實況案例管理 (Firebase Storage)</h3>
-          <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增案例</button>
+          <h3 style="color:var(--primary); margin:0; font-size:15px;">📑 實況案例與文件管理 (Firebase Storage)</h3>
+          <button type="button" onclick="addAdminCase()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增案例/文件</button>
         </div>
         <div id="adminCasesList"></div>
       </div>
@@ -685,7 +735,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.2.5",
+      "資料版本": "7.3.0",
       "預設模式": "adult",
       "公司醫保溫馨提示": "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？",
       "成人尊顯額度": "每年 $1,200 萬 ｜ 終身 $6,000 萬 🛡️",
@@ -699,7 +749,10 @@
     claimCases: [
       { category: "日間手術", caseName: "(網絡) 腸胃鏡檢查", totalCost: 17714, files: [] },
       { category: "住院治療", caseName: "子宮肌瘤引起滯留", totalCost: 174397, files: [] },
-      { category: "癌症治療", caseName: "急性視網膜脫落 / 標靶治療", totalCost: 275073, files: [] }
+      { category: "癌症治療", caseName: "急性視網膜脫落 / 標靶治療", totalCost: 275073, files: [] },
+      { category: "尊顯計劃文件", caseName: "尊顯計劃條款及特色", totalCost: 0, files: [] },
+      { category: "睿選計劃文件", caseName: "睿選網絡醫院及預先批核", totalCost: 0, files: [] },
+      { category: "靈活計劃文件", caseName: "靈活計劃賠償細則", totalCost: 0, files: [] }
     ]
   };
   var db = DEFAULT_FALLBACK_DB;
@@ -713,10 +766,10 @@
     if (!remote) return;
     db = remote;
     if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
-    // 強制補齊重要預設值
     if (!db.config["公司醫保溫馨提示"]) {
       db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
     }
+    if (!Array.isArray(db.claimCases)) db.claimCases = DEFAULT_FALLBACK_DB.claimCases;
   }
 
   function loadLocalCache() {
@@ -766,7 +819,7 @@
     applyRoleContent();
   }
 
-  // 1. 動態頁面渲染：修復置中圖片與粗體字顯示
+  // 動態頁面渲染 (支援置中大圖與粗體字)
   function renderDynamicPages() {
     var r = appState.role;
     var container = document.getElementById('dynamic-pages-container');
@@ -875,7 +928,7 @@
             </div>
           </div>
 
-          <!-- 有公司醫保時的黃底紅字溫馨提示 -->
+          <!-- 溫馨提示 -->
           <div id="m5-company-warm-tip" class="yellow-alert-red-text" style="display: ${appState.hasCompany ? 'block' : 'none'};">
             ${warnTipText}
           </div>
@@ -1198,6 +1251,7 @@
     updateValPremiums();
   }
 
+  // 1. 自付額同步 (情境案例頁與保費頁雙向聯動)
   function syncDeductibles(type, val) {
     if (type === 'elite') {
       var d1 = document.getElementById('elite-deductible');
@@ -1372,6 +1426,49 @@
     }
   }
 
+  // 2. 膠囊旁 ! 按鈕彈窗 (對應尊顯/睿選/靈活文件展示)
+  function openPlanInfoDrawer(categoryName) {
+    var overlay = document.getElementById('planInfoDrawerOverlay');
+    var titleEl = document.getElementById('planInfoDrawerTitle');
+    var gridEl = document.getElementById('planInfoGrid');
+    if (!overlay) return;
+    
+    titleEl.innerText = '📑 ' + categoryName;
+    overlay.style.display = 'flex';
+    
+    var cList = (db && db.claimCases) || [];
+    var matchedCases = cList.filter(c => c.category === categoryName);
+    var allFiles = [];
+    matchedCases.forEach(c => {
+      if (Array.isArray(c.files)) {
+        c.files.forEach(fUrl => {
+          allFiles.push({ title: c.caseName || categoryName, url: fUrl });
+        });
+      }
+    });
+
+    if (allFiles.length === 0) {
+      gridEl.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:#94a3b8; font-size:13px;">暫無上載之文件（可於後台「📑 實況案例與文件管理」上載）</div>';
+      return;
+    }
+
+    var html = '';
+    allFiles.forEach((item, idx) => {
+      var isPdf = item.url.toLowerCase().includes('.pdf');
+      if (isPdf) {
+        html += `<div class="media-card-item" onclick="window.open('${item.url}')"><div style="font-size:30px;">📄</div><div class="media-card-title">${item.title} (PDF)</div></div>`;
+      } else {
+        html += `<div class="media-card-item" onclick="window.open('${item.url}')"><img src="${item.url}" alt="${item.title}"><div class="media-card-title">${item.title}</div></div>`;
+      }
+    });
+    gridEl.innerHTML = html;
+  }
+
+  function closePlanInfoDrawer() {
+    var overlay = document.getElementById('planInfoDrawerOverlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+
   // ==================== 後台管理系統 ====================
   function openAdminModal() {
     document.getElementById('adminFullScreenModal').style.display = 'flex';
@@ -1541,7 +1638,6 @@
     renderAdminVisualLayout();
   }
 
-  // 2. 系統設定後台渲染：強制保證帶出「公司醫保溫馨提示」
   function renderAdminConfigLayout() {
     const container = document.getElementById('adminConfigContainer');
     if (!container) return;
@@ -1647,6 +1743,7 @@
     renderAdminP06Mirror();
   }
 
+  // 2. 實況案例與文件管理 (選項支援尊顯/睿選/靈活文件分類)
   function renderAdminCasesList() {
     const box = document.getElementById('adminCasesList');
     if (!box) return;
@@ -1655,16 +1752,19 @@
       box.innerHTML += `
         <div class="stage-card" style="display:block; margin-bottom:12px; box-shadow:none; border:1px solid #cbd5e1;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <select data-adm-case-cat="${idx}" style="width:130px;">
+            <select data-adm-case-cat="${idx}" style="width:160px;">
               <option value="日間手術" ${c.category==='日間手術'?'selected':''}>日間手術</option>
               <option value="住院治療" ${c.category==='住院治療'?'selected':''}>住院治療</option>
               <option value="癌症治療" ${c.category==='癌症治療'?'selected':''}>癌症治療</option>
+              <option value="尊顯計劃文件" ${c.category==='尊顯計劃文件'?'selected':''}>👑 尊顯條款/文件</option>
+              <option value="睿選計劃文件" ${c.category==='睿選計劃文件'?'selected':''}>🛡️ 睿選條款/文件</option>
+              <option value="靈活計劃文件" ${c.category==='靈活計劃文件'?'selected':''}>⚠️ 靈活條款/文件</option>
             </select>
-            <input type="text" data-adm-case-name="${idx}" value="${c.caseName}" placeholder="案例名稱" style="flex:1; margin:0 8px;">
+            <input type="text" data-adm-case-name="${idx}" value="${c.caseName}" placeholder="名稱 / 標題" style="flex:1; margin:0 8px;">
             <button type="button" onclick="deleteAdminCase(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:6px 10px; cursor:pointer;">刪除</button>
           </div>
           <div style="display:grid; grid-template-columns:1fr 2fr; gap:6px; margin-top:8px;">
-            <input type="number" data-adm-case-cost="${idx}" value="${c.totalCost}" placeholder="總費用">
+            <input type="number" data-adm-case-cost="${idx}" value="${c.totalCost || 0}" placeholder="總費用 (若是文件填0即可)">
             <div style="display:flex; gap:6px; align-items:center;">
               <input type="text" id="admCaseFiles_${idx}" data-adm-case-files="${idx}" value="${(c.files||[]).join(';')}" placeholder="Firebase 網址清單" style="flex:1;">
               <label id="uploadLabel_${idx}" style="background:#1a3a6e; color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap;">
@@ -1683,7 +1783,7 @@
     const textInput = document.getElementById(`admCaseFiles_${idx}`);
     let currentFiles = textInput.value ? textInput.value.split(';').map(s=>s.trim()).filter(Boolean) : [];
     if (currentFiles.length + files.length > 10) {
-      alert("⚠️ 每個案例最多只可上載 10 個檔案！");
+      alert("⚠️ 每個項目最多只可上載 10 個檔案！");
       files = files.slice(0, 10 - currentFiles.length);
     }
     const uploadBtn = document.getElementById(`uploadLabel_${idx}`);
@@ -1712,7 +1812,7 @@
 
   function addAdminCase() {
     if (!db.claimCases) db.claimCases = [];
-    db.claimCases.push({ category: "日間手術", caseName: "新實況案例", totalCost: 20000, files: [] });
+    db.claimCases.push({ category: "尊顯計劃文件", caseName: "新文件項目", totalCost: 0, files: [] });
     renderAdminCasesList();
   }
 
@@ -1724,12 +1824,12 @@
   async function saveAllAdminData() {
     saveCurrentAdminInputs();
     
-    // 1. 系統參數
+    // 系統參數
     document.querySelectorAll('[data-adm-config-key]').forEach(inp => {
       db.config[inp.dataset.admConfigKey] = inp.value;
     });
     
-    // 3. 專屬方案細項
+    // 專屬方案細項
     document.querySelectorAll('[data-adm-pi-name]').forEach((inp, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = inp.value;
@@ -1775,7 +1875,7 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.2.5') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.3.0') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
