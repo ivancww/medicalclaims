@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.3.6 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.3.7 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -259,7 +259,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.3.6</span>
+      <span class="v-badge" id="appVersion">v7.3.7</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -399,7 +399,7 @@
     </div>
   </div>
 
-  <!-- 08 保費與價值 -->
+  <!-- 08 保費與價值 (圖1：不疊加會費，還原扣稅試算) -->
   <div class="stage-card" id="stage-premium-val">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保費與價值 ｜ 精算預算</span>
@@ -410,7 +410,7 @@
     </div>
     
     <h2 class="stage-title">為呢個保障，實際需要付出幾多？</h2>
-    <p class="stage-desc">結合官方精算費率，並扣除折扣。請點選勾選你想確認的方案：</p>
+    <p class="stage-desc">結合官方精算費率，並扣除折扣與稅務優惠。請點選勾選你想確認的方案：</p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
       <div>
         <label style="font-size:12px; font-weight:bold;">受保人年齡</label>
@@ -461,7 +461,15 @@
       </div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+    <!-- 還原 VHIS 扣稅勾選項 -->
+    <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px; font-size:13px; font-weight:600;">
+      <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+        <input type="checkbox" id="chkTax" onchange="updateValPremiums()" style="width:auto; margin:0;">
+        享受 VHIS 稅務扣減 (按 17% 稅率計算)
+      </label>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
       <div class="plan-select-card plan-col-elite" id="cardSelectElite" onclick="selectFinalPlan('elite')">
         <input type="radio" name="finalPlan" value="elite">
         <div style="font-size:13px; font-weight:bold; color:var(--elite-color);" id="select-label-elite">👑 尊顯計劃</div>
@@ -489,7 +497,7 @@
     </div>
   </div>
 
-  <!-- 09 保障總結 (嚴格按照最新決策脈絡結構回應) -->
+  <!-- 09 保障總結 (圖2：建議方案轉為替代方案) -->
   <div class="stage-card" id="stage-confirm">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="stage-tag">保障總結 ｜ 方案總結</span>
@@ -504,7 +512,7 @@
       <div>💡 <strong>缺口處理方式：</strong> <span style="font-weight:700; color:#059669;">替代方案處理差額</span></div>
       
       <div style="border-top:1px dashed #cbd5e1; margin:6px 0; padding-top:6px;">
-        🛡️ <strong>建議建立方案：</strong> <strong style="color:#0056b3;" id="sumPlanName">🛡️ 高端睿選醫療計劃 (半私家房)</strong>
+        🛡️ <strong>替代方案：</strong> <strong style="color:#0056b3;" id="sumPlanName">🛡️ 高端睿選醫療計劃 (半私家房 ｜ 自付額：HK$ 18,000)</strong>
       </div>
       <div>💰 <strong>主要保障額度：</strong> <span id="sumCoverage">每年 HK$1,200 萬全數賠償 (終身 $6,000 萬，指定網絡)</span></div>
       <div id="rowVitalityStatus" style="display:none;">
@@ -737,7 +745,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.3.6",
+      "資料版本": "7.3.7",
       "預設模式": "adult",
       "尊顯計劃名稱": "👑 高端尊顯醫療計劃",
       "睿選計劃名稱": "🛡️ 高端睿選醫療計劃",
@@ -871,7 +879,6 @@
             </div>
           </div>
 
-          <!-- 第一層：公司醫保 -->
           <div class="defense-card">
             <h3>🏢 第一道防線：公司醫保</h3>
             <div class="form-group">
@@ -899,7 +906,6 @@
             </div>
           </div>
 
-          <!-- 第二層：個人醫保 -->
           <div class="defense-card">
             <h3>🛡️ 第二道防線：個人醫療保險</h3>
             <div class="form-group">
@@ -927,7 +933,6 @@
             </div>
           </div>
 
-          <!-- 自身承擔缺口總結 -->
           <div class="stat-grid-box" style="margin-top: 12px; border: 2px solid var(--danger); background: #fff;">
             <div class="stat-row total" style="margin-top: 0; padding-top: 0; border-top: none;">
               <span style="color: var(--danger); font-size: 16px;">自身需承擔自付缺口：</span>
@@ -935,7 +940,6 @@
             </div>
           </div>
 
-          <!-- 溫馨提示 -->
           <div id="m5-company-warm-tip" class="yellow-alert-red-text" style="display: ${appState.hasCompany ? 'block' : 'none'};">
             ${warnTipText}
           </div>
@@ -1317,12 +1321,14 @@
     if (arrow) arrow.innerText = isShown ? '▼ 點擊展開說明' : '▲ 點擊收起說明';
   }
 
+  // 1. 圖1：不疊加會費，還原扣稅試算
   function updateValPremiums() {
     var age = Number(document.getElementById('valAge').value) || 35;
     var gender = document.getElementById('valGender').value;
     var eliteDed = document.getElementById('valEliteDed').value;
     var wiseDed = document.getElementById('valWiseDed').value;
     var isVitality = document.getElementById('chkDiscount').checked;
+    var isTax = document.getElementById('chkTax').checked;
     var isMonthly = appState.premMode === 'monthly';
     
     function calcP(raw) {
@@ -1330,19 +1336,26 @@
       var base = Number(raw);
       var p = base;
       var vitSaving = 0;
+      var taxSaving = 0;
+      
+      // 1. Vitality 9 折折扣
       if (isVitality) {
         vitSaving = Math.round(base * 0.1);
         p = p * 0.9;
       }
       
-      var totalAnnual = Math.round(p + (isVitality ? 430 : 0));
+      // 2. 還原扣稅計算 (按 17% 稅率，上限 $8,000)
+      if (isTax) {
+        taxSaving = Math.round(Math.min(8000, p) * 0.17);
+        p = p - taxSaving;
+      }
+
+      var totalAnnual = Math.round(p);
       var displayVal = isMonthly ? Math.round((totalAnnual * 1.06) / 12) : totalAnnual;
       
       var detailParts = [];
-      if (isVitality) {
-        detailParts.push(`保費9折省$${vitSaving.toLocaleString()}`);
-        detailParts.push(`加Vitality年費$430`);
-      }
+      if (isVitality) detailParts.push(`保費9折省$${vitSaving.toLocaleString()}`);
+      if (isTax) detailParts.push(`VHIS省稅$${taxSaving.toLocaleString()}`);
       
       return {
         str: 'HK$ ' + displayVal.toLocaleString() + (isMonthly ? ' /月' : ' /年'),
@@ -1377,7 +1390,7 @@
     updateSummaryTable();
   }
 
-  // 總結表完整回應：嚴格執行指定邏輯
+  // 2. 圖2：總結表（建議方案 ➔ 替代方案）
   function updateSummaryTable() {
     var plan = appState.selectedFinalPlan;
     var cfg = db.config || DEFAULT_FALLBACK_DB.config;
@@ -1386,14 +1399,15 @@
     var nameFlexi = cfg["靈活計劃名稱"] || "⚠️ 傳統靈活醫療計劃";
 
     var isVitality = document.getElementById('chkDiscount')?.checked || false;
+    var isTax = document.getElementById('chkTax')?.checked || false;
     var eliteDed = document.getElementById('valEliteDed')?.value || '16000';
     var wiseDed = document.getElementById('valWiseDed')?.value || '18000';
 
-    // 1. 第一點：固定客戶價值初心 (已移走「不被費用限制」)
+    // 1. 第一點：固定客戶價值初心
     var goalEl = document.getElementById('sumGoal');
     if (goalEl) goalEl.innerText = "有需要時，享有醫療服務的選擇權及自主權";
 
-    // 2. 第一道防線：詳細列出公司/個人或顯示沒有
+    // 2. 第一道防線
     var firstLineEl = document.getElementById('sumFirstLine');
     if (firstLineEl) {
       var parts = [];
@@ -1406,7 +1420,7 @@
       firstLineEl.innerHTML = parts.length > 0 ? parts.join('<br>') : "沒有";
     }
 
-    // 3. 建議方案與保障
+    // 3. 替代方案 (已將「建議建立方案」轉為「替代方案」)
     var planNameEl = document.getElementById('sumPlanName');
     var coverEl = document.getElementById('sumCoverage');
     if (plan === 'elite') {
@@ -1423,22 +1437,21 @@
       appState.selectedFinalPrice = document.getElementById('valPriceFlexi')?.innerText || 'HK$ --';
     }
 
-    // 4. 健康程式加持狀態 (未勾選則整行隱藏)
+    // 4. 健康程式加持狀態
     var rowVit = document.getElementById('rowVitalityStatus');
     if (rowVit) {
       rowVit.style.display = isVitality ? 'block' : 'none';
     }
 
-    // 5. 預算投入與明細
+    // 5. 預算投入與明細 (不疊加會費)
     var sumPriceEl = document.getElementById('sumPrice');
     var sumBreakEl = document.getElementById('sumPremBreakdown');
     if (sumPriceEl) sumPriceEl.innerText = appState.selectedFinalPrice;
     if (sumBreakEl) {
-      if (isVitality) {
-        sumBreakEl.innerText = `(已計入 9 折折扣 ＋ Vitality 每年會費 HK$ 430，未扣減額外稅務扣減)`;
-      } else {
-        sumBreakEl.innerText = `(標準全額保費支出，未扣減額外稅務扣減)`;
-      }
+      var notes = [];
+      if (isVitality) notes.push("已計入 9 折折扣");
+      if (isTax) notes.push("已計入 VHIS 稅務扣減");
+      sumBreakEl.innerText = notes.length > 0 ? `(${notes.join(' ＋ ')})` : "(標準全額保費支出)";
     }
   }
 
@@ -1938,12 +1951,10 @@
 
     saveCurrentAdminInputs();
     
-    // 系統參數
     document.querySelectorAll('[data-adm-config-key]').forEach(inp => {
       db.config[inp.dataset.admConfigKey] = inp.value;
     });
 
-    // 產品亮點
     document.querySelectorAll('[data-adm-hl-text]').forEach((inp, idx) => {
       if (db.highlights[idx]) {
         db.highlights[idx].text = inp.value;
@@ -1952,7 +1963,6 @@
       }
     });
     
-    // 專屬方案細項
     document.querySelectorAll('[data-adm-pi-name]').forEach((inp, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = inp.value;
@@ -2001,7 +2011,7 @@
     
     if (hasCache) {
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.3.6') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.3.7') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
