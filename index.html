@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.3.8 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.4.0 | AVA專屬</title>
   
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -48,10 +48,7 @@
     .plan-visibility-bar { display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
     .capsule-unit { display: inline-flex; align-items: center; gap: 2px; }
     .vis-btn { padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 15px; cursor: pointer; border: 1.5px dashed var(--pink-border); background: #f8f9fa; color: #555; transition: 0.2s; }
-    .vis-btn.active-elite { background: #fffaf0; border-color: #fdebd0; color: #b9770e; }
-    .vis-btn.active-wise { background: #f0f7ff; border-color: #cce5ff; color: #0056b3; }
-    .vis-btn.active-flexi { background: #fff5f5; border-color: #ffdce0; color: #c62828; }
-    .vis-btn.off { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; text-decoration: line-through; }
+    .vis-btn.off { background: #e9ecef !important; color: #adb5bd !important; border-color: #dee2e6 !important; text-decoration: line-through; }
     
     .btn-mini-info {
       width: 17px; height: 17px; border-radius: 50%; font-size: 11px; font-weight: 900;
@@ -60,9 +57,6 @@
       transition: 0.2s; flex-shrink: 0; line-height: 1;
     }
     .btn-mini-info:hover { transform: scale(1.15); border-color: var(--primary); color: var(--primary); }
-    .btn-mini-info.elite { color: var(--elite-color); border-color: #fdebd0; background: #fffaf0; }
-    .btn-mini-info.wise { color: var(--wise-color); border-color: #cce5ff; background: #f0f7ff; }
-    .btn-mini-info.flexi { color: var(--flexi-color); border-color: #ffdce0; background: #fff5f5; }
 
     .stage-card {
       background: #fff; border-radius: var(--radius); padding: 26px 20px;
@@ -96,37 +90,18 @@
     .btn-secondary { background: #f1f5f9; border: 1px solid var(--border); color: #333; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
     .btn-success { background: #059669; color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 16px; font-weight: 800; cursor: pointer; flex: 2; text-align: center; }
     
-    .info-quote-box { background: #fffdf5; border-left: 4px solid #f39c12; border-radius: 8px; padding: 14px; margin: 14px 0; font-size: 14px; line-height: 1.6; color: #78350f; }
     .stat-grid-box { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 16px; margin: 15px 0; }
     .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
     .stat-row.total { border-top: 1.5px dashed var(--border); padding-top: 10px; margin-top: 10px; font-weight: 900; font-size: 16px; }
     
-    .defense-card {
-      background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; margin-top: 10px;
-    }
-    .defense-card h3 {
-      font-size: 13.5px; font-weight: 800; color: var(--primary); margin: 0 0 8px 0;
-    }
-    .input-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-    }
-    .form-group {
-      display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px;
-    }
-    .form-group label {
-      font-size: 11.5px; font-weight: 700; color: #64748b;
-    }
+    .defense-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; margin-top: 10px; }
+    .defense-card h3 { font-size: 13.5px; font-weight: 800; color: var(--primary); margin: 0 0 8px 0; }
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px; }
+    .form-group label { font-size: 11.5px; font-weight: 700; color: #64748b; }
     .yellow-alert-red-text {
-      background: #fffbeb !important;
-      border: 1.5px solid #fde68a !important;
-      border-left: 5px solid #dc2626 !important;
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-top: 14px;
-      color: #dc2626 !important;
-      font-size: 14px;
-      font-weight: 800;
-      line-height: 1.6;
+      background: #fffbeb !important; border: 1.5px solid #fde68a !important; border-left: 5px solid #dc2626 !important;
+      border-radius: 10px; padding: 14px 16px; margin-top: 14px; color: #dc2626 !important; font-size: 14px; font-weight: 800; line-height: 1.6;
     }
     
     .success-box { background: #f4fbf7; border: 1.5px solid #a7f3d0; border-radius: 10px; padding: 15px; margin: 14px 0; color: #065f46; font-size: 14px; line-height: 1.6; }
@@ -259,7 +234,7 @@
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
       <span>AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.3.8</span>
+      <span class="v-badge" id="appVersion">v7.4.0</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -274,15 +249,15 @@
       <span class="stage-tag">專屬方案</span>
       <div class="plan-visibility-bar" style="margin:0;">
         <div class="capsule-unit">
-          <button id="vis-btn-elite" class="vis-btn active-elite" onclick="togglePlanVis('elite')">👑 尊顯</button>
+          <button id="vis-btn-elite" class="vis-btn active-elite" style="color:var(--elite-color); border-color:#fdebd0; background:#fffaf0;" onclick="togglePlanVis('elite')">👑 尊顯</button>
           <button type="button" class="btn-mini-info elite" onclick="openPlanInfoDrawer('尊顯計劃文件')" title="查看尊顯文件/圖片">!</button>
         </div>
         <div class="capsule-unit">
-          <button id="vis-btn-wise" class="vis-btn active-wise" onclick="togglePlanVis('wise')">🛡️ 睿選</button>
+          <button id="vis-btn-wise" class="vis-btn active-wise" style="color:var(--wise-color); border-color:#cce5ff; background:#f0f7ff;" onclick="togglePlanVis('wise')">🛡️ 睿選</button>
           <button type="button" class="btn-mini-info wise" onclick="openPlanInfoDrawer('睿選計劃文件')" title="查看睿選文件/圖片">!</button>
         </div>
         <div class="capsule-unit">
-          <button id="vis-btn-flexi" class="vis-btn active-flexi" onclick="togglePlanVis('flexi')">⚠️ 靈活</button>
+          <button id="vis-btn-flexi" class="vis-btn active-flexi" style="color:var(--flexi-color); border-color:#ffdce0; background:#fff5f5;" onclick="togglePlanVis('flexi')">⚠️ 靈活</button>
           <button type="button" class="btn-mini-info flexi" onclick="openPlanInfoDrawer('靈活計劃文件')" title="查看靈活文件/圖片">!</button>
         </div>
       </div>
@@ -599,17 +574,23 @@
 <!-- 全螢幕雲端後台管理系統 -->
 <div id="adminFullScreenModal">
   <div class="admin-header-nav">
-    <span style="font-weight:800; font-size:15px;">⚙️ Medical App 雲端後台管理控制台</span>
-    <div style="display:flex; gap:8px;">
-      <button type="button" id="btnAdminSaveSync" class="btn-primary" style="padding:6px 14px; font-size:12px; background:#10b981;" onclick="saveAllAdminData()">💾 儲存同步至 Google Sheet</button>
-      <button type="button" style="background:#64748b; color:#fff; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; font-weight:bold;" onclick="closeAdminModal()">關閉</button>
+    <span style="font-weight:800; font-size:15px;" id="adminHeaderTitle">⚙️ Medical App 後台管理控制台</span>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <button type="button" id="btnAdminUnlock" class="btn-primary" style="padding:6px 10px; font-size:11.5px; background:#d97706;" onclick="promptAdminLogin()">🔑 管理員登入</button>
+      <button type="button" class="btn-primary" style="padding:6px 10px; font-size:11.5px; background:#0284c7;" onclick="exportAgentPreset()">📤 匯出</button>
+      <label style="background:#475569; color:#fff; padding:6px 10px; border-radius:6px; font-size:11.5px; font-weight:bold; cursor:pointer; white-space:nowrap;">
+        📥 匯入
+        <input type="file" accept=".json" style="display:none;" onchange="importAgentPreset(this)">
+      </label>
+      <button type="button" id="btnAdminSaveSync" class="btn-primary" style="padding:6px 12px; font-size:12px; background:#10b981;" onclick="saveAllAdminData()">💾 儲存</button>
+      <button type="button" style="background:#64748b; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-weight:bold;" onclick="closeAdminModal()">關閉</button>
     </div>
   </div>
   
-  <div class="admin-tab-bar">
+  <div class="admin-tab-bar" id="adminTabBar">
     <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('pages', this)">📄 頁面流程與題目管理</button>
-    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('config', this)">⚙️ 系統參數設定</button>
     <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p06', this)">📋 專屬方案細項與亮點</button>
+    <button type="button" class="admin-tab-btn" onclick="switchAdminTab('config', this)">⚙️ 系統參數設定</button>
     <button type="button" class="admin-tab-btn" onclick="switchAdminTab('p07', this)">📑 實況案例與文件管理</button>
   </div>
 
@@ -623,7 +604,10 @@
             <option value="child">👶 編輯：兒童模式</option>
           </select>
         </div>
-        <button type="button" onclick="addAdminNewPage()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增頁面</button>
+        <div style="display:flex; gap:6px;">
+          <button type="button" onclick="resetToCaptainDefault()" style="background:#f59e0b; color:#fff; border:none; border-radius:6px; padding:6px 10px; font-size:11.5px; cursor:pointer;">🔄 還原官方預設</button>
+          <button type="button" onclick="addAdminNewPage()" style="background:var(--primary); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer;">+ 新增頁面</button>
+        </div>
       </div>
       <div id="adminVisualContainer"></div>
     </div>
@@ -678,6 +662,9 @@
   }
   const storage = firebase.storage();
   
+  const urlParams = new URLSearchParams(window.location.search);
+  let isAdminMaster = (urlParams.get('admin') === '8888' || urlParams.get('admin') === '888');
+
   var appState = {
     role: 'adult',
     cost: 500000,
@@ -693,6 +680,7 @@
     selectedFinalPlan: 'wise',
     selectedFinalPrice: '--',
     selectedRawAnnualNum: 5528,
+    selectedBaseBeforeDiscount: 5528,
     premMode: 'annual',
     planVis: { elite: true, wise: true, flexi: true }
   };
@@ -744,7 +732,8 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.3.8",
+      "資料版本": "7.4.0",
+      "管理員密碼": "8888",
       "預設模式": "adult",
       "尊顯計劃名稱": "👑 高端尊顯醫療計劃",
       "睿選計劃名稱": "🛡️ 高端睿選醫療計劃",
@@ -767,38 +756,73 @@
       { category: "靈活計劃文件", caseName: "靈活計劃賠償細則", totalCost: 0, files: [] }
     ]
   };
-  var db = DEFAULT_FALLBACK_DB;
+  var db = { ...DEFAULT_FALLBACK_DB };
 
   function parseSafeNum(val) {
     if (!val) return 0;
     return Number(String(val).replace(/[^0-9.]/g, '')) || 0;
   }
 
-  function applyDatabaseMerge(remote) {
-    if (!remote) return;
-    db = remote;
-    if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
-    if (!db.config["尊顯計劃名稱"]) db.config["尊顯計劃名稱"] = "👑 高端尊顯醫療計劃";
-    if (!db.config["睿選計劃名稱"]) db.config["睿選計劃名稱"] = "🛡️ 高端睿選醫療計劃";
-    if (!db.config["靈活計劃名稱"]) db.config["靈活計劃名稱"] = "⚠️ 傳統靈活醫療計劃";
-    if (!db.config["公司醫保溫馨提示"]) db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
-    if (!Array.isArray(db.highlights)) db.highlights = DEFAULT_FALLBACK_DB.highlights;
-    if (!Array.isArray(db.planItems)) db.planItems = DEFAULT_FALLBACK_DB.planItems;
-    if (!Array.isArray(db.claimCases)) db.claimCases = DEFAULT_FALLBACK_DB.claimCases;
+  function promptAdminLogin() {
+    const correctPwd = (db.config && db.config["管理員密碼"]) || "8888";
+    const inputPwd = prompt("🔑 請輸入隊長管理員密碼：");
+    if (inputPwd === correctPwd) {
+      isAdminMaster = true;
+      updateAdminUIState();
+      alert("✅ 管理員驗證成功！已解鎖 Google Sheet 雙向同步權限。");
+    } else if (inputPwd !== null) {
+      alert("❌ 密碼錯誤，維持個人本機自訂模式。");
+    }
   }
 
-  function loadLocalCache() {
+  function updateAdminUIState() {
+    const titleEl = document.getElementById('adminHeaderTitle');
+    const saveBtn = document.getElementById('btnAdminSaveSync');
+    const unlockBtn = document.getElementById('btnAdminUnlock');
+    if (!titleEl || !saveBtn) return;
+    
+    if (isAdminMaster) {
+      titleEl.innerText = "⚙️ Medical App【隊長管理員】中央控制台";
+      saveBtn.innerText = "💾 儲存同步至 Google Sheet";
+      saveBtn.style.background = "#10b981";
+      if (unlockBtn) unlockBtn.style.display = "none";
+    } else {
+      titleEl.innerText = "⚙️ Medical App【個人自訂】控制台 (存入本機)";
+      saveBtn.innerText = "💾 保存至本機";
+      saveBtn.style.background = "#0284c7";
+      if (unlockBtn) unlockBtn.style.display = "inline-block";
+    }
+  }
+
+  // 雙軌資料混合引擎 (Hybrid Merge)
+  function applyHybridDatabaseMerge(remote) {
+    const localCached = loadLocalCacheRaw();
+    const isTailorMade = localCached && localCached.isCustomized;
+
+    // 🔒 1. 系統設定、費率表、Firebase案例強制整合
+    db.config = (remote && remote.config) ? remote.config : DEFAULT_FALLBACK_DB.config;
+    db.premiumTables = (remote && remote.premiumTables) ? remote.premiumTables : {};
+    db.claimCases = (remote && Array.isArray(remote.claimCases) && remote.claimCases.length > 0) ? remote.claimCases : DEFAULT_FALLBACK_DB.claimCases;
+    db.planItems = (remote && Array.isArray(remote.planItems) && remote.planItems.length > 0) ? remote.planItems : DEFAULT_FALLBACK_DB.planItems;
+
+    // 🎨 2. 隊員 Tailor-made 優先 (頁面題目、問題順序、亮點)
+    if (isTailorMade && !isAdminMaster) {
+      db.pages = localCached.pages || DEFAULT_FALLBACK_DB.pages;
+      db.options = localCached.options || DEFAULT_FALLBACK_DB.options;
+      db.highlights = localCached.highlights || DEFAULT_FALLBACK_DB.highlights;
+    } else {
+      db.pages = (remote && Array.isArray(remote.pages) && remote.pages.length > 0) ? remote.pages : DEFAULT_FALLBACK_DB.pages;
+      db.options = (remote && Array.isArray(remote.options) && remote.options.length > 0) ? remote.options : DEFAULT_FALLBACK_DB.options;
+      db.highlights = (remote && Array.isArray(remote.highlights) && remote.highlights.length > 0) ? remote.highlights : DEFAULT_FALLBACK_DB.highlights;
+    }
+  }
+
+  function loadLocalCacheRaw() {
     try {
-      var cached = localStorage.getItem(STORAGE_KEY_MED_DB);
-      if (cached) {
-        var parsed = JSON.parse(cached);
-        if (parsed && parsed.status === 'success') {
-          applyDatabaseMerge(parsed);
-          return true;
-        }
-      }
-    } catch(e) { console.warn("讀取快取失敗:", e); }
-    return false;
+      const cached = localStorage.getItem(STORAGE_KEY_MED_DB);
+      if (cached) return JSON.parse(cached);
+    } catch(e) {}
+    return null;
   }
 
   function saveLocalCache(dataObj) {
@@ -962,9 +986,7 @@
       var navButtons = `
         <div class="nav-btn-group">
           ${!isFirst ? `<button type="button" class="btn-secondary" onclick="goToStage('${prevTarget}')">← 上一步</button>` : ''}
-          <button type="button" class="btn-primary" onclick="goToStage('${nextTarget}')">
-            ${isLastDynamic ? '下一步 →' : '下一步 →'}
-          </button>
+          <button type="button" class="btn-primary" onclick="goToStage('${nextTarget}')">下一步 →</button>
         </div>
       `;
       
@@ -1409,11 +1431,9 @@
     var eliteDed = document.getElementById('valEliteDed')?.value || '16000';
     var wiseDed = document.getElementById('valWiseDed')?.value || '18000';
 
-    // 1. 第一點：初心
     var goalEl = document.getElementById('sumGoal');
     if (goalEl) goalEl.innerText = "有需要時，享有醫療服務的選擇權及自主權";
 
-    // 2. 第一道防線
     var firstLineEl = document.getElementById('sumFirstLine');
     if (firstLineEl) {
       var parts = [];
@@ -1426,7 +1446,6 @@
       firstLineEl.innerHTML = parts.length > 0 ? parts.join('<br>') : "沒有";
     }
 
-    // 3. 替代方案
     var planNameEl = document.getElementById('sumPlanName');
     var coverEl = document.getElementById('sumCoverage');
     if (plan === 'elite') {
@@ -1440,13 +1459,11 @@
       if (coverEl) coverEl.innerText = '每年 HK$42 萬上限 (設細項分項限制)';
     }
 
-    // 4. 健康程式加持狀態
     var rowVit = document.getElementById('rowVitalityStatus');
     if (rowVit) {
       rowVit.style.display = isVitality ? 'block' : 'none';
     }
 
-    // 5. 總結頁專屬精算：(9折後保費 ＋ Vitality會費$430)，不扣稅
     var discountedPrem = appState.selectedRawAnnualNum || 0;
     var basePrem = appState.selectedBaseBeforeDiscount || discountedPrem;
     var totalYearPay = discountedPrem + (isVitality ? 430 : 0);
@@ -1572,6 +1589,7 @@
   // ==================== 後台管理系統 ====================
   function openAdminModal() {
     document.getElementById('adminFullScreenModal').style.display = 'flex';
+    updateAdminUIState();
     renderAdminVisualLayout();
     renderAdminConfigLayout();
     renderAdminP06Mirror();
@@ -1702,7 +1720,7 @@
       textInput.value = downloadURL;
       if (db.pages[pageIdx]) db.pages[pageIdx].imageUrl = downloadURL;
       uploadLabel.innerText = "📤 上載圖片";
-      alert("✅ 圖片上傳成功！請點擊右上角「💾 儲存同步至 Google Sheet」保存。");
+      alert("✅ 圖片上傳成功！請點擊右上角「💾 儲存」保存。");
     } catch(err) {
       uploadLabel.innerText = "📤 上載圖片";
       alert("❌ 上傳失敗：" + err.message);
@@ -1742,10 +1760,7 @@
     const container = document.getElementById('adminConfigContainer');
     if (!container) return;
     if (!db.config) db.config = { ...DEFAULT_FALLBACK_DB.config };
-    if (!db.config["尊顯計劃名稱"]) db.config["尊顯計劃名稱"] = "👑 高端尊顯醫療計劃";
-    if (!db.config["睿選計劃名稱"]) db.config["睿選計劃名稱"] = "🛡️ 高端睿選醫療計劃";
-    if (!db.config["靈活計劃名稱"]) db.config["靈活計劃名稱"] = "⚠️ 傳統靈活醫療計劃";
-    if (!db.config["公司醫保溫馨提示"]) db.config["公司醫保溫馨提示"] = "🤔 關鍵思考：轉職、退休、失業後，公司醫保還可以為自己帶來保障嗎？";
+    if (!db.config["管理員密碼"]) db.config["管理員密碼"] = "8888";
     
     const cfg = db.config;
     let html = '<h3 style="color:var(--primary); margin:0 0 12px 0;">⚙️ 系統參數設定 (對應 Google Sheet 系統設定)</h3><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
@@ -1955,19 +1970,12 @@
   }
 
   async function saveAllAdminData() {
-    const saveBtn = document.getElementById('btnAdminSaveSync');
-    const originalText = saveBtn.innerText;
-    saveBtn.innerText = "⏳ 上傳中...";
-    saveBtn.disabled = true;
-
     saveCurrentAdminInputs();
     
-    // 系統參數
     document.querySelectorAll('[data-adm-config-key]').forEach(inp => {
       db.config[inp.dataset.admConfigKey] = inp.value;
     });
 
-    // 產品亮點
     document.querySelectorAll('[data-adm-hl-text]').forEach((inp, idx) => {
       if (db.highlights[idx]) {
         db.highlights[idx].text = inp.value;
@@ -1976,7 +1984,6 @@
       }
     });
     
-    // 專屬方案細項
     document.querySelectorAll('[data-adm-pi-name]').forEach((inp, idx) => {
       if (db.planItems[idx]) {
         db.planItems[idx].name = inp.value;
@@ -2003,33 +2010,107 @@
     });
     db.claimCases = newCases;
 
-    try {
-      const payload = { ...db, status: 'success' };
-      await fetch(GAS_API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
-      saveLocalCache(payload);
-      alert("✅ 設定已成功同步至 Google Sheet 及本地！");
+    if (isAdminMaster) {
+      const saveBtn = document.getElementById('btnAdminSaveSync');
+      const originalText = saveBtn.innerText;
+      saveBtn.innerText = "⏳ 正在同步至 Google Sheet...";
+      saveBtn.disabled = true;
+
+      try {
+        const payload = { ...db, status: 'success' };
+        await fetch(GAS_API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+        saveLocalCache({ status: "success", isCustomized: false, ...payload });
+        alert("✅【隊長管理員】設定已成功雙向同步至 Google Sheet 及本地！");
+      } catch(e) {
+        alert("⚠️ 同步失敗，請檢查網路。");
+      } finally {
+        saveBtn.innerText = originalText;
+        saveBtn.disabled = false;
+      }
+    } else {
+      saveLocalCache({
+        status: "success",
+        isCustomized: true,
+        pages: db.pages,
+        options: db.options,
+        highlights: db.highlights
+      });
+      alert("✅ 設定已成功保存至此手機（個人自訂 Tailor-made 模式）！");
+    }
+
+    closeAdminModal();
+    applyRoleContent();
+  }
+
+  function exportAgentPreset() {
+    saveCurrentAdminInputs();
+    const presetName = prompt("請輸入此設定檔名稱（例如：Ivan極簡版）：") || "MyPreset";
+    const exportData = {
+      presetName: presetName,
+      exportDate: new Date().toLocaleDateString('zh-HK'),
+      pages: db.pages,
+      options: db.options,
+      highlights: db.highlights,
+      config: db.config,
+      planItems: db.planItems,
+      claimCases: db.claimCases
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `medical_preset_${presetName}.json`;
+    a.click();
+  }
+
+  function importAgentPreset(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const importedData = JSON.parse(e.target.result);
+        if (importedData.pages && importedData.config) {
+          db = { ...db, ...importedData };
+          saveLocalCache({ status: "success", isCustomized: true, ...importedData });
+          applyRoleContent();
+          renderAdminVisualLayout();
+          alert(`✅ 成功套用設定檔：【${importedData.presetName || '個人自訂版'}】！`);
+        } else {
+          alert("⚠️ 檔案格式不符，請確認是否為正確的 App 設定檔。");
+        }
+      } catch(err) {
+        alert("❌ 讀取失敗：" + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetToCaptainDefault() {
+    if (confirm("確定要重設為隊長官方預設版本？（你的本機自訂題目將被覆蓋）")) {
+      localStorage.removeItem(STORAGE_KEY_MED_DB);
+      fetchFullRemoteData();
+      alert("✅ 已成功還原至隊長官方預設！");
       closeAdminModal();
-      applyRoleContent();
-    } catch(e) {
-      alert("⚠️ 同步失敗，請檢查網路。");
-    } finally {
-      saveBtn.innerText = originalText;
-      saveBtn.disabled = false;
     }
   }
 
+  // 秒開保證：先讀本地快取秒開，背景檢查版本號，有新版才拉取
   function initApp() {
     initParams();
-    const hasCache = loadLocalCache();
+    const localCached = loadLocalCacheRaw();
     const badge = document.getElementById('sync-status-badge');
     
-    if (hasCache) {
+    if (localCached) {
+      applyHybridDatabaseMerge(localCached);
       if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.3.8') + ')';
+        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.4.0') + ')';
         badge.className = 'status-cache';
       }
       applyRoleContent();
       
+      // 背景極速檢查版本號
       fetch(GAS_API_URL + (GAS_API_URL.includes('?') ? '&' : '?') + 'action=checkVersion')
         .then(res => res.json())
         .then(verRes => {
@@ -2056,7 +2137,7 @@
       .then(res => res.json())
       .then(remote => {
         if (remote && remote.status === 'success') {
-          applyDatabaseMerge(remote);
+          applyHybridDatabaseMerge(remote);
           saveLocalCache(remote);
           const badge = document.getElementById('sync-status-badge');
           if (badge) {
