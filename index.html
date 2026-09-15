@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.5.0 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.5.1 | AVA專屬</title>
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta name="Expires" content="0">
-  <meta name="theme-color" content="#176b5b">
+  <meta name="theme-color" content="#1a3a6e">
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -17,29 +17,23 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700;900&display=swap');
     :root {
-      --primary: #176b5b;
-      --primary-hover: #10594c;
-      --primary-light: #edf8f5;
-      --accent: #d59b38;
-      --accent-light: #fff9ec;
+      --primary: #1a3a6e;
+      --primary-light: #eff6ff;
+      --accent: #d97706;
+      --accent-light: #fffbeb;
       --danger: #dc2626;
       --danger-light: #fef2f2;
       --warning-bg: #fffbeb;
-      --border: #d9e2df;
-      --surface: #ffffff;
-      --surface-muted: #f5f8f7;
-      --text: #20332f;
-      --muted: #687a76;
+      --border: #cbd5e1;
       --pink-border: #f8d7da;
-      --radius: 18px;
-      --shadow: 0 10px 30px rgba(28, 67, 59, 0.08);
+      --radius: 14px;
       --elite-color: #b9770e;
       --wise-color: #0056b3;
       --flexi-color: #c62828;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'Noto Sans HK', sans-serif; background-color: #f3f7f5; color: var(--text); margin: 0; padding: clamp(12px, 2.2vw, 24px); }
-    .app-shell { max-width: 920px; margin: 0 auto; }
+    body { font-family: 'Noto Sans HK', sans-serif; background-color: #eef2f5; color: #333; margin: 0; padding: 15px; }
+    .app-shell { max-width: 860px; margin: 0 auto; }
 
     .header-version-bar {
       display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
@@ -65,15 +59,15 @@
     .btn-mini-info:hover { transform: scale(1.15); border-color: var(--primary); color: var(--primary); }
 
     .stage-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: clamp(20px, 3vw, 30px);
-      box-shadow: var(--shadow); display: none; margin-bottom: 20px;
+      background: #fff; border-radius: var(--radius); padding: 26px 20px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.06); display: none; margin-bottom: 20px;
     }
     .stage-card.active { display: block; animation: fadeIn 0.25s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     .stage-tag { display: inline-block; font-size: 12px; font-weight: 800; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
-    .stage-title { font-size: clamp(21px, 3vw, 26px); font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
-    .stage-desc { font-size: clamp(14px, 1.8vw, 16px); color: var(--muted); line-height: 1.65; margin-bottom: 18px; }
+    .stage-title { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.4; margin: 0 0 10px 0; }
+    .stage-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 18px; }
 
     .dignity-headline-box { font-size: 17px; font-weight: 800; color: #334155; line-height: 1.6; margin-bottom: 16px; }
     .dignity-highlight-text { display: block; font-size: 23px; font-weight: 900; color: #1d4ed8; line-height: 1.4; margin-top: 6px; letter-spacing: 0.5px; }
@@ -92,8 +86,7 @@
     .choice-btn .c-desc { font-size: 13px; color: #7f8c8d; }
 
     .nav-btn-group { display: flex; gap: 10px; margin-top: 22px; }
-    .btn-primary { background: var(--primary); color: #fff; border: 1px solid var(--primary); padding: 13px 20px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; text-align: center; transition: .2s ease; }
-    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; flex: 1; text-align: center; }
     .btn-secondary { background: #f1f5f9; border: 1px solid var(--border); color: #333; padding: 14px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
     .btn-success { background: #059669; color: #fff; border: none; padding: 14px 20px; border-radius: 10px; font-size: 16px; font-weight: 800; cursor: pointer; flex: 2; text-align: center; }
 
@@ -134,10 +127,9 @@
     .flexi-setting h3 { color: var(--flexi-color); }
 
     select, input[type="text"], input[type="number"], textarea {
-      width: 100%; min-height: 44px; padding: 10px 12px; font-size: 14px; border-radius: 11px; border: 1px solid var(--border);
-      background: #fff; font-weight: 600; color: var(--text); outline: none; margin-top: 4px; box-sizing: border-box;
+      width: 100%; padding: 9px; font-size: 14px; border-radius: 8px; border: 2px dashed var(--pink-border);
+      background: #fff; font-weight: 700; color: #333; outline: none; margin-top: 4px; box-sizing: border-box;
     }
-    select:focus, input[type="text"]:focus, input[type="number"]:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(23,107,91,.12); }
 
     .checklist-grid { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; font-size: 12.5px; margin-top: 15px; }
     .checklist-row { display: flex; border-bottom: 1px solid #eee; }
@@ -209,26 +201,26 @@
 
     #adminFullScreenModal {
       display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: #f3f7f5; z-index: 9999999; flex-direction: column; overflow: hidden;
+      background: #f1f5f9; z-index: 9999999; flex-direction: column; overflow: hidden;
     }
     .admin-header-nav {
-      background: var(--primary); color: #fff; padding: 16px clamp(14px, 3vw, 28px); display: flex;
+      background: #1a3a6e; color: #fff; padding: 12px 16px; display: flex;
       justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); flex-shrink: 0;
     }
     .admin-tab-bar {
-      display: flex; gap: 8px; background: #e7f0ed; padding: 10px clamp(12px, 3vw, 28px);
-      border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto;
+      display: flex; gap: 8px; background: #e2e8f0; padding: 8px 16px;
+      border-bottom: 1px solid #cbd5e1; flex-shrink: 0; overflow-x: auto;
     }
     .admin-tab-btn {
       padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 800;
       border: none; background: #fff; color: #475569; cursor: pointer; white-space: nowrap;
     }
-    .admin-tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(23,107,91,.18); }
+    .admin-tab-btn.active { background: #1a3a6e; color: #fff; }
     .admin-scroll-body {
       flex: 1; overflow-y: auto; padding: 16px; max-width: 900px; width: 100%; margin: 0 auto; -webkit-overflow-scrolling: touch;
     }
     .admin-card-section {
-      background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: clamp(14px, 2.5vw, 20px); margin-bottom: 16px; box-shadow: 0 5px 18px rgba(28,67,59,.05);
+      background: #fff; border-radius: 12px; border: 1.5px solid #cbd5e1; padding: 16px; margin-bottom: 16px;
     }
     .admin-label { font-size: 12px; font-weight: 800; color: #475569; margin-top: 8px; display: block; }
     .admin-highlight-row { display: flex; gap: 8px; align-items: center; background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; }
@@ -238,20 +230,47 @@
       background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold;
     }
     .btn-move:hover { background: #e2e8f0; }
-    .admin-footer-actions { flex-shrink: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 12px clamp(12px, 3vw, 24px); border-top: 1px solid var(--border); background: rgba(255,255,255,.96); box-shadow: 0 -5px 20px rgba(28,67,59,.07); }
-    .admin-action-btn, .admin-import-label { min-height: 44px; padding: 10px 15px; border-radius: 11px; border: 1px solid var(--border); background: #fff; color: var(--text); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
-    .admin-action-btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
-    .admin-action-btn.restore { color: #9a6517; background: var(--accent-light); border-color: #efd49d; }
-    .theme-preview { margin-top: 14px; padding: 16px; border-radius: 14px; background: var(--primary-light); color: var(--primary); font-weight: 800; }
-    @media (max-width: 620px) { .admin-footer-actions > * { flex: 1 1 calc(50% - 8px); } .admin-action-btn.close-action { flex-basis: 100%; } .admin-plan-item-grid { grid-template-columns: 1fr; } }
+
+
+    /* 5pay design-source components: reuse the established navy, white and slate UI language. */
+    #adminFullScreenModal { display:none; position:fixed; inset:0; width:100vw; height:100vh; background:#eef2f5; z-index:9999999; flex-direction:column; overflow:hidden; }
+    .admin-header-nav { background:#1a3a6e; color:#fff; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,.15); flex-shrink:0; }
+    .admin-tab-bar { display:flex; gap:8px; background:#e2e8f0; padding:8px 16px; border-bottom:1px solid #cbd5e1; flex-shrink:0; overflow-x:auto; }
+    .admin-tab-btn { min-height:44px; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:800; border:1px solid #cbd5e1; background:#fff; color:#475569; cursor:pointer; white-space:nowrap; }
+    .admin-tab-btn.active { background:#1a3a6e; border-color:#1a3a6e; color:#fff; }
+    .admin-scroll-body { flex:1; overflow-y:auto; padding:16px; max-width:900px; width:100%; margin:0 auto; -webkit-overflow-scrolling:touch; }
+    .admin-card-section { background:#fff; border-radius:12px; border:1.5px solid #cbd5e1; padding:16px; margin-bottom:16px; box-shadow:0 6px 25px rgba(0,0,0,.06); }
+    .admin-label { font-size:12px; font-weight:800; color:#475569; margin-top:8px; display:block; }
+    .admin-highlight-row { display:flex; gap:8px; align-items:center; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1; }
+    .admin-plan-item-card { background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:10px; padding:12px; }
+    .admin-plan-item-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; }
+    .btn-move { background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:3px 8px; font-size:11px; cursor:pointer; font-weight:bold; }
+    .btn-move:hover { background:#e2e8f0; }
+    .admin-footer-actions { flex-shrink:0; display:flex; justify-content:center; flex-wrap:wrap; gap:8px; padding:12px 16px; border-top:1px solid #cbd5e1; background:#fff; box-shadow:0 -2px 10px rgba(0,0,0,.08); }
+    .admin-action-btn,.admin-import-label,.library-btn { min-height:44px; padding:10px 15px; border-radius:8px; border:1px solid #cbd5e1; background:#fff; color:#333; font-family:'Noto Sans HK',sans-serif; font-size:13px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; }
+    .admin-action-btn.primary,.library-btn.primary { background:#1a3a6e; border-color:#1a3a6e; color:#fff; }
+    .admin-action-btn.restore { color:#92400e; background:#fffbeb; border-color:#fde68a; }
+    .theme-preview { margin-top:14px; padding:14px; border-radius:10px; background:#eff6ff; color:#1a3a6e; font-weight:800; }
+    .library-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .library-item { background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:14px; box-shadow:0 2px 8px rgba(26,58,110,.06); min-width:0; }
+    .library-item-head { display:flex; gap:10px; align-items:flex-start; justify-content:space-between; }
+    .library-item-title { color:#1a3a6e; font-size:15px; font-weight:800; overflow-wrap:anywhere; }
+    .library-meta,.library-preview,.library-empty { color:#64748b; font-size:12px; line-height:1.6; }
+    .library-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .library-actions .library-btn { min-height:40px; padding:8px 12px; }
+    .library-toggle { display:flex; align-items:center; gap:8px; color:#333; font-size:14px; font-weight:700; cursor:pointer; }
+    .library-toggle input { width:20px; height:20px; accent-color:#1a3a6e; }
+    .upload-area { display:flex; align-items:center; justify-content:center; min-height:96px; padding:16px; border:2px dashed #cbd5e1; border-radius:10px; background:#f8fafc; color:#1a3a6e; font-size:14px; font-weight:800; cursor:pointer; text-align:center; }
+    .admin-section-heading { color:#1a3a6e; margin:0 0 6px; font-size:16px; }
+    @media(max-width:620px){ .admin-footer-actions>*{flex:1 1 calc(50% - 8px)} .admin-action-btn.close-action{flex-basis:100%} .admin-plan-item-grid,.library-grid{grid-template-columns:1fr} .library-item-head{flex-direction:column} }
   </style>
 </head>
 <body>
 <div class="app-shell">
   <div class="header-version-bar">
     <div style="display:flex; align-items:center; gap:6px;">
-      <span id="appThemeName">Medical</span>
-      <span class="v-badge" id="appVersion">v7.5.0</span>
+      <span id="appThemeName">AVA HEALTHCARE PLANNER</span>
+      <span class="v-badge" id="appVersion">v7.5.1</span>
       <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
       <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
     </div>
@@ -599,6 +618,8 @@
     <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('pages', this)">📄 頁面流程與題目管理</button>
     <button type="button" class="admin-tab-btn" data-user-tab onclick="switchAdminTab('p06', this)">✨ 產品亮點</button>
     <button type="button" class="admin-tab-btn" data-user-tab onclick="switchAdminTab('theme', this)">🎨 主題</button>
+    <button type="button" class="admin-tab-btn" data-user-tab onclick="switchAdminTab('userCases', this)">📋 實況案例</button>
+    <button type="button" class="admin-tab-btn" data-user-tab onclick="switchAdminTab('documents', this)">📁 文件管理</button>
     <button type="button" class="admin-tab-btn" data-admin-only onclick="switchAdminTab('config', this)">⚙️ 系統參數設定</button>
     <button type="button" class="admin-tab-btn" data-admin-only onclick="switchAdminTab('p07', this)">📑 實況案例與文件管理</button>
   </div>
@@ -623,8 +644,34 @@
         <h3 style="color:var(--primary); margin:0 0 6px;">🎨 主題</h3>
         <p style="color:var(--muted); font-size:13px; margin:0 0 14px;">此名稱只儲存於本機，不會修改任何系統參數或計算資料。</p>
         <label class="admin-label" for="adminThemeName">主題名稱</label>
-        <input id="adminThemeName" type="text" maxlength="80" placeholder="Medical / 自訂名稱" oninput="previewThemeName()">
-        <div class="theme-preview">預覽：<span id="themeNamePreview">Medical</span></div>
+        <input id="adminThemeName" type="text" maxlength="80" placeholder="AVA HEALTHCARE PLANNER / 自訂名稱" oninput="previewThemeName()">
+        <div class="theme-preview">預覽：<span id="themeNamePreview">AVA HEALTHCARE PLANNER</span></div>
+      </div>
+    </div>
+
+    <div id="adminTabUserCasesSection" style="display:none;">
+      <div class="admin-card-section">
+        <h3 class="admin-section-heading">📋 雲端實況案例</h3>
+        <p class="library-preview">取消顯示只會在此裝置記錄隱藏項目；不會刪除或修改雲端案例。</p>
+        <div id="cloudCasesManager" class="library-grid"></div>
+      </div>
+      <div class="admin-card-section">
+        <div class="library-item-head"><div><h3 class="admin-section-heading">我的實況案例</h3><p class="library-preview">只儲存於這個瀏覽器的 LocalStorage。</p></div><button type="button" class="library-btn primary" onclick="addLocalUserCase()">＋ 新增案例</button></div>
+        <div id="localCasesManager" class="library-grid"></div>
+      </div>
+    </div>
+
+    <div id="adminTabDocumentsSection" style="display:none;">
+      <div class="admin-card-section">
+        <h3 class="admin-section-heading">☁️ 雲端文件</h3>
+        <p class="library-preview">由系統提供；取消顯示只影響此裝置。</p>
+        <div id="cloudDocumentsManager" class="library-grid"></div>
+      </div>
+      <div class="admin-card-section">
+        <h3 class="admin-section-heading">📁 我的文件</h3>
+        <p class="library-preview">Metadata 儲存於 LocalStorage；PDF／圖片 Blob 儲存於 Medical 專用 IndexedDB。</p>
+        <label class="upload-area">＋ 上載 PDF 或圖片<input id="localDocumentUpload" type="file" accept="application/pdf,image/jpeg,image/png" multiple hidden onchange="uploadLocalDocuments(this)"></label>
+        <div id="localDocumentsManager" class="library-grid" style="margin-top:12px;"></div>
       </div>
     </div>
 
@@ -673,7 +720,16 @@
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzOOtrQy-LfaMlTuLhJJD0ibfSuns4mkF4rWhn6BBTekb09O_UG9-aYH-JGMDZ1lekejw/exec";
   const STORAGE_KEY_MED_DB = "AVA_MED_APP_DB_CACHE_V7";
   const STORAGE_KEY_MED_TAILOR = "AVA_MED_APP_TAILOR_V1";
-  const APP_VERSION = "7.5.0";
+  const STORAGE_KEY_HIDDEN_CLOUD_CASES = "AVA_MED_HIDDEN_CLOUD_CASE_IDS_V1";
+  const STORAGE_KEY_CASE_OVERRIDES = "AVA_MED_CASE_OVERRIDES_V1";
+  const STORAGE_KEY_USER_CASES = "AVA_MED_LOCAL_USER_CASES_V1";
+  const STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS = "AVA_MED_HIDDEN_CLOUD_DOCUMENT_IDS_V1";
+  const STORAGE_KEY_LOCAL_DOCUMENT_METADATA = "AVA_MED_LOCAL_DOCUMENT_METADATA_V1";
+  const STORAGE_KEY_DOCUMENT_ORDER = "AVA_MED_DOCUMENT_ORDER_V1";
+  const MED_DOCUMENT_DB_NAME = "AVA_MED_USER_DOCUMENTS_V1";
+  const MED_DOCUMENT_STORE_NAME = "userFiles";
+  const ORIGINAL_THEME_NAME = "AVA HEALTHCARE PLANNER";
+  const APP_VERSION = "7.5.1";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
@@ -757,7 +813,7 @@
       { itemId: "item5", name: "🧸 陪床費", eliteMain: "✅ 全數索償", eliteSub: "(每日包1張陪床)", wiseSemiMain: "✅ 全數索償", wiseSemiSub: "(每日包1張陪床)", wiseGenMain: "✅ 全數索償", wiseGenSub: "(每日包1張陪床)", flexiMain: "不設保障", flexiSub: "(兒童模式專屬)", isChildOnly: true }
     ],
     config: {
-      "資料版本": "7.5.0",
+      "資料版本": "7.5.1",
       "管理員密碼": "8888",
       "預設模式": "adult",
       "尊顯計劃名稱": "👑 高端尊顯醫療計劃",
@@ -782,7 +838,122 @@
     ]
   };
   var db = { ...DEFAULT_FALLBACK_DB };
-  var tailorData = { themeName: "Medical", pages: null, options: null, highlights: null };
+  var tailorData = { themeName: ORIGINAL_THEME_NAME, pages: null, options: null, highlights: null };
+
+  function readLocalJSON(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch (error) {
+      console.warn("Unable to read local preference", key, error);
+      return fallback;
+    }
+  }
+
+  function writeLocalJSON(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); }
+    catch (error) { console.warn("Unable to save local preference", key, error); }
+  }
+
+  function stableCloudId(prefix, item, index) {
+    if (item && item.id) return String(item.id);
+    const identity = `${item?.category || ''}|${item?.caseName || item?.name || ''}|${item?.url || ''}`;
+    const raw = identity.replace(/\|/g, '') ? identity : String(index);
+    let hash = 2166136261;
+    for (let i = 0; i < raw.length; i += 1) hash = Math.imul(hash ^ raw.charCodeAt(i), 16777619);
+    return `${prefix}-${(hash >>> 0).toString(36)}`;
+  }
+
+  function isDocumentCategory(category) { return String(category || '').includes('文件'); }
+
+  function getCloudCases() {
+    return ((getSystemData(db).claimCases || []).filter(item => !isDocumentCategory(item.category))).map((item, index) => ({ ...item, id: stableCloudId('cloud-case', item, index), source: 'cloud' }));
+  }
+
+  function getFinalCases() {
+    const hidden = new Set(readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_CASES, []));
+    const overrides = readLocalJSON(STORAGE_KEY_CASE_OVERRIDES, {});
+    const cloud = getCloudCases().filter(item => !hidden.has(item.id)).map(item => ({ ...item, ...(overrides[item.id] || {}), id: item.id, source: 'cloud' }));
+    const local = readLocalJSON(STORAGE_KEY_USER_CASES, []).map(item => ({ ...item, source: 'local' }));
+    return cloud.concat(local);
+  }
+
+  function getCloudDocuments() {
+    const result = [];
+    ((getSystemData(db).claimCases || []).filter(item => isDocumentCategory(item.category))).forEach((item, caseIndex) => {
+      const files = Array.isArray(item.files) && item.files.length ? item.files : [null];
+      files.forEach((url, fileIndex) => {
+        const seed = { category:item.category, caseName:item.caseName, url:url || '', id:item.id ? `${item.id}-${fileIndex}` : '' };
+        result.push({ id:stableCloudId('cloud-document', seed, caseIndex * 100 + fileIndex), name:item.caseName, category:item.category, type:url && /\.pdf(?:$|\?)/i.test(url) ? 'application/pdf' : 'link', url:url || '', source:'cloud' });
+      });
+    });
+    return result;
+  }
+
+  function getFinalDocuments() {
+    const hidden = new Set(readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, []));
+    const cloud = getCloudDocuments().filter(item => !hidden.has(item.id));
+    const local = readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []).map(item => ({ ...item, source:'local' }));
+    const order = readLocalJSON(STORAGE_KEY_DOCUMENT_ORDER, []);
+    const rank = new Map(order.map((id, index) => [id, index]));
+    return cloud.concat(local).sort((a, b) => (rank.get(a.id) ?? 999999) - (rank.get(b.id) ?? 999999));
+  }
+
+  function openMedicalDocumentDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(MED_DOCUMENT_DB_NAME, 1);
+      request.onupgradeneeded = () => {
+        const database = request.result;
+        if (!database.objectStoreNames.contains(MED_DOCUMENT_STORE_NAME)) database.createObjectStore(MED_DOCUMENT_STORE_NAME, { keyPath:'id' });
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function putLocalDocumentBlob(id, file) {
+    const database = await openMedicalDocumentDB();
+    await new Promise((resolve, reject) => {
+      const tx = database.transaction(MED_DOCUMENT_STORE_NAME, 'readwrite');
+      tx.objectStore(MED_DOCUMENT_STORE_NAME).put({ id, blob:file });
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+    database.close();
+  }
+
+  async function getLocalDocumentBlob(id) {
+    const database = await openMedicalDocumentDB();
+    const record = await new Promise((resolve, reject) => {
+      const request = database.transaction(MED_DOCUMENT_STORE_NAME, 'readonly').objectStore(MED_DOCUMENT_STORE_NAME).get(id);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return record?.blob || null;
+  }
+
+  async function deleteLocalDocumentBlob(id) {
+    const database = await openMedicalDocumentDB();
+    await new Promise((resolve, reject) => {
+      const tx = database.transaction(MED_DOCUMENT_STORE_NAME, 'readwrite');
+      tx.objectStore(MED_DOCUMENT_STORE_NAME).delete(id);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+    database.close();
+  }
+
+  async function clearMedicalDocumentBlobs() {
+    const database = await openMedicalDocumentDB();
+    await new Promise((resolve, reject) => {
+      const tx = database.transaction(MED_DOCUMENT_STORE_NAME, 'readwrite');
+      tx.objectStore(MED_DOCUMENT_STORE_NAME).clear();
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+    database.close();
+  }
 
   function parseSafeNum(val) {
     if (!val) return 0;
@@ -852,7 +1023,7 @@
     const system = getSystemData(systemSource);
     const defaults = getCloudDefaults(defaultSource || systemSource);
     const localTailor = loadTailorMadeData();
-    tailorData = localTailor || { themeName: "Medical", pages: null, options: null, highlights: null };
+    tailorData = localTailor || { themeName: ORIGINAL_THEME_NAME, pages: null, options: null, highlights: null };
     const useTailorMade = Boolean(localTailor && localTailor.isCustomized && !isAdminMaster);
     db = {
       ...system,
@@ -874,13 +1045,18 @@
   function loadTailorMadeData() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY_MED_TAILOR);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // v7.5.0 wrote "Medical" automatically even when the user never changed the title.
+        if (parsed.themeName === "Medical" || parsed.themeName === "AVA Medical") parsed.themeName = ORIGINAL_THEME_NAME;
+        return parsed;
+      }
       // Backward compatibility: migrate the previous combined customized cache.
       const legacy = loadLocalCacheRaw();
       if (legacy && legacy.isCustomized) {
         const migrated = {
           isCustomized: true,
-          themeName: legacy.themeName || "Medical",
+          themeName: legacy.themeName || ORIGINAL_THEME_NAME,
           pages: legacy.pages,
           options: legacy.options,
           highlights: legacy.highlights,
@@ -907,7 +1083,7 @@
   }
 
   function applyThemeName() {
-    const name = (tailorData && tailorData.themeName || "Medical").trim() || "Medical";
+    const name = (tailorData && tailorData.themeName || ORIGINAL_THEME_NAME).trim() || ORIGINAL_THEME_NAME;
     const title = document.getElementById("appThemeName");
     if (title) title.textContent = name;
     document.title = `${name} v${APP_VERSION} | AVA專屬`;
@@ -1305,23 +1481,26 @@
     if (cat === '住院治療') document.getElementById('scTab-inpatient').classList.add('selected');
     if (cat === '癌症治療') document.getElementById('scTab-cancer').classList.add('selected');
 
-    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_FALLBACK_DB.claimCases;
-    var filtered = cList.filter(c => c.category === cat);
-    if (filtered.length === 0) filtered = DEFAULT_FALLBACK_DB.claimCases.filter(c => c.category === cat);
+    var filtered = getFinalCases().filter(c => c.category === cat);
 
     var drop = document.getElementById('case-select-dropdown');
     drop.innerHTML = '';
     filtered.forEach((c, idx) => {
       drop.innerHTML += `<option value="${idx}">📍 案例：${c.caseName} (總開支: $${Number(c.totalCost).toLocaleString()})</option>`;
     });
-    renderSelectedCase(0);
+    if (filtered.length) renderSelectedCase(0);
+    else {
+      drop.innerHTML = '<option>此分類暫無顯示案例</option>';
+      document.getElementById('case-title-display').innerText = '此分類暫無顯示案例';
+      document.getElementById('case-total-input').value = 'HK$ 0';
+      recalcCustomCost(0);
+    }
   }
 
   function renderSelectedCase(idx) {
-    var cList = (db && db.claimCases && db.claimCases.length > 0) ? db.claimCases : DEFAULT_FALLBACK_DB.claimCases;
-    var filtered = cList.filter(c => c.category === appState.currentCaseCat);
-    if (filtered.length === 0) filtered = DEFAULT_FALLBACK_DB.claimCases.filter(c => c.category === appState.currentCaseCat);
+    var filtered = getFinalCases().filter(c => c.category === appState.currentCaseCat);
     var c = filtered[Number(idx)] || filtered[0];
+    if (!c) return;
 
     document.getElementById('case-title-display').innerText = c.caseName;
     document.getElementById('case-total-input').value = 'HK$ ' + Number(c.totalCost).toLocaleString();
@@ -1630,46 +1809,190 @@
     }
   }
 
-  function openPlanInfoDrawer(categoryName) {
+  async function openPlanInfoDrawer(categoryName) {
     var overlay = document.getElementById('planInfoDrawerOverlay');
     var titleEl = document.getElementById('planInfoDrawerTitle');
     var gridEl = document.getElementById('planInfoGrid');
     if (!overlay) return;
-
     titleEl.innerText = '📑 ' + categoryName;
     overlay.style.display = 'flex';
-
-    var cList = (db && db.claimCases) || [];
-    var matchedCases = cList.filter(c => c.category === categoryName);
-    var allFiles = [];
-    matchedCases.forEach(c => {
-      if (Array.isArray(c.files)) {
-        c.files.forEach(fUrl => {
-          allFiles.push({ title: c.caseName || categoryName, url: fUrl });
-        });
-      }
-    });
-
-    if (allFiles.length === 0) {
-      gridEl.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:#94a3b8; font-size:13px;">暫無上載之文件（可於後台「📑 實況案例與文件管理」上載）</div>';
+    const documents = getFinalDocuments().filter(item => item.category === categoryName);
+    if (!documents.length || documents.every(item => !item.url && item.source === 'cloud')) {
+      gridEl.innerHTML = '<div class="library-empty" style="grid-column:1/-1;text-align:center;padding:30px;">暫無可開啟文件（可於使用者後台「文件管理」上載）</div>';
       return;
     }
-
-    var html = '';
-    allFiles.forEach((item, idx) => {
-      var isPdf = item.url.toLowerCase().includes('.pdf');
-      if (isPdf) {
-        html += `<div class="media-card-item" onclick="window.open('${item.url}')"><div style="font-size:30px;">📄</div><div class="media-card-title">${item.title} (PDF)</div></div>`;
-      } else {
-        html += `<div class="media-card-item" onclick="window.open('${item.url}')"><img src="${item.url}" alt="${item.title}"><div class="media-card-title">${item.title}</div></div>`;
+    gridEl.innerHTML = '';
+    for (const item of documents) {
+      if (item.source === 'local') {
+        const blob = await getLocalDocumentBlob(item.id);
+        if (!blob) {
+          gridEl.insertAdjacentHTML('beforeend', `<div class="media-card-item"><div style="font-size:30px;">⚠️</div><div class="media-card-title">${escapeHtml(item.name)}：文件需要重新上載</div></div>`);
+          continue;
+        }
+        const url = URL.createObjectURL(blob);
+        gridEl.insertAdjacentHTML('beforeend', `<div class="media-card-item" onclick="window.open('${url}')"><div style="font-size:30px;">${item.type === 'application/pdf' ? '📄' : '🖼️'}</div><div class="media-card-title">${escapeHtml(item.name)}</div></div>`);
+      } else if (item.url) {
+        const isPdf = item.type === 'application/pdf';
+        gridEl.insertAdjacentHTML('beforeend', `<div class="media-card-item" onclick="window.open('${item.url}')">${isPdf ? '<div style="font-size:30px;">📄</div>' : `<img src="${item.url}" alt="">`}<div class="media-card-title">${escapeHtml(item.name)}</div></div>`);
       }
-    });
-    gridEl.innerHTML = html;
+    }
   }
 
   function closePlanInfoDrawer() {
     var overlay = document.getElementById('planInfoDrawerOverlay');
     if (overlay) overlay.style.display = 'none';
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[char]));
+  }
+
+  function renderUserCasesManager() {
+    const cloudBox = document.getElementById('cloudCasesManager');
+    const localBox = document.getElementById('localCasesManager');
+    if (!cloudBox || !localBox) return;
+    const hidden = new Set(readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_CASES, []));
+    const overrides = readLocalJSON(STORAGE_KEY_CASE_OVERRIDES, {});
+    cloudBox.innerHTML = getCloudCases().map(item => {
+      const shown = !hidden.has(item.id);
+      const merged = { ...item, ...(overrides[item.id] || {}) };
+      return `<div class="library-item">
+        <label class="library-toggle"><input type="checkbox" ${shown ? 'checked' : ''} onchange="toggleCloudCase('${item.id}',this.checked)">顯示此案例</label>
+        <label class="admin-label">案例名稱</label><input type="text" value="${escapeHtml(merged.caseName)}" onchange="saveCloudCaseOverride('${item.id}','caseName',this.value)">
+        <label class="admin-label">案例分類</label><input type="text" value="${escapeHtml(merged.category)}" onchange="saveCloudCaseOverride('${item.id}','category',this.value)">
+        <label class="admin-label">總費用</label><input type="number" value="${Number(merged.totalCost)||0}" onchange="saveCloudCaseOverride('${item.id}','totalCost',Number(this.value)||0)">
+        <p class="library-preview">Cloud Preview：${escapeHtml(item.caseName)}｜${escapeHtml(item.category)}｜HK$ ${Number(item.totalCost||0).toLocaleString()}</p>
+        <button type="button" class="library-btn" onclick="clearCloudCaseOverride('${item.id}')">還原此案例內容</button>
+      </div>`;
+    }).join('') || '<p class="library-empty">目前沒有雲端案例。</p>';
+    const localCases = readLocalJSON(STORAGE_KEY_USER_CASES, []);
+    localBox.innerHTML = localCases.map(item => `<div class="library-item"><div class="library-item-title">${escapeHtml(item.caseName)}</div><p class="library-meta">${escapeHtml(item.category)}｜HK$ ${Number(item.totalCost||0).toLocaleString()}</p><div class="library-actions"><button class="library-btn" onclick="editLocalUserCase('${item.id}')">修改</button><button class="library-btn" onclick="deleteLocalUserCase('${item.id}')">刪除</button></div></div>`).join('') || '<p class="library-empty">尚未新增我的案例。</p>';
+  }
+
+  function toggleCloudCase(id, shown) {
+    const hidden = new Set(readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_CASES, []));
+    shown ? hidden.delete(id) : hidden.add(id);
+    writeLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_CASES, Array.from(hidden));
+    selectScenarioCategory(appState.currentCaseCat);
+  }
+
+  function saveCloudCaseOverride(id, field, value) {
+    const overrides = readLocalJSON(STORAGE_KEY_CASE_OVERRIDES, {});
+    overrides[id] = { ...(overrides[id] || {}), [field]:value };
+    writeLocalJSON(STORAGE_KEY_CASE_OVERRIDES, overrides);
+    selectScenarioCategory(appState.currentCaseCat);
+  }
+
+  function clearCloudCaseOverride(id) {
+    const overrides = readLocalJSON(STORAGE_KEY_CASE_OVERRIDES, {});
+    delete overrides[id];
+    writeLocalJSON(STORAGE_KEY_CASE_OVERRIDES, overrides);
+    renderUserCasesManager();
+    selectScenarioCategory(appState.currentCaseCat);
+  }
+
+  function addLocalUserCase() {
+    const caseName = prompt('案例名稱：');
+    if (!caseName) return;
+    const category = prompt('案例分類（日間手術／住院治療／癌症治療）：', '日間手術') || '日間手術';
+    const totalCost = Number(prompt('總費用：', '0')) || 0;
+    const list = readLocalJSON(STORAGE_KEY_USER_CASES, []);
+    list.push({ id:`local-case-${Date.now()}-${Math.random().toString(36).slice(2,7)}`, caseName, category, totalCost, files:[], source:'local', createdAt:new Date().toISOString(), updatedAt:new Date().toISOString() });
+    writeLocalJSON(STORAGE_KEY_USER_CASES, list);
+    renderUserCasesManager();
+  }
+
+  function editLocalUserCase(id) {
+    const list = readLocalJSON(STORAGE_KEY_USER_CASES, []);
+    const item = list.find(entry => entry.id === id);
+    if (!item) return;
+    const caseName = prompt('案例名稱：', item.caseName);
+    if (!caseName) return;
+    item.caseName = caseName;
+    item.category = prompt('案例分類：', item.category) || item.category;
+    item.totalCost = Number(prompt('總費用：', String(item.totalCost || 0))) || 0;
+    item.updatedAt = new Date().toISOString();
+    writeLocalJSON(STORAGE_KEY_USER_CASES, list);
+    renderUserCasesManager();
+    selectScenarioCategory(appState.currentCaseCat);
+  }
+
+  function deleteLocalUserCase(id) {
+    if (!confirm('確定刪除這個本機案例？')) return;
+    writeLocalJSON(STORAGE_KEY_USER_CASES, readLocalJSON(STORAGE_KEY_USER_CASES, []).filter(item => item.id !== id));
+    renderUserCasesManager();
+    selectScenarioCategory(appState.currentCaseCat);
+  }
+
+  function renderDocumentsManager() {
+    const cloudBox = document.getElementById('cloudDocumentsManager');
+    const localBox = document.getElementById('localDocumentsManager');
+    if (!cloudBox || !localBox) return;
+    const hidden = new Set(readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, []));
+    cloudBox.innerHTML = getCloudDocuments().map(item => `<div class="library-item"><label class="library-toggle"><input type="checkbox" ${hidden.has(item.id) ? '' : 'checked'} onchange="toggleCloudDocument('${item.id}',this.checked)">顯示</label><div class="library-item-title">${escapeHtml(item.name)}</div><p class="library-meta">${escapeHtml(item.category)}｜系統雲端文件</p>${item.url ? `<a class="library-btn" href="${item.url}" target="_blank" rel="noopener">預覽／開啟</a>` : '<span class="library-empty">目前沒有檔案連結</span>'}</div>`).join('') || '<p class="library-empty">目前沒有雲端文件。</p>';
+    const local = readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []);
+    localBox.innerHTML = local.map((item, index) => `<div class="library-item"><div class="library-item-title">${escapeHtml(item.name)}</div><p class="library-meta">${escapeHtml(item.type)}｜${new Date(item.updatedAt).toLocaleDateString('zh-HK')}${item.missingFile ? '｜文件需要重新上載' : ''}</p><div class="library-actions"><button class="library-btn" onclick="openLocalDocument('${item.id}')">預覽／開啟</button><button class="library-btn" onclick="renameLocalDocument('${item.id}')">修改名稱</button><button class="library-btn" onclick="moveLocalDocument('${item.id}',-1)" ${index===0?'disabled':''}>↑</button><button class="library-btn" onclick="moveLocalDocument('${item.id}',1)" ${index===local.length-1?'disabled':''}>↓</button><button class="library-btn" onclick="deleteLocalDocument('${item.id}')">刪除</button></div></div>`).join('') || '<p class="library-empty">尚未上載我的文件。</p>';
+  }
+
+  function toggleCloudDocument(id, shown) {
+    const hidden = new Set(readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, []));
+    shown ? hidden.delete(id) : hidden.add(id);
+    writeLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, Array.from(hidden));
+  }
+
+  async function uploadLocalDocuments(input) {
+    const allowed = new Set(['application/pdf','image/jpeg','image/png']);
+    const files = Array.from(input.files || []).filter(file => allowed.has(file.type));
+    const metadata = readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []);
+    const category = prompt('文件分類（尊顯計劃文件／睿選計劃文件／靈活計劃文件）：', '尊顯計劃文件') || '尊顯計劃文件';
+    for (const file of files) {
+      const id = `local-document-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+      await putLocalDocumentBlob(id, file);
+      const now = new Date().toISOString();
+      metadata.push({ id, name:file.name, category, type:file.type, size:file.size, createdAt:now, updatedAt:now, source:'local' });
+    }
+    writeLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, metadata);
+    writeLocalJSON(STORAGE_KEY_DOCUMENT_ORDER, metadata.map(item => item.id));
+    input.value = '';
+    renderDocumentsManager();
+  }
+
+  async function openLocalDocument(id) {
+    const blob = await getLocalDocumentBlob(id);
+    if (!blob) { alert('⚠️ 文件需要重新上載'); return; }
+    window.open(URL.createObjectURL(blob), '_blank', 'noopener');
+  }
+
+  function renameLocalDocument(id) {
+    const metadata = readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []);
+    const item = metadata.find(entry => entry.id === id);
+    if (!item) return;
+    const name = prompt('文件名稱：', item.name);
+    if (!name) return;
+    item.name = name;
+    item.updatedAt = new Date().toISOString();
+    writeLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, metadata);
+    renderDocumentsManager();
+  }
+
+  function moveLocalDocument(id, direction) {
+    const metadata = readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []);
+    const index = metadata.findIndex(item => item.id === id);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= metadata.length) return;
+    [metadata[index], metadata[target]] = [metadata[target], metadata[index]];
+    writeLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, metadata);
+    writeLocalJSON(STORAGE_KEY_DOCUMENT_ORDER, metadata.map(item => item.id));
+    renderDocumentsManager();
+  }
+
+  async function deleteLocalDocument(id) {
+    if (!confirm('確定刪除這份本機文件？')) return;
+    await deleteLocalDocumentBlob(id);
+    const metadata = readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []).filter(item => item.id !== id);
+    writeLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, metadata);
+    writeLocalJSON(STORAGE_KEY_DOCUMENT_ORDER, metadata.map(item => item.id));
+    renderDocumentsManager();
   }
 
   // ==================== 後台管理系統 ====================
@@ -1681,6 +2004,8 @@
     renderAdminP06Mirror();
     if (isAdminMaster) renderAdminCasesList();
     renderThemeSettings();
+    renderUserCasesManager();
+    renderDocumentsManager();
   }
 
   function closeAdminModal() {
@@ -1688,30 +2013,32 @@
   }
 
   function switchAdminTab(tabKey, btn) {
+    if (!isAdminMaster && (tabKey === 'config' || tabKey === 'p07')) return;
     document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('adminTabPagesSection').style.display = (tabKey === 'pages') ? 'block' : 'none';
-    if (!isAdminMaster && (tabKey === 'config' || tabKey === 'p07')) return;
-    document.getElementById('adminTabConfigSection').style.display = (tabKey === 'config') ? 'block' : 'none';
-    document.getElementById('adminTabP06Section').style.display = (tabKey === 'p06') ? 'block' : 'none';
-    document.getElementById('adminTabThemeSection').style.display = (tabKey === 'theme') ? 'block' : 'none';
-    document.getElementById('adminTabP07Section').style.display = (tabKey === 'p07') ? 'block' : 'none';
-
+    const sections = {
+      pages:'adminTabPagesSection', p06:'adminTabP06Section', theme:'adminTabThemeSection',
+      userCases:'adminTabUserCasesSection', documents:'adminTabDocumentsSection',
+      config:'adminTabConfigSection', p07:'adminTabP07Section'
+    };
+    Object.entries(sections).forEach(([key, id]) => { document.getElementById(id).style.display = key === tabKey ? 'block' : 'none'; });
     if (tabKey === 'pages') renderAdminVisualLayout();
     if (tabKey === 'config') renderAdminConfigLayout();
     if (tabKey === 'p06') renderAdminP06Mirror();
     if (tabKey === 'p07') renderAdminCasesList();
     if (tabKey === 'theme') renderThemeSettings();
+    if (tabKey === 'userCases') renderUserCasesManager();
+    if (tabKey === 'documents') renderDocumentsManager();
   }
 
   function renderThemeSettings() {
     const input = document.getElementById('adminThemeName');
-    if (input) input.value = tailorData.themeName || 'Medical';
+    if (input) input.value = tailorData.themeName || ORIGINAL_THEME_NAME;
     previewThemeName();
   }
 
   function previewThemeName() {
-    const value = document.getElementById('adminThemeName')?.value.trim() || 'Medical';
+    const value = document.getElementById('adminThemeName')?.value.trim() || ORIGINAL_THEME_NAME;
     const preview = document.getElementById('themeNamePreview');
     if (preview) preview.textContent = value;
   }
@@ -2106,7 +2433,7 @@
       tailorData = {
         status: "success",
         isCustomized: true,
-        themeName: document.getElementById('adminThemeName')?.value.trim() || tailorData.themeName || "Medical",
+        themeName: document.getElementById('adminThemeName')?.value.trim() || tailorData.themeName || ORIGINAL_THEME_NAME,
         pages: db.pages,
         options: db.options,
         highlights: db.highlights,
@@ -2128,12 +2455,18 @@
     const exportData = {
       presetName: presetName,
       exportDate: new Date().toLocaleDateString('zh-HK'),
-      themeName: document.getElementById('adminThemeName')?.value.trim() || tailorData.themeName || "Medical",
+      themeName: document.getElementById('adminThemeName')?.value.trim() || tailorData.themeName || ORIGINAL_THEME_NAME,
       pages: db.pages,
       options: db.options,
-      highlights: db.highlights
+      highlights: db.highlights,
+      hiddenCloudCaseIds: readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_CASES, []),
+      caseOverrides: readLocalJSON(STORAGE_KEY_CASE_OVERRIDES, {}),
+      localUserCases: readLocalJSON(STORAGE_KEY_USER_CASES, []),
+      hiddenCloudDocumentIds: readLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, []),
+      localDocumentMetadata: readLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, []),
+      documentOrder: readLocalJSON(STORAGE_KEY_DOCUMENT_ORDER, [])
     };
-    // 保留舊 JSON keys 供現有工具讀取；匯入時這些 System snapshots 永不覆蓋 Cloud Data。
+    // 只保留既有 System snapshots 作相容用途；使用者匯入不會覆蓋 Cloud Data。
     Object.assign(exportData, { config: db.config, planItems: db.planItems, claimCases: db.claimCases });
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
@@ -2157,7 +2490,7 @@
           tailorData = {
             status: "success",
             isCustomized: true,
-            themeName: importedData.themeName || importedData.presetName || "Medical",
+            themeName: importedData.themeName || ORIGINAL_THEME_NAME,
             pages: importedData.pages,
             options: Array.isArray(importedData.options) ? importedData.options : db.options,
             highlights: Array.isArray(importedData.highlights) ? importedData.highlights : db.highlights,
@@ -2165,6 +2498,12 @@
             dataVersion: version
           };
           saveTailorMadeData(tailorData);
+          if (Array.isArray(importedData.hiddenCloudCaseIds)) writeLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_CASES, importedData.hiddenCloudCaseIds);
+          if (importedData.caseOverrides && typeof importedData.caseOverrides === 'object') writeLocalJSON(STORAGE_KEY_CASE_OVERRIDES, importedData.caseOverrides);
+          if (Array.isArray(importedData.localUserCases)) writeLocalJSON(STORAGE_KEY_USER_CASES, importedData.localUserCases);
+          if (Array.isArray(importedData.hiddenCloudDocumentIds)) writeLocalJSON(STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, importedData.hiddenCloudDocumentIds);
+          if (Array.isArray(importedData.localDocumentMetadata)) writeLocalJSON(STORAGE_KEY_LOCAL_DOCUMENT_METADATA, importedData.localDocumentMetadata.map(item => ({ ...item, missingFile:true })));
+          if (Array.isArray(importedData.documentOrder)) writeLocalJSON(STORAGE_KEY_DOCUMENT_ORDER, importedData.documentOrder);
           db.pages = tailorData.pages;
           db.options = tailorData.options;
           db.highlights = tailorData.highlights;
@@ -2173,6 +2512,9 @@
           renderAdminVisualLayout();
           renderAdminP06Mirror();
           renderThemeSettings();
+          renderUserCasesManager();
+          renderDocumentsManager();
+          selectScenarioCategory(appState.currentCaseCat);
           alert(`✅ 成功套用設定檔：【${importedData.presetName || '個人自訂版'}】！`);
         } else {
           alert("⚠️ 檔案格式不符，請確認是否為正確的 App 設定檔。");
@@ -2189,7 +2531,11 @@
   async function resetToCaptainDefault() {
     if (!confirm("確定要還原雲端設定？目前保存於本機的自訂內容將會被取代。")) return;
     localStorage.removeItem(STORAGE_KEY_MED_TAILOR);
-    tailorData = { themeName: "Medical", pages: null, options: null, highlights: null };
+    [STORAGE_KEY_HIDDEN_CLOUD_CASES, STORAGE_KEY_CASE_OVERRIDES, STORAGE_KEY_USER_CASES,
+      STORAGE_KEY_HIDDEN_CLOUD_DOCUMENTS, STORAGE_KEY_LOCAL_DOCUMENT_METADATA, STORAGE_KEY_DOCUMENT_ORDER
+    ].forEach(key => localStorage.removeItem(key));
+    try { await clearMedicalDocumentBlobs(); } catch (error) { console.warn("Unable to clear Medical local documents", error); }
+    tailorData = { themeName: ORIGINAL_THEME_NAME, pages: null, options: null, highlights: null };
     setSyncStatus('🔄 正在還原雲端...');
     const restored = await fetchFullRemoteData();
     if (restored) {
