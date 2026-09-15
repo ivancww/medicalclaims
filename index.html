@@ -223,6 +223,9 @@
       background: #fff; border-radius: 12px; border: 1.5px solid #cbd5e1; padding: 16px; margin-bottom: 16px;
     }
     .admin-label { font-size: 12px; font-weight: 800; color: #475569; margin-top: 8px; display: block; }
+    .admin-highlight-row { display: flex; gap: 8px; align-items: center; background: #fff; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; }
+    .admin-plan-item-card { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px; }
+    .admin-plan-item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
     .btn-move {
       background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold;
     }
@@ -1101,21 +1104,22 @@
     var nameWise = cfg["睿選計劃名稱"] || "🛡️ 高端睿選醫療計劃";
     var nameFlexi = cfg["靈活計劃名稱"] || "⚠️ 傳統靈活醫療計劃";
 
-    if (document.getElementById('vis-btn-elite')) document.getElementById('vis-btn-elite').innerText = nameElite.split(' ')[0] + ' ' + (nameElite.split(' ')[1] || '尊顯');
-    if (document.getElementById('vis-btn-wise')) document.getElementById('vis-btn-wise').innerText = nameWise.split(' ')[0] + ' ' + (nameWise.split(' ')[1] || '睿選');
-    if (document.getElementById('vis-btn-flexi')) document.getElementById('vis-btn-flexi').innerText = nameFlexi.split(' ')[0] + ' ' + (nameFlexi.split(' ')[1] || '靈活');
+    var planNames = { elite: nameElite, wise: nameWise, flexi: nameFlexi };
+    var fallbackNames = { elite: '尊顯', wise: '睿選', flexi: '靈活' };
+    ['elite', 'wise', 'flexi'].forEach(function(plan) {
+      var name = planNames[plan];
+      var nameParts = name.split(' ');
+      var shortName = nameParts[1] || fallbackNames[plan];
+      var visButton = document.getElementById('vis-btn-' + plan);
+      var cardTitle = document.getElementById('card-title-' + plan);
+      var columnTitle = document.getElementById('col-title-' + plan);
+      var selectLabel = document.getElementById('select-label-' + plan);
 
-    if (document.getElementById('card-title-elite')) document.getElementById('card-title-elite').innerText = nameElite;
-    if (document.getElementById('card-title-wise')) document.getElementById('card-title-wise').innerText = nameWise;
-    if (document.getElementById('card-title-flexi')) document.getElementById('card-title-flexi').innerText = nameFlexi;
-
-    if (document.getElementById('col-title-elite')) document.getElementById('col-title-elite').innerText = nameElite + ' 客人自付';
-    if (document.getElementById('col-title-wise')) document.getElementById('col-title-wise').innerText = nameWise + ' 客人自付';
-    if (document.getElementById('col-title-flexi')) document.getElementById('col-title-flexi').innerText = nameFlexi + ' 客人自付';
-
-    if (document.getElementById('select-label-elite')) document.getElementById('select-label-elite').innerText = nameElite;
-    if (document.getElementById('select-label-wise')) document.getElementById('select-label-wise').innerText = nameWise + ' (推薦)';
-    if (document.getElementById('select-label-flexi')) document.getElementById('select-label-flexi').innerText = nameFlexi;
+      if (visButton) visButton.innerText = nameParts[0] + ' ' + shortName;
+      if (cardTitle) cardTitle.innerText = name;
+      if (columnTitle) columnTitle.innerText = name + ' 客人自付';
+      if (selectLabel) selectLabel.innerText = name + (plan === 'wise' ? ' (推薦)' : '');
+    });
 
     if (isChild) {
       document.getElementById('elite-deductible').value = "0";
@@ -1289,9 +1293,10 @@
     var flexiClaimable = flexiBase * 0.85;
     var flexiOOP = Math.round(num - flexiClaimable);
     
-    document.getElementById('case-oop-elite').innerText = 'HK$ ' + Math.round(eliteOOP).toLocaleString();
-    document.getElementById('case-oop-wise').innerText = 'HK$ ' + Math.round(wiseOOP).toLocaleString();
-    document.getElementById('case-oop-flexi').innerText = 'HK$ ' + Math.round(flexiOOP).toLocaleString();
+    var planOop = { elite: eliteOOP, wise: wiseOOP, flexi: flexiOOP };
+    ['elite', 'wise', 'flexi'].forEach(function(plan) {
+      document.getElementById('case-oop-' + plan).innerText = 'HK$ ' + Math.round(planOop[plan]).toLocaleString();
+    });
   }
 
   function setPremMode(mode) {
@@ -1778,7 +1783,7 @@
       let hlHtml = '';
       db.highlights.forEach((h, idx) => {
         hlHtml += `
-          <div style="display:flex; gap:8px; align-items:center; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1;">
+          <div class="admin-highlight-row">
             <select data-adm-hl-role="${idx}" style="width:100px; margin-top:0; padding:4px;">
               <option value="adult" ${h.role==='adult'?'selected':''}>👨‍👩‍👧 成人</option>
               <option value="child" ${h.role==='child'?'selected':''}>👶 兒童</option>
@@ -1797,10 +1802,23 @@
     const items = (db.planItems && db.planItems.length > 0) ? db.planItems : DEFAULT_FALLBACK_DB.planItems;
     db.planItems = items;
     
+    const planItemFields = [
+      [['eliteMain', 'elitemain', '👑 尊顯主內容：'], ['eliteSub', 'elitesub', '👑 尊顯細字說明：']],
+      [['wiseSemiMain', 'wisesemimain', '🛡️ 睿選半私家主內容：'], ['wiseSemiSub', 'wisesemisub', '🛡️ 睿選半私家細字說明：']],
+      [['wiseGenMain', 'wisegenmain', '🏨 睿選普通房主內容：'], ['wiseGenSub', 'wisegensub', '🏨 睿選普通房細字說明：']],
+      [['flexiMain', 'fleximain', '⚠️ 靈活主內容：'], ['flexiSub', 'flexisub', '⚠️ 靈活細字說明：']]
+    ];
     let html = '';
     items.forEach((pi, idx) => {
+      const fieldRows = planItemFields.map(fields => `
+          <div class="admin-plan-item-grid">
+            ${fields.map(([key, dataKey, label]) => `<div>
+              <label class="admin-label">${label}</label>
+              <input type="text" data-adm-pi-${dataKey}="${idx}" value="${pi[key] || ''}">
+            </div>`).join('')}
+          </div>`).join('');
       html += `
-        <div style="background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:10px; padding:12px;">
+        <div class="admin-plan-item-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <div style="display:flex; align-items:center; gap:8px; flex:1;">
               <span style="font-weight:bold; font-size:13px; color:var(--primary);">項目 ${idx+1}：</span>
@@ -1808,50 +1826,7 @@
             </div>
             <button type="button" onclick="deleteAdminPlanItem(${idx})" style="background:#fee2e2; color:#dc2626; border:1px solid #ef4444; border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer; margin-left:8px;">🗑️ 刪除</button>
           </div>
-          
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
-            <div>
-              <label class="admin-label">👑 尊顯主內容：</label>
-              <input type="text" data-adm-pi-elitemain="${idx}" value="${pi.eliteMain || ''}">
-            </div>
-            <div>
-              <label class="admin-label">👑 尊顯細字說明：</label>
-              <input type="text" data-adm-pi-elitesub="${idx}" value="${pi.eliteSub || ''}">
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
-            <div>
-              <label class="admin-label">🛡️ 睿選半私家主內容：</label>
-              <input type="text" data-adm-pi-wisesemimain="${idx}" value="${pi.wiseSemiMain || ''}">
-            </div>
-            <div>
-              <label class="admin-label">🛡️ 睿選半私家細字說明：</label>
-              <input type="text" data-adm-pi-wisesemisub="${idx}" value="${pi.wiseSemiSub || ''}">
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
-            <div>
-              <label class="admin-label">🏨 睿選普通房主內容：</label>
-              <input type="text" data-adm-pi-wisegenmain="${idx}" value="${pi.wiseGenMain || ''}">
-            </div>
-            <div>
-              <label class="admin-label">🏨 睿選普通房細字說明：</label>
-              <input type="text" data-adm-pi-wisegensub="${idx}" value="${pi.wiseGenSub || ''}">
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;">
-            <div>
-              <label class="admin-label">⚠️ 靈活主內容：</label>
-              <input type="text" data-adm-pi-fleximain="${idx}" value="${pi.flexiMain || ''}">
-            </div>
-            <div>
-              <label class="admin-label">⚠️ 靈活細字說明：</label>
-              <input type="text" data-adm-pi-flexisub="${idx}" value="${pi.flexiSub || ''}">
-            </div>
-          </div>
+          ${fieldRows}
         </div>`;
     });
     box.innerHTML = html;
@@ -2096,18 +2071,21 @@
     }
   }
 
+  function setSyncStatus(text, className) {
+    const badge = document.getElementById('sync-status-badge');
+    if (!badge) return;
+    badge.innerText = text;
+    if (className !== undefined) badge.className = className;
+  }
+
   // 秒開保證：先讀本地快取秒開，背景檢查版本號，有新版才拉取
   function initApp() {
     initParams();
     const localCached = loadLocalCacheRaw();
-    const badge = document.getElementById('sync-status-badge');
     
     if (localCached) {
       applyHybridDatabaseMerge(localCached);
-      if (badge) {
-        badge.innerText = '⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.4.0') + ')';
-        badge.className = 'status-cache';
-      }
+      setSyncStatus('⚡ 本地秒開 (v' + (db.config["資料版本"] || '7.4.0') + ')', 'status-cache');
       applyRoleContent();
       
       // 背景極速檢查版本號
@@ -2118,13 +2096,12 @@
           const currentVer = db.config ? db.config["資料版本"] : null;
           if (remoteVer && remoteVer !== currentVer) {
             fetchFullRemoteData();
-          } else if (badge) {
-            badge.innerText = '● 雲端已是最新';
-            badge.className = 'status-ok';
+          } else {
+            setSyncStatus('● 雲端已是最新', 'status-ok');
           }
         })
         .catch(() => {
-          if (badge) badge.innerText = '⚡ 離線快取模式';
+          setSyncStatus('⚡ 離線快取模式');
         });
     } else {
       applyRoleContent();
@@ -2139,17 +2116,12 @@
         if (remote && remote.status === 'success') {
           applyHybridDatabaseMerge(remote);
           saveLocalCache(remote);
-          const badge = document.getElementById('sync-status-badge');
-          if (badge) {
-            badge.innerText = '● 雲端同步完成';
-            badge.className = 'status-ok';
-          }
+          setSyncStatus('● 雲端同步完成', 'status-ok');
           applyRoleContent();
         }
       })
       .catch(() => {
-        const badge = document.getElementById('sync-status-badge');
-        if (badge) badge.innerText = '○ 離線模式';
+        setSyncStatus('○ 離線模式');
       });
   }
 
