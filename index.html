@@ -263,6 +263,59 @@
     .upload-area { display:flex; align-items:center; justify-content:center; min-height:96px; padding:16px; border:2px dashed #cbd5e1; border-radius:10px; background:#f8fafc; color:#1a3a6e; font-size:14px; font-weight:800; cursor:pointer; text-align:center; }
     .admin-section-heading { color:#1a3a6e; margin:0 0 6px; font-size:16px; }
     @media(max-width:620px){ .admin-footer-actions>*{flex:1 1 calc(50% - 8px)} .admin-action-btn.close-action{flex-basis:100%} .admin-plan-item-grid,.library-grid{grid-template-columns:1fr} .library-item-head{flex-direction:column} }
+
+    /* 5pay layout scale: keep component dimensions aligned with the source app. */
+    body { min-height:100vh; padding:24px; font-size:16px; line-height:1.6; font-weight:400; }
+    .app-shell { width:100%; max-width:1120px; margin:0 auto; }
+    .header-version-bar { min-height:32px; margin-bottom:16px; gap:16px; font-size:15px; line-height:1.5; font-weight:700; }
+    .stage-card { min-height:0; padding:32px; margin-bottom:24px; border-radius:18px; }
+    .stage-tag { padding:6px 12px; margin-bottom:16px; border-radius:8px; font-size:14px; line-height:1.5; font-weight:800; }
+    .stage-title { margin:0 0 12px; font-size:30px; line-height:1.35; font-weight:800; }
+    .stage-desc { margin:0 0 24px; font-size:17px; line-height:1.7; font-weight:400; }
+    .dignity-headline-box { margin-bottom:20px; font-size:20px; line-height:1.6; font-weight:800; }
+    .dignity-highlight-text { margin-top:8px; font-size:28px; line-height:1.4; font-weight:900; }
+    .dignity-image-wrap { width:100%; max-width:none; margin:20px 0; border-radius:14px; }
+    .dignity-image-wrap img { width:100%; max-height:none; }
+    .choice-list { gap:14px; }
+    .choice-btn { min-height:76px; padding:18px 22px; gap:6px; border-radius:14px; }
+    .choice-btn .c-title { font-size:18px; line-height:1.5; font-weight:800; }
+    .choice-btn .c-desc { font-size:15px; line-height:1.6; font-weight:400; }
+    .nav-btn-group { gap:14px; margin-top:28px; }
+    .btn-primary,.btn-secondary,.btn-success { min-height:56px; padding:14px 24px; border-radius:12px; font-size:17px; line-height:1.5; }
+    select,input[type="text"],input[type="number"],textarea { min-height:52px; padding:12px 14px; margin-top:6px; border-radius:10px; font-size:16px; line-height:1.5; font-weight:700; }
+    .form-group { gap:6px; margin-bottom:10px; }
+    .form-group label,.admin-label { font-size:14px; line-height:1.5; font-weight:700; }
+    .input-grid { gap:14px; }
+    .modal-overlay { padding:24px; }
+    .modal-box { width:min(100%,1040px); max-width:1040px; max-height:90vh; padding:28px; border-radius:18px; }
+    .modal-close-btn { top:16px; right:16px; width:44px; height:44px; font-size:22px; }
+    .admin-header-nav { min-height:64px; padding:14px 24px; font-size:16px; }
+    .admin-tab-bar { gap:10px; padding:10px 24px; }
+    .admin-tab-btn { min-height:48px; padding:10px 18px; border-radius:10px; font-size:15px; line-height:1.4; }
+    .admin-scroll-body { width:100%; max-width:1120px; padding:24px; }
+    .admin-card-section { padding:24px; margin-bottom:20px; border-radius:16px; }
+    .admin-plan-item-grid,.library-grid { gap:14px; }
+    .admin-plan-item-card,.library-item { padding:18px; border-radius:12px; }
+    .admin-action-btn,.admin-import-label,.library-btn { min-height:48px; padding:11px 18px; border-radius:10px; font-size:15px; }
+    .admin-footer-actions { gap:10px; padding:14px 24px; }
+
+    @media(max-width:700px){
+      body { padding:12px; font-size:15px; }
+      .header-version-bar { align-items:flex-start; gap:10px; font-size:13px; }
+      .stage-card { padding:22px 18px; border-radius:16px; }
+      .stage-title { font-size:clamp(24px,7vw,28px); }
+      .stage-desc { font-size:16px; }
+      .choice-btn { min-height:72px; padding:16px 18px; }
+      .choice-btn .c-title { font-size:17px; }
+      .choice-btn .c-desc { font-size:14px; }
+      .nav-btn-group { gap:10px; }
+      .btn-primary,.btn-secondary,.btn-success { min-height:52px; padding:12px 16px; font-size:16px; }
+      .input-grid { grid-template-columns:1fr; }
+      .modal-overlay { padding:10px; }
+      .modal-box { width:100%; padding:22px 16px; border-radius:16px; }
+      .admin-scroll-body { padding:16px 12px; }
+      .admin-card-section { padding:18px 14px; }
+    }
   </style>
 </head>
 <body>
