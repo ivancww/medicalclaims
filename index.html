@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>醫療保障實況對比 v7.5.1 | AVA專屬</title>
+  <title>醫療保障實況對比 v7.5.2 | AVA專屬</title>
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -264,71 +264,88 @@
     .admin-section-heading { color:#1a3a6e; margin:0 0 6px; font-size:16px; }
     @media(max-width:620px){ .admin-footer-actions>*{flex:1 1 calc(50% - 8px)} .admin-action-btn.close-action{flex-basis:100%} .admin-plan-item-grid,.library-grid{grid-template-columns:1fr} .library-item-head{flex-direction:column} }
 
-    /* 5pay layout scale: keep component dimensions aligned with the source app. */
-    body { min-height:100vh; padding:24px; font-size:16px; line-height:1.6; font-weight:400; }
-    .app-shell { width:100%; max-width:1120px; margin:0 auto; }
-    .header-version-bar { min-height:32px; margin-bottom:16px; gap:16px; font-size:15px; line-height:1.5; font-weight:700; }
-    .stage-card { min-height:0; padding:32px; margin-bottom:24px; border-radius:18px; }
-    .stage-tag { padding:6px 12px; margin-bottom:16px; border-radius:8px; font-size:14px; line-height:1.5; font-weight:800; }
-    .stage-title { margin:0 0 12px; font-size:30px; line-height:1.35; font-weight:800; }
-    .stage-desc { margin:0 0 24px; font-size:17px; line-height:1.7; font-weight:400; }
-    .dignity-headline-box { margin-bottom:20px; font-size:20px; line-height:1.6; font-weight:800; }
-    .dignity-highlight-text { margin-top:8px; font-size:28px; line-height:1.4; font-weight:900; }
-    .dignity-image-wrap { width:100%; max-width:none; margin:20px 0; border-radius:14px; }
-    .dignity-image-wrap img { width:100%; max-height:none; }
-    .choice-list { gap:14px; }
-    .choice-btn { min-height:76px; padding:18px 22px; gap:6px; border-radius:14px; }
-    .choice-btn .c-title { font-size:18px; line-height:1.5; font-weight:800; }
-    .choice-btn .c-desc { font-size:15px; line-height:1.6; font-weight:400; }
-    .nav-btn-group { gap:14px; margin-top:28px; }
-    .btn-primary,.btn-secondary,.btn-success { min-height:56px; padding:14px 24px; border-radius:12px; font-size:17px; line-height:1.5; }
-    select,input[type="text"],input[type="number"],textarea { min-height:52px; padding:12px 14px; margin-top:6px; border-radius:10px; font-size:16px; line-height:1.5; font-weight:700; }
-    .form-group { gap:6px; margin-bottom:10px; }
-    .form-group label,.admin-label { font-size:14px; line-height:1.5; font-weight:700; }
-    .input-grid { gap:14px; }
-    .modal-overlay { padding:24px; }
-    .modal-box { width:min(100%,1040px); max-width:1040px; max-height:90vh; padding:28px; border-radius:18px; }
-    .modal-close-btn { top:16px; right:16px; width:44px; height:44px; font-size:22px; }
-    .admin-header-nav { min-height:64px; padding:14px 24px; font-size:16px; }
-    .admin-tab-bar { gap:10px; padding:10px 24px; }
-    .admin-tab-btn { min-height:48px; padding:10px 18px; border-radius:10px; font-size:15px; line-height:1.4; }
-    .admin-scroll-body { width:100%; max-width:1120px; padding:24px; }
-    .admin-card-section { padding:24px; margin-bottom:20px; border-radius:16px; }
-    .admin-plan-item-grid,.library-grid { gap:14px; }
-    .admin-plan-item-card,.library-item { padding:18px; border-radius:12px; }
-    .admin-action-btn,.admin-import-label,.library-btn { min-height:48px; padding:11px 18px; border-radius:10px; font-size:15px; }
-    .admin-footer-actions { gap:10px; padding:14px 24px; }
+    /* AVA / 5pay shared frontend architecture: compact app bar and centred content rail. */
+    body { min-height:100vh; padding:0; font-size:14px; line-height:1.6; font-weight:400; }
+    .app-header { min-height:56px; background:var(--primary); color:#fff; box-shadow:0 2px 10px rgba(15,23,42,.16); }
+    .app-header-inner { width:min(100%, 920px); min-height:56px; margin:0 auto; padding:8px 20px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .app-header-leading,.app-header-actions { display:flex; align-items:center; min-width:0; gap:10px; }
+    .back-ava { min-height:40px; padding:8px 12px; display:inline-flex; align-items:center; border:1px solid rgba(255,255,255,.38); border-radius:8px; color:#fff; font-size:13px; font-weight:700; line-height:1; text-decoration:none; white-space:nowrap; }
+    .back-ava:hover,.back-ava:focus-visible { background:rgba(255,255,255,.12); outline:2px solid #fff; outline-offset:2px; }
+    .app-identity { min-width:0; display:flex; align-items:center; gap:8px; }
+    .app-name { overflow:hidden; font-size:14px; font-weight:800; letter-spacing:.02em; text-overflow:ellipsis; white-space:nowrap; }
+    .app-header .v-badge { flex:none; background:rgba(255,255,255,.16); color:#fff; }
+    .app-header .role-toggle-btn { min-height:36px; background:#fff; border-color:#fff; color:var(--primary); }
+    .admin-trigger { width:40px; height:40px; padding:0; border:0; border-radius:8px; background:transparent; color:#fff; font-size:18px; cursor:pointer; }
+    .admin-trigger:hover,.admin-trigger:focus-visible { background:rgba(255,255,255,.12); }
+    .app-header #sync-status-badge { max-width:150px; overflow:hidden; background:rgba(255,255,255,.14); color:#fff; text-overflow:ellipsis; white-space:nowrap; }
+    .app-shell { width:min(100%, 920px); margin:0 auto; padding:20px; }
+    .stage-card { min-height:0; padding:24px; margin-bottom:20px; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 4px 16px rgba(15,23,42,.06); }
+    .stage-tag { padding:4px 10px; margin-bottom:12px; border-radius:7px; font-size:12px; line-height:1.5; }
+    .stage-title { margin:0 0 10px; font-size:22px; line-height:1.4; }
+    .stage-desc { margin:0 0 18px; font-size:14px; line-height:1.65; }
+    .dignity-headline-box { margin-bottom:16px; font-size:17px; }
+    .dignity-highlight-text { margin-top:6px; font-size:23px; }
+    .dignity-image-wrap { margin:16px 0; border-radius:12px; }
+    .choice-list { gap:10px; }
+    .choice-btn { min-height:60px; padding:14px 16px; gap:4px; border-radius:10px; }
+    .choice-btn .c-title { font-size:15px; line-height:1.5; }
+    .choice-btn .c-desc { font-size:13px; line-height:1.55; }
+    .nav-btn-group { gap:10px; margin-top:22px; }
+    .btn-primary,.btn-secondary,.btn-success { min-height:46px; padding:11px 18px; border-radius:9px; font-size:14px; line-height:1.5; }
+    select,input[type="text"],input[type="number"],textarea { min-height:44px; padding:9px 11px; margin-top:4px; border-radius:8px; font-size:14px; line-height:1.5; }
+    .form-group { gap:4px; margin-bottom:6px; }
+    .form-group label,.admin-label { font-size:12px; line-height:1.5; }
+    .input-grid { gap:10px; }
+    .modal-overlay { padding:16px; }
+    .modal-box { width:min(100%,850px); max-width:850px; padding:20px; border-radius:14px; }
+    .admin-scroll-body { width:100%; max-width:920px; }
 
     @media(max-width:700px){
-      body { padding:12px; font-size:15px; }
-      .header-version-bar { align-items:flex-start; gap:10px; font-size:13px; }
-      .stage-card { padding:22px 18px; border-radius:16px; }
-      .stage-title { font-size:clamp(24px,7vw,28px); }
-      .stage-desc { font-size:16px; }
-      .choice-btn { min-height:72px; padding:16px 18px; }
-      .choice-btn .c-title { font-size:17px; }
-      .choice-btn .c-desc { font-size:14px; }
-      .nav-btn-group { gap:10px; }
-      .btn-primary,.btn-secondary,.btn-success { min-height:52px; padding:12px 16px; font-size:16px; }
+      .app-header-inner { padding:8px 12px; gap:8px; flex-wrap:wrap; }
+      .app-header-leading { flex:1 1 auto; max-width:calc(100% - 48px); }
+      .app-header-actions { margin-left:auto; }
+      .app-name { font-size:13px; }
+      .app-header #sync-status-badge { order:3; max-width:none; }
+      .app-shell { padding:12px; }
+      .stage-card { padding:18px 16px; border-radius:12px; }
+      .stage-title { font-size:20px; }
+      .stage-desc { font-size:14px; }
+      .choice-btn { min-height:60px; padding:13px 14px; }
+      .nav-btn-group { gap:8px; }
+      .btn-primary,.btn-secondary,.btn-success { min-height:46px; padding:10px 14px; font-size:14px; }
       .input-grid { grid-template-columns:1fr; }
-      .modal-overlay { padding:10px; }
-      .modal-box { width:100%; padding:22px 16px; border-radius:16px; }
+      .modal-overlay { padding:8px; }
+      .modal-box { width:100%; padding:20px 14px; }
       .admin-scroll-body { padding:16px 12px; }
-      .admin-card-section { padding:18px 14px; }
+    }
+    @media(max-width:480px){
+      .app-header-inner { align-items:flex-start; }
+      .app-header-leading { max-width:100%; flex-basis:100%; }
+      .app-identity { flex:1; }
+      .app-header-actions { width:100%; justify-content:flex-end; }
+      .nav-btn-group { flex-wrap:wrap; }
+      .nav-btn-group > * { flex:1 1 130px; }
     }
   </style>
 </head>
 <body>
-<div class="app-shell">
-  <div class="header-version-bar">
-    <div style="display:flex; align-items:center; gap:6px;">
-      <span id="appThemeName">AVA HEALTHCARE PLANNER</span>
-      <span class="v-badge" id="appVersion">v7.5.1</span>
-      <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
-      <span style="cursor:pointer; font-size:16px;" onclick="openAdminModal()" title="開啟雲端後台">⚙️</span>
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-header-leading">
+      <a class="back-ava" href="https://ivancww.github.io/avaplatform/" aria-label="返回 AVA Platform">← 返回 AVA</a>
+      <div class="app-identity">
+        <span class="app-name" id="appThemeName">AVA HEALTHCARE PLANNER</span>
+        <span class="v-badge" id="appVersion">v7.5.2</span>
+      </div>
     </div>
-    <div id="sync-status-badge">🔄 載入中...</div>
+    <div class="app-header-actions">
+      <button type="button" class="role-toggle-btn" id="btnRoleSwitch" onclick="toggleRoleMode()">👨‍👩‍👧 成人模式</button>
+      <button type="button" class="admin-trigger" onclick="openAdminModal()" title="開啟雲端後台" aria-label="開啟雲端後台">⚙️</button>
+      <span id="sync-status-badge">🔄 載入中...</span>
+    </div>
   </div>
+</header>
+<main class="app-shell">
 
   <div id="dynamic-pages-container"></div>
 
@@ -650,7 +667,7 @@
       <button type="button" class="btn-success" onclick="alert('✅ 資料已確認，即將進入專屬申請流程！')">✅ 符合，進入辦理手續 →</button>
     </div>
   </div>
-</div>
+</main>
 
 <div class="modal-overlay" id="planInfoDrawerOverlay">
   <div class="modal-box">
@@ -782,7 +799,7 @@
   const MED_DOCUMENT_DB_NAME = "AVA_MED_USER_DOCUMENTS_V1";
   const MED_DOCUMENT_STORE_NAME = "userFiles";
   const ORIGINAL_THEME_NAME = "AVA HEALTHCARE PLANNER";
-  const APP_VERSION = "7.5.1";
+  const APP_VERSION = "7.5.2";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDBA5Iitb8X0qmbVfjVdYWw-M2D_9ZhFIg",
